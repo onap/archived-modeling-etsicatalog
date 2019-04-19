@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 
 class SwaggerJsonView(APIView):
     def get(self, request):
-        json_file = os.path.join(os.path.dirname(__file__), 'vfc.catalog.swagger.json')
+        json_file = os.path.join(os.path.dirname(__file__), 'modeling.genericparser.swagger.json')
         f = open(json_file)
         json_data = json.JSONDecoder().decode(f.read())
         f.close()

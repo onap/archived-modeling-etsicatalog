@@ -16,14 +16,14 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-    <id>catalog</id>
+    <id>genericparser</id>
     <formats>
         <format>zip</format>
     </formats>
     <fileSets>
         <fileSet>
-            <directory>catalog</directory>
-            <outputDirectory>/catalog</outputDirectory>
+            <directory>genericparser</directory>
+            <outputDirectory>/genericparser</outputDirectory>
             <includes>
                 <include>**/*.py</include>
                 <include>**/*.json</include>
@@ -76,5 +76,5 @@
             </includes>
         </fileSet>
     </fileSets>
-    <baseDirectory>vfc/nfvo/catalog</baseDirectory>
+    <baseDirectory>modeling/toscaparsers/genericparser</baseDirectory>
 </assembly>

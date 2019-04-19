@@ -9,16 +9,12 @@ install_sf(){
 
     # get binary zip from nexus - vfc-nfvo-genericparser
 
-#    wget -q -O vfc-nfvo-genericparser.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.vfc.nfvo.genericparser&a=vfc-nfvo-genericparser&v=LATEST&e=zip' && \
-#    unzip vfc-nfvo-genericparser.zip && \
-#    rm -rf vfc-nfvo-genericparser.zip && \
-    wget -q -O vfc-nfvo-genericparser.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.vfc.nfvo.genericparser&a=vfc-nfvo-genericparser&v=LATEST&e=zip' && \
-    unzip vfc-nfvo-genericparser.zip && \
-    rm -rf vfc-nfvo-genericparser.zip && \
-    pip install --upgrade setuptools pip -i https://mirrors.aliyun.com/pypi/simple/ && \
+    wget -q -O modeling-genericparser.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.toscaparsers.genericparser&a=modeling-toscaparsers-genericparserr&v=LATEST&e=zip' && \
+    unzip modeling-genericparser.zip && \
+    rm -rf modeling-genericparser.zip && \
+    pip install --upgrade setuptools pip  && \
 
-#    pip install --no-cache-dir --pre -r  /service/vfc/nfvo/genericparser/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
-    pip install --no-cache-dir --pre -r  /service/modeling/genericparser/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+    pip install --no-cache-dir --pre -r  /service/modeling/toscaparsers/genericparser/requirements.txt
 }
 
 add_user(){

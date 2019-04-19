@@ -7,7 +7,6 @@ cd ${DOCKER_BUILD_DIR}
 BUILD_ARGS="--no-cache"
 ORG="onap"
 VERSION="1.3.0"
-#PROJECT=" vfc"
 PROJECT=" modeling"
 IMAGE="genericparser"
 DOCKER_REPOSITORY="nexus3.onap.org:10003"

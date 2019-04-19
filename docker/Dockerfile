@@ -13,5 +13,4 @@ EXPOSE 8806
 USER onap
 WORKDIR /service
 
-#ENTRYPOINT vfc/nfvo/genericparser/docker/docker-entrypoint.sh
-ENTRYPOINT modeling/genericparser/docker/docker-entrypoint.sh
+ENTRYPOINT modeling/toscaparsers/genericparser/docker/docker-entrypoint.sh

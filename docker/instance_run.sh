@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#cd /service/vfc/nfvo/genericparser
-cd /service/modeling/genericparser
+cd /service/modeling/toscaparsers/genericparser
 
 ./run.sh
 

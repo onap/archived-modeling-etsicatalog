@@ -2,12 +2,12 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "ONAP VFC Catalog Rest API",
-    "description": "VFC Catalog Management API.",
+    "title": "Parser as Microservice API",
+    "description": "Parser as Microservice API.",
     "contact": {
-      "name": "ONAP VFC team",
+      "name": "ONAP Modeling team",
       "email": "onap-discuss@lists.onap.org",
-      "url": "https://gerrit.onap.org/r/#/admin/projects/vfc/nfvo/catalog"
+      "url": "https://gerrit.onap.org/r/modeling/genericparser"
     }
   },
   "basePath": "/api/catalog/v1",

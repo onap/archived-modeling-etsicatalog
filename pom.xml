@@ -21,12 +21,12 @@
         <version>1.2.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.vfc.nfvo.catalog</groupId>
-    <artifactId>vfc-nfvo-catalog</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <groupId>org.onap.modeling.toscaparsers.genericparser</groupId>
+    <artifactId>modeling-toscaparsers-genericparser</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>vfc-nfvo-catalog</name>
-    <description>vfc nfvo catalog</description>
+    <name>modeling-toscaparsers-genericparser</name>
+    <description>modeling toscaparsers genericparser</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.sources>.</sonar.sources>

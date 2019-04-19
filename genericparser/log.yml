@@ -24,7 +24,7 @@ handlers:
         level: "DEBUG"
         class:
             "logging.handlers.RotatingFileHandler"
-        filename: "/var/log/onap/vfc/genericparser/runtime_gengricparser.log"
+        filename: "/var/log/onap/modeling/genericparser/runtime_gengricparser.log"
         formatter:
             "mdcFormat"
         maxBytes: 52428800

@@ -30,7 +30,7 @@ DISTRIBUTED = "DISTRIBUTED"
 
 def call_sdc(resource, method, content=''):
     additional_headers = {
-        'X-ECOMP-InstanceID': 'VFC',
+        'X-ECOMP-InstanceID': 'Modeling',
     }
     return restcall.call_req(base_url=SDC_BASE_URL,
                              user=SDC_USER,
@@ -95,7 +95,7 @@ def delete_artifact(asset_type, asset_id, artifact_id):
 
 def download_artifacts(download_url, local_path, file_name):
     additional_headers = {
-        'X-ECOMP-InstanceID': 'VFC',
+        'X-ECOMP-InstanceID': 'Modeling',
         'accept': 'application/octet-stream'
     }
     ret = restcall.call_req(base_url=SDC_BASE_URL,
