@@ -257,7 +257,7 @@ class TestNfPackage(TestCase):
 
     @mock.patch.object(NfDistributeThread, 'run')
     def test_nf_pkg_distribute_normal(self, mock_run):
-        resp = self.client.post("/api/genericparser/v1/vnfpackages", {
+        resp = self.client.post("/api/parser/v1/vnfpackages", {
             "csarId": "1",
             "vimIds": ["1"]
         }, format='json')
@@ -310,7 +310,7 @@ class TestNfPackage(TestCase):
 
     @mock.patch.object(NfPkgDeleteThread, 'run')
     def test_nf_pkg_delete_normal(self, mock_run):
-        resp = self.client.delete("/api/genericparser/v1/vnfpackages/1")
+        resp = self.client.delete("/api/parser/v1/vnfpackages/1")
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
 
     def test_nf_pkg_normal_delete(self):
@@ -323,7 +323,7 @@ class TestNfPackage(TestCase):
                         vnfSoftwareVersion='', vnfPackageUri='', vnfdModel='').save()
         VnfPackageModel(vnfPackageId="4", vnfdId="4", vnfVendor='4', vnfdVersion='4',
                         vnfSoftwareVersion='', vnfPackageUri='', vnfdModel='').save()
-        resp = self.client.get("/api/genericparser/v1/vnfpackages")
+        resp = self.client.get("/api/parser/v1/vnfpackages")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         expect_data = [
             {
@@ -361,7 +361,7 @@ class TestNfPackage(TestCase):
         VnfPackageModel(vnfPackageId="4", vnfdId="4", vnfVendor='4', vnfdVersion='4',
                         vnfSoftwareVersion='', vnfPackageUri='', vnfdModel='').save()
 
-        resp = self.client.get("/api/genericparser/v1/vnfpackages/4")
+        resp = self.client.get("/api/parser/v1/vnfpackages/4")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         expect_data = {
             "imageInfo": [],
@@ -383,7 +383,7 @@ class TestNfPackage(TestCase):
         VnfPackageModel(vnfPackageId="4", vnfdId="4", vnfVendor='4', vnfdVersion='4',
                         vnfSoftwareVersion='', vnfPackageUri='', vnfdModel='').save()
 
-        resp = self.client.get("/api/genericparser/v1/vnfpackages/2")
+        resp = self.client.get("/api/parser/v1/vnfpackages/2")
         self.assertEqual(resp.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertEqual({'error': 'Vnf package[2] not Found.'}, resp.data)
 
@@ -394,12 +394,12 @@ class TestNfPackage(TestCase):
         VnfPackageModel(vnfPackageId="8", vnfdId="10").save()
         mock_parse_vnfd.return_value = json.JSONEncoder().encode({"c": "d"})
         req_data = {"csarId": "8", "inputs": []}
-        resp = self.client.post("/api/genericparser/v1/parservnfd", req_data, format='json')
+        resp = self.client.post("/api/parser/v1/parservnfd", req_data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual({"model": '{"c": "d"}'}, resp.data)
 
     def test_vnfd_parse_when_csar_not_exist(self):
         req_data = {"csarId": "1", "inputs": []}
-        resp = self.client.post("/api/genericparser/v1/parservnfd", req_data, format='json')
+        resp = self.client.post("/api/parser/v1/parservnfd", req_data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertEqual(resp.data, {"error": "VNF CSAR(1) does not exist."})
