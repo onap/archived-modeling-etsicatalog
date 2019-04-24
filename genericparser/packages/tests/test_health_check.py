@@ -37,12 +37,6 @@ class TestHealthCheck(TestCase):
         resp_data = json.loads(response.content)
         self.assertEqual({"status": "active"}, resp_data)
 
-    def test_catalog_health_check(self):
-        response = self.client.get("/api/genericparser/v1/health_check")
-        self.assertEqual(status.HTTP_200_OK, response.status_code, response.content)
-        resp_data = json.loads(response.content)
-        self.assertEqual({"status": "active"}, resp_data)
-
     def test_parser_health_check(self):
         response = self.client.get("/api/parser/v1/health_check")
         self.assertEqual(status.HTTP_200_OK, response.status_code, response.content)
