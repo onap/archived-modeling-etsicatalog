@@ -94,11 +94,11 @@ class NsdmSubscription:
             response = requests.get(self.callback_uri, timeout=2)
             if response.status_code != status.HTTP_204_NO_CONTENT:
                 raise GenericparserException("callbackUri %s returns %s status "
-                                       "code." % (self.callback_uri,
-                                                  response.status_code))
+                                             "code." % (self.callback_uri,
+                                                        response.status_code))
         except Exception:
             raise GenericparserException("callbackUri %s didn't return 204 status"
-                                   "code." % self.callback_uri)
+                                         "code." % self.callback_uri)
 
     def fill_resp_data(self, subscription):
         subscription_filter = dict()
@@ -158,8 +158,7 @@ class NsdmSubscription:
         if const.BASIC in self.authentication.get("authType", '') and \
                 "paramsBasic" in self.authentication.keys() and \
                 not is_filter_type_equal(PARAMSBASICKEYS,
-                                         self.authentication.
-                                         get("paramsBasic").keys()):
+                                         self.authentication.get("paramsBasic").keys()):
             raise NsdmBadRequestException('userName and password needed '
                                           'for ' + const.BASIC)
         if const.OAUTH2_CLIENT_CREDENTIALS in \
@@ -167,9 +166,7 @@ class NsdmSubscription:
                 "paramsOauth2ClientCredentials" in \
                 self.authentication.keys() and \
                 not is_filter_type_equal(PARAMSOAUTH2CLIENTCREDENTIALSKEYS,
-                                         self.authentication.
-                                         get("paramsOauth2ClientCredentials")
-                                         .keys()):
+                                         self.authentication.get("paramsOauth2ClientCredentials").keys()):
             raise NsdmBadRequestException('clientId, clientPassword and '
                                           'tokenEndpoint required '
                                           'for ' + const.OAUTH2_CLIENT_CREDENTIALS)
@@ -203,7 +200,7 @@ class NsdmSubscription:
         links = {
             "self": {
                 "href":
-                const.NSDM_SUBSCRIPTION_ROOT_URI + self.subscription_id
+                    const.NSDM_SUBSCRIPTION_ROOT_URI + self.subscription_id
             }
         }
         subscription_save_db = {

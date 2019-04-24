@@ -23,6 +23,7 @@ from genericparser.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, 
 from genericparser.pub.config import config as pub_config
 from logging import config as log_config
 from onaplogging import monkey
+
 monkey.patch_all()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -86,7 +87,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'genericparser.middleware.LogContextMiddleware',
+    'genericparser.middleware.LogContextMiddleware',
 ]
 
 ROOT_URLCONF = 'genericparser.urls'
@@ -189,5 +190,6 @@ if 'test' in sys.argv:
 
     import mock
     from genericparser.pub.utils import idutil
+
     idutil.get_auto_id = mock.Mock()
     idutil.get_auto_id.return_value = 1

@@ -246,10 +246,8 @@ class TestNsPackage(TestCase):
                                  "version": 1,
                                  "name": "VCPE_NS",
                                  "desginer": "ZTE",
-                                 "invariant_id": "vcpe_ns_sff_1"
-                             }
-        }
-        }
+                                 "invariant_id": "vcpe_ns_sff_1"}}
+                         }
 
     def tearDown(self):
         pass
@@ -257,7 +255,7 @@ class TestNsPackage(TestCase):
     def test_ns_pkg_distribute_when_ns_exists(self):
         NSPackageModel(nsPackageId="1", nsdId="2").save()
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
@@ -268,7 +266,7 @@ class TestNsPackage(TestCase):
     def test_ns_pkg_distribute_when_csar_not_exist(self, mock_call_req):
         mock_call_req.return_value = [0, "[]", '200']
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
@@ -289,7 +287,7 @@ class TestNsPackage(TestCase):
         }]), '200']
         NSPackageModel(nsPackageId="2", nsdId="VCPE_NS").save()
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
@@ -309,7 +307,7 @@ class TestNsPackage(TestCase):
             "distributionStatus": "DISTRIBUTED",
         }]), '200']
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
@@ -331,7 +329,7 @@ class TestNsPackage(TestCase):
         VnfPackageModel(vnfPackageId="1", vnfdId="vcpe_vfw_zte_1_0").save()
         PnfPackageModel(pnfPackageId="1", pnfdId="m6000_s").save()
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("success", resp.data["status"])
         self.assertEqual(
@@ -354,7 +352,7 @@ class TestNsPackage(TestCase):
             "lastUpdaterUserId": "jh0003"
         }]
         resp = self.client.post(
-            "/api/genericparser/v1/nspackages", {"csarId": "1"}, format='json')
+            "/api/parser/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
@@ -365,7 +363,7 @@ class TestNsPackage(TestCase):
 
     def test_ns_pkg_normal_delete(self):
         NSPackageModel(nsPackageId="8", nsdId="2").save()
-        resp = self.client.delete("/api/genericparser/v1/nspackages/8")
+        resp = self.client.delete("/api/parser/v1/nspackages/8")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual("success", resp.data["status"])
         self.assertEqual(
@@ -387,7 +385,7 @@ class TestNsPackage(TestCase):
             nsdVersion="3",
             nsPackageUri="14.csar",
             nsdModel="").save()
-        resp = self.client.get("/api/genericparser/v1/nspackages")
+        resp = self.client.get("/api/parser/v1/nspackages")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         expect_data = [{"csarId": "13",
                         "packageInfo": {"csarName": "13.csar",
@@ -418,7 +416,7 @@ class TestNsPackage(TestCase):
             nsdVersion="4",
             nsPackageUri="14.csar",
             nsdModel="").save()
-        resp = self.client.get("/api/genericparser/v1/nspackages/14")
+        resp = self.client.get("/api/parser/v1/nspackages/14")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         expect_data = {
             "csarId": "14",
@@ -434,7 +432,7 @@ class TestNsPackage(TestCase):
         self.assertEqual(expect_data, resp.data)
 
     def test_ns_pkg_get_one_not_found(self):
-        resp = self.client.get("/api/genericparser/v1/nspackages/22")
+        resp = self.client.get("/api/parser/v1/nspackages/22")
         self.assertEqual(resp.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertEqual(
             {"error": "Ns package[22] not Found."},
@@ -448,7 +446,7 @@ class TestNsPackage(TestCase):
         mock_parse_nsd.return_value = json.JSONEncoder().encode({"a": "b"})
         req_data = {"csarId": "18", "inputs": []}
         resp = self.client.post(
-            "/api/genericparser/v1/parsernsd",
+            "/api/parser/v1/parsernsd",
             req_data,
             format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
@@ -457,7 +455,7 @@ class TestNsPackage(TestCase):
     def test_nsd_parse_when_csar_not_exist(self):
         req_data = {"csarId": "1", "inputs": []}
         resp = self.client.post(
-            "/api/genericparser/v1/parsernsd",
+            "/api/parser/v1/parsernsd",
             req_data,
             format='json')
         self.assertEqual(
