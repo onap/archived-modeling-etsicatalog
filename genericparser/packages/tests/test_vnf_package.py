@@ -16,6 +16,7 @@ import json
 import os
 import urllib2
 import mock
+import shutil
 
 from django.test import TestCase
 from rest_framework import status
@@ -42,7 +43,9 @@ class TestVnfPackage(TestCase):
         self.client = APIClient()
 
     def tearDown(self):
-        pass
+        file_path = os.path.join(GENERICPARSER_ROOT_PATH, "222")
+        if os.path.exists(file_path):
+            shutil.rmtree(file_path)
 
     @mock.patch.object(toscaparsers, 'parse_vnfd')
     def test_upload_vnf_pkg(self, mock_parse_vnfd):
@@ -250,12 +253,28 @@ class TestVnfPackage(TestCase):
             onboardingState="ONBOARDED",
             localFilePath="vnfPackage.csar"
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content", RANGE="4-7")
+        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content", HTTP_RANGE="4-7")
         partial_file_content = ''
         for data in response.streaming_content:
             partial_file_content = partial_file_content + data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual('BBB', partial_file_content)
+        os.remove("vnfPackage.csar")
+
+    def test_fetch_last_partical_vnf_pkg(self):
+        with open("vnfPackage.csar", "wb") as fp:
+            fp.writelines("AAAABBBBCCCCDDDD")
+        VnfPackageModel.objects.create(
+            vnfPackageId="222",
+            onboardingState="ONBOARDED",
+            localFilePath="vnfPackage.csar"
+        )
+        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content", HTTP_RANGE=" 4-")
+        partial_file_content = ''
+        for data in response.streaming_content:
+            partial_file_content = partial_file_content + data
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual('BBBBCCCCDDDD', partial_file_content)
         os.remove("vnfPackage.csar")
 
     def test_fetch_vnf_pkg_when_pkg_not_exist(self):

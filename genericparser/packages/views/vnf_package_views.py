@@ -19,13 +19,15 @@ from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from genericparser.pub.exceptions import GenericparserException
 from genericparser.packages.serializers.upload_vnf_pkg_from_uri_req import UploadVnfPackageFromUriRequestSerializer
 from genericparser.packages.serializers.create_vnf_pkg_info_req import CreateVnfPkgInfoRequestSerializer
 from genericparser.packages.serializers.vnf_pkg_info import VnfPkgInfoSerializer
 from genericparser.packages.serializers.vnf_pkg_infos import VnfPkgInfosSerializer
-from genericparser.packages.biz.vnf_package import VnfPackage, VnfPkgUploadThread, parse_vnfd_and_save, handle_upload_failed
-from genericparser.packages.views.common import validate_data
+from genericparser.packages.biz.vnf_package import VnfPackage
+from genericparser.packages.biz.vnf_package import VnfPkgUploadThread
+from genericparser.packages.biz.vnf_package import parse_vnfd_and_save
+from genericparser.packages.biz.vnf_package import handle_upload_failed
+from .common import validate_data
 from .common import view_safe_call_with_log
 
 logger = logging.getLogger(__name__)
@@ -60,7 +62,8 @@ def vnf_packages_rc(request):
 
     if request.method == 'POST':
         logger.debug("Create VNF package> %s" % request.data)
-        create_vnf_pkg_info_request = validate_data(request.data, CreateVnfPkgInfoRequestSerializer)
+        create_vnf_pkg_info_request = validate_data(request.data,
+                                                    CreateVnfPkgInfoRequestSerializer)
         data = VnfPackage().create_vnf_pkg(create_vnf_pkg_info_request.data)
         vnf_pkg_info = validate_data(data, VnfPkgInfoSerializer)
         return Response(data=vnf_pkg_info.data, status=status.HTTP_201_CREATED)
@@ -96,15 +99,12 @@ def package_content_ru(request, **kwargs):
             local_file_name = VnfPackage().upload(vnf_pkg_id, files[0])
             parse_vnfd_and_save(vnf_pkg_id, local_file_name)
             return Response(None, status=status.HTTP_202_ACCEPTED)
-        except GenericparserException as e:
-            handle_upload_failed(vnf_pkg_id)
-            raise e
         except Exception as e:
             handle_upload_failed(vnf_pkg_id)
             raise e
 
     if request.method == "GET":
-        file_range = request.META.get('RANGE')
+        file_range = request.META.get('HTTP_RANGE')
         file_iterator = VnfPackage().download(vnf_pkg_id, file_range)
         return StreamingHttpResponse(file_iterator, status=status.HTTP_200_OK)
 
@@ -123,12 +123,10 @@ def package_content_ru(request, **kwargs):
 def upload_from_uri_c(request, **kwargs):
     vnf_pkg_id = kwargs.get("vnfPkgId")
     try:
-        upload_vnf_from_uri_request = validate_data(request.data, UploadVnfPackageFromUriRequestSerializer)
+        upload_vnf_from_uri_request = validate_data(request.data,
+                                                    UploadVnfPackageFromUriRequestSerializer)
         VnfPkgUploadThread(upload_vnf_from_uri_request.data, vnf_pkg_id).start()
         return Response(None, status=status.HTTP_202_ACCEPTED)
-    except GenericparserException as e:
-        handle_upload_failed(vnf_pkg_id)
-        raise e
     except Exception as e:
         handle_upload_failed(vnf_pkg_id)
         raise e

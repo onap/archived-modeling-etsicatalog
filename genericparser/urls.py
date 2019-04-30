@@ -13,10 +13,13 @@
 # limitations under the License.
 
 from django.conf.urls import include, url
+from django.contrib import admin
+
 
 from genericparser.pub.config.config import REG_TO_MSB_WHEN_START, REG_TO_MSB_REG_URL, REG_TO_MSB_REG_PARAM
 
 urlpatterns = [
+    url(r'^api/genericparser/v1/admin', admin.site.urls),
     url(r'^', include('genericparser.samples.urls')),
     url(r'^', include('genericparser.packages.urls')),
     url(r'^', include('genericparser.jobs.urls')),

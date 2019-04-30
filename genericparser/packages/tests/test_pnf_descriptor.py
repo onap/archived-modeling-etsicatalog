@@ -17,6 +17,7 @@ import copy
 import json
 import mock
 import os
+import shutil
 
 from django.test import TestCase
 from rest_framework import status
@@ -24,6 +25,7 @@ from rest_framework.test import APIClient
 from genericparser.packages.biz.pnf_descriptor import PnfDescriptor
 from genericparser.packages.const import PKG_STATUS
 from genericparser.packages.tests.const import pnfd_data
+from genericparser.pub.config.config import GENERICPARSER_ROOT_PATH
 from genericparser.pub.database.models import PnfPackageModel, NSPackageModel
 from genericparser.pub.utils import toscaparsers
 
@@ -54,7 +56,9 @@ class TestPnfDescriptor(TestCase):
         }
 
     def tearDown(self):
-        pass
+        file_path = os.path.join(GENERICPARSER_ROOT_PATH, "22")
+        if os.path.exists(file_path):
+            shutil.rmtree(file_path)
 
     def test_pnfd_create_normal(self):
         request_data = {'userDefinedData': self.user_defined_data}
