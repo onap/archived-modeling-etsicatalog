@@ -49,5 +49,11 @@ class NsdmDuplicateSubscriptionException(GenericparserException):
     pass
 
 
+
+class BadRequestException(GenericparserException):
+    pass
+
+
+
 class ArtifactNotFoundException(GenericparserException):
     pass

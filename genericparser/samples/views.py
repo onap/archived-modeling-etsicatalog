@@ -30,6 +30,14 @@ class SampleList(APIView):
         logger.debug("get")
         return Response({"status": "active"})
 
+class CallbackSample(APIView):
+    """
+    Callback Sample.
+    """
+    def get(self, request, format=None):
+        logger.debug("Callback Sample")
+        return Response(data={}, status=status.HTTP_204_NO_CONTENT)
+
 
 class TablesList(APIView):
     def delete(self, request, modelName):

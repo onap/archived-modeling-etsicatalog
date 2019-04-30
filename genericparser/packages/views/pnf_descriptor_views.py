@@ -25,10 +25,10 @@ from genericparser.packages.serializers.create_pnfd_info_request import CreatePn
 from genericparser.packages.serializers.pnfd_info import PnfdInfoSerializer
 from genericparser.packages.serializers.pnfd_infos import PnfdInfosSerializer
 from genericparser.packages.views.common import validate_data
-from genericparser.pub.exceptions import GenericparserException
 from genericparser.packages.serializers.genericparser_serializers import ParseModelRequestSerializer
 from genericparser.packages.serializers.genericparser_serializers import ParseModelResponseSerializer
 from genericparser.packages.serializers.genericparser_serializers import InternalErrorRequestSerializer
+from genericparser.packages.serializers.response import ProblemDetailsSerializer
 from genericparser.pub.utils.syscomm import fun_name
 from genericparser.pub.utils.values import ignore_case_get
 from .common import view_safe_call_with_log
@@ -42,8 +42,8 @@ logger = logging.getLogger(__name__)
     request_body=no_body,
     responses={
         status.HTTP_200_OK: PnfdInfoSerializer(),
-        status.HTTP_404_NOT_FOUND: "PNFD does not exist",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @swagger_auto_schema(
@@ -52,7 +52,7 @@ logger = logging.getLogger(__name__)
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @api_view(http_method_names=['GET', 'DELETE'])
@@ -77,7 +77,7 @@ def pnfd_info_rd(request, **kwargs):  # TODO
     request_body=CreatePnfdInfoRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: PnfdInfoSerializer(),
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @swagger_auto_schema(
@@ -86,7 +86,7 @@ def pnfd_info_rd(request, **kwargs):  # TODO
     request_body=no_body,
     responses={
         status.HTTP_200_OK: PnfdInfosSerializer(),
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @api_view(http_method_names=['POST', 'GET'])
@@ -99,11 +99,7 @@ def pnf_descriptors_rc(request):
         return Response(data=pnfd_info.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
-        pnfdId = request.query_params.get('pnfdId', None)
-        if pnfdId:
-            data = PnfDescriptor().query_multiple(pnfdId)
-        else:
-            data = PnfDescriptor().query_multiple()
+        data = PnfDescriptor().query_multiple(request)
         pnfd_infos = validate_data(data, PnfdInfosSerializer)
         return Response(data=pnfd_infos.data, status=status.HTTP_200_OK)
 
@@ -114,7 +110,7 @@ def pnf_descriptors_rc(request):
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @swagger_auto_schema(
@@ -123,8 +119,8 @@ def pnf_descriptors_rc(request):
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'PNFD file',
-        status.HTTP_404_NOT_FOUND: "PNFD does not exist",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     }
 )
 @api_view(http_method_names=['PUT', 'GET'])
@@ -137,9 +133,6 @@ def pnfd_content_ru(request, **kwargs):
             local_file_name = PnfDescriptor().upload(files[0], pnfd_info_id)
             PnfDescriptor().parse_pnfd_and_save(pnfd_info_id, local_file_name)
             return Response(data=None, status=status.HTTP_204_NO_CONTENT)
-        except GenericparserException as e:
-            PnfDescriptor().handle_upload_failed(pnfd_info_id)
-            raise e
         except Exception as e:
             PnfDescriptor().handle_upload_failed(pnfd_info_id)
             raise e

@@ -2,7 +2,6 @@
 
 install_sf(){
 
-    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     apk --no-cache update
     apk --no-cache add bash curl gcc wget mysql-client openssl-dev
     apk --no-cache add python-dev libffi-dev musl-dev py2-virtualenv
@@ -13,7 +12,6 @@ install_sf(){
     unzip modeling-genericparser.zip && \
     rm -rf modeling-genericparser.zip && \
     pip install --upgrade setuptools pip  && \
-
     pip install --no-cache-dir --pre -r  /service/modeling/genericparser/requirements.txt
 }
 
@@ -32,11 +30,11 @@ config_logdir(){
 
     if [ ! -d "/var/log/onap" ]; then
        sudo mkdir /var/log/onap
-    fi 
-   
+    fi
+
     sudo chown onap:onap -R /var/log/onap
     chmod g+s /var/log/onap
-    
+
 }
 
 clean_sf_cache(){

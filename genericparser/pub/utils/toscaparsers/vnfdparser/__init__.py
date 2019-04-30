@@ -1,4 +1,4 @@
-# Copyright 2017 ZTE Corporation.
+# Copyright 2019 ZTE Corporation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls import url
-from genericparser.samples import views
+from genericparser.pub.utils.toscaparsers.vnfdparser.vnfd_sol_base import VnfdSOLBase
+from genericparser.pub.utils.toscaparsers.vnfdparser.vnfd_sol_251 import VnfdSOL251
 
-urlpatterns = [
-    url(r'^api/genericparser/v1/mandb/(?P<modelName>[a-zA-Z\-]+)$', views.TablesList.as_view()),
-    url(r'^api/genericparser/v1/callback_sample$', views.CallbackSample.as_view()),
-    url(r'^samples/$', views.SampleList.as_view())
-]
+
+def CreateVnfdSOLParser(sol_version, etsi_vnfd_model):
+    switcher = {
+        "base": VnfdSOLBase(etsi_vnfd_model),
+        "2.5.1+1": VnfdSOL251(etsi_vnfd_model)
+    }
+    return switcher.get(sol_version, lambda: "Invalid Version")
