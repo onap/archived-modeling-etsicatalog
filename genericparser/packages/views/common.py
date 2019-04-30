@@ -19,10 +19,14 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from genericparser.pub.exceptions import GenericparserException
+from genericparser.pub.exceptions import BadRequestException
 from genericparser.pub.exceptions import NsdmBadRequestException
 from genericparser.pub.exceptions import PackageNotFoundException
 from genericparser.pub.exceptions import ResourceNotFoundException
 from genericparser.pub.exceptions import ArtifactNotFoundException
+from genericparser.pub.exceptions import NsdmDuplicateSubscriptionException
+from genericparser.pub.exceptions import VnfPkgDuplicateSubscriptionException
+from genericparser.pub.exceptions import VnfPkgSubscriptionException
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +58,18 @@ def view_safe_call_with_log(logger):
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
+            except NsdmDuplicateSubscriptionException as e:
+                logger.error(e.message)
+                return make_error_resp(
+                    detail=e.message,
+                    status=status.HTTP_303_SEE_OTHER
+                )
+            except VnfPkgDuplicateSubscriptionException as e:
+                logger.error(e.message)
+                return make_error_resp(
+                    detail=e.message,
+                    status=status.HTTP_303_SEE_OTHER
+                )
             except PackageNotFoundException as e:
                 logger.error(e.message)
                 return make_error_resp(
@@ -72,11 +88,23 @@ def view_safe_call_with_log(logger):
                     detail=e.message,
                     status=status.HTTP_404_NOT_FOUND
                 )
+            except BadRequestException as e:
+                logger.error(e.message)
+                return make_error_resp(
+                    detail=e.message,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             except NsdmBadRequestException as e:
                 logger.error(e.message)
                 return make_error_resp(
                     detail=e.message,
                     status=status.HTTP_400_BAD_REQUEST
+                )
+            except VnfPkgSubscriptionException as e:
+                logger.error(e.message)
+                return make_error_resp(
+                    detail=e.message,
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             except GenericparserException as e:
                 logger.error(e.message)
