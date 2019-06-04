@@ -165,6 +165,11 @@ if platform.system() == 'Windows' or 'test' in sys.argv:
                 'level': 'DEBUG',
                 'propagate': False
             },
+            'tosca.model': {
+                'handlers': ['genericparser_handler'],
+                'level': 'DEBUG',
+                'propagate': False
+            },
         }
     }
 else:
