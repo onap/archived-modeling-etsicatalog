@@ -1,5 +1,5 @@
 # rest framework
-Django==1.11.9
+Django==1.11.21
 djangorestframework==3.7.7
 
 # for access MySQL
