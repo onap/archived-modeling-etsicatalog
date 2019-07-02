@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Yan Yang <yangyanyj@chinamobile.com>
+Code-Review+2: maopeng zhang <zhang.maopeng1@zte.com.cn>
+Submitted-by: maopeng zhang <zhang.maopeng1@zte.com.cn>
+Submitted-at: Tue, 02 Jul 2019 03:24:43 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/modeling/genericparser/+/90757
+Project: modeling/genericparser
+Branch: refs/heads/master
