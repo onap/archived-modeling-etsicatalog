@@ -15,6 +15,7 @@ import datetime
 import logging
 import uuid
 import traceback
+from functools import reduce
 
 from genericparser.pub.database.models import JobStatusModel, JobModel
 from genericparser.pub.utils import idutil

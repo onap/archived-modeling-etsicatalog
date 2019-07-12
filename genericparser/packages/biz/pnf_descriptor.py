@@ -221,8 +221,8 @@ class PnfDescriptor(object):
             csar_path = pnf_pkg[0].localFilePath
             ret = {"model": toscaparsers.parse_pnfd(csar_path, inputs)}
         except GenericparserException as e:
-            return [1, e.message]
+            return [1, e.args[0]]
         except Exception as e:
-            logger.error(e.message)
-            return [1, e.message]
+            logger.error(e.args[0])
+            return [1, e.args[0]]
         return [0, ret]

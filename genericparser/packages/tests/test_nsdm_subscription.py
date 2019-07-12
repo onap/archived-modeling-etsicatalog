@@ -30,7 +30,6 @@ class TestNsdmSubscription(TestCase):
         NsdmSubscriptionModel.objects.all().delete()
         self.subscription_id = str(uuid.uuid4())
         self.subscription = {
-            "filter": {},
             "callbackUri": "http://callbackuri.com",
             "authentication": {
                 "authType": ["BASIC"],
@@ -38,6 +37,9 @@ class TestNsdmSubscription(TestCase):
                     "userName": "username",
                     "password": "password"
                 }
+            },
+            "filter": {
+                "nsdId": ["b632bddc-abcd-4180-bd8d-4e8a9578eff7"],
             }
         }
         self.links = {

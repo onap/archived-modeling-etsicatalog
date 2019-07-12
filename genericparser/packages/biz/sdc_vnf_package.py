@@ -39,9 +39,9 @@ def nf_get_csars():
     try:
         ret = NfPackage().get_csars()
     except GenericparserException as e:
-        return [1, e.message]
+        return [1, e.args[0]]
     except Exception as e:
-        logger.error(e.message)
+        logger.error(e.args[0])
         logger.error(traceback.format_exc())
         return [1, str(sys.exc_info())]
     return ret
@@ -52,9 +52,9 @@ def nf_get_csar(csar_id):
     try:
         ret = NfPackage().get_csar(csar_id)
     except GenericparserException as e:
-        return [1, e.message]
+        return [1, e.args[0]]
     except Exception as e:
-        logger.error(e.message)
+        logger.error(e.args[0])
         logger.error(traceback.format_exc())
         return [1, str(sys.exc_info())]
     return ret
@@ -69,9 +69,9 @@ def parse_vnfd(csar_id, inputs):
         csar_path = nf_pkg[0].localFilePath
         ret = {"model": toscaparsers.parse_vnfd(csar_path, inputs)}
     except GenericparserException as e:
-        return [1, e.message]
+        return [1, e.args[0]]
     except Exception as e:
-        logger.error(e.message)
+        logger.error(e.args[0])
         logger.error(traceback.format_exc())
         return [1, str(sys.exc_info())]
     return [0, ret]
@@ -96,9 +96,9 @@ class NfDistributeThread(threading.Thread):
             self.on_distribute()
         except GenericparserException as e:
             self.rollback_distribute()
-            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.message)
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.args[0])
         except Exception as e:
-            logger.error(e.message)
+            logger.error(e.args[0])
             logger.error(traceback.format_exc())
             logger.error(str(sys.exc_info()))
             self.rollback_distribute()
@@ -162,7 +162,7 @@ class NfDistributeThread(threading.Thread):
             VnfPackageModel.objects.filter(vnfPackageId=self.csar_id).delete()
             fileutil.delete_dirs(self.csar_save_path)
         except Exception as e:
-            logger.error(e.message)
+            logger.error(e.args[0])
             logger.error(traceback.format_exc())
             logger.error(str(sys.exc_info()))
 
@@ -181,9 +181,9 @@ class NfPkgDeleteThread(threading.Thread):
         try:
             self.delete_csar()
         except GenericparserException as e:
-            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.message)
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.args[0])
         except Exception as e:
-            logger.error(e.message)
+            logger.error(e.args[0])
             logger.error(traceback.format_exc())
             logger.error(str(sys.exc_info()))
             JobUtil.add_job_status(self.job_id, JOB_ERROR, "Failed to delete CSAR(%s)" % self.csar_id)
