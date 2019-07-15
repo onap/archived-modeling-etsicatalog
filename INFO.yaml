@@ -34,6 +34,11 @@ committers:
       company: 'ZTE'
       id: 'Zhaoxing'
       timezone: 'Asia/Shanghai'
+    - name: 'Yuanhong Deng'
+      email: 'dengyuanhong@chinamobile.com'
+      company: 'CMCC'
+      id: 'dengyh'
+      timezone: 'Asia/Shanghai'
 tsc:
     approval: 'https://lists.onap.org/pipermail/onap-tsc'
     changes:
@@ -46,6 +51,9 @@ tsc:
         - type: 'Addition'
           name: 'Zhaoxing Meng'
           link: 'https://wiki.onap.org/pages/viewpage.action?pageId=28381587'
+        - type: 'Addition'
+          name: 'Yuanhong Deng'
+          link: 'https://wiki.onap.org/display/DW/New+Committer+Promotion+Request+for+Modeling+genericparser'
 mailing_list:
     type: 'groups.io'
     url: 'lists.onap.org'
