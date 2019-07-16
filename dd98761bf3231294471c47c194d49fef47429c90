@@ -1,0 +1,10 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Yan Yang <yangyanyj@chinamobile.com>
+Code-Review+1: deng yuanhong <dengyuanhong@chinamobile.com>
+Code-Review+2: Hui Deng <denghui12@huawei.com>
+Verified+1: Hui Deng <denghui12@huawei.com>
+Submitted-by: Hui Deng <denghui12@huawei.com>
+Submitted-at: Tue, 16 Jul 2019 09:24:53 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/modeling/genericparser/+/91487
+Project: modeling/genericparser
+Branch: refs/heads/master
