@@ -1,4 +1,4 @@
 [gerrit]
 host=gerrit.onap.org
 port=29418
-project=modeling/toscaparsers/genericparser
+project=modeling/genericparser

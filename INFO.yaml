@@ -28,7 +28,7 @@ meetings:
       repeats: 'dual weekly'
       time: '13:00 UTC'
 repositories:
-    - 'modeling-genericparser'
+    - 'modeling/genericparser'
 committers:
     - <<: *onap_modeling_ptl
     - name: 'Yuanhong Deng'
