@@ -1,5 +1,5 @@
 ---
-project: 'modeling-genericparser'
+project: 'modeling-etsicatalog'
 project_creation_date: '2019-02-05'
 project_category: ''
 lifecycle_state: 'Incubation'
@@ -28,13 +28,18 @@ meetings:
       repeats: 'dual weekly'
       time: '13:00 UTC'
 repositories:
-    - 'modeling-genericparser'
+    - 'modeling-etsicatalog'
 committers:
     - <<: *onap_modeling_ptl
     - name: 'Yuanhong Deng'
       email: 'dengyuanhong@chinamobile.com'
       company: 'CMCC'
       id: 'dengyh'
+      timezone: 'Asia/Shanghai'
+    - name: 'Maopeng Zhang'
+      email: 'zhang.maopeng1@zte.com.cn'
+      company: 'ZTE'
+      id: 'maopengzhang'
       timezone: 'Asia/Shanghai'
 tsc:
     approval: 'https://lists.onap.org/pipermail/onap-tsc'
@@ -45,3 +50,9 @@ tsc:
         - type: 'Addition'
           name: 'Yuanhong Deng'
           link: 'https://lists.onap.org/g/onap-tsc/message/5221'
+        - type: 'Modification'
+          target: 'repository name'
+          link: 'https://lists.onap.org/g/onap-tsc/message/5399'
+        - type: 'Addition'
+          name: 'Maopeng Zhang'
+          link: 'https://lists.onap.org/g/onap-tsc/message/5364'
