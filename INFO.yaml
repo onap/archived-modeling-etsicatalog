@@ -28,7 +28,7 @@ meetings:
       repeats: 'dual weekly'
       time: '13:00 UTC'
 repositories:
-    - 'modeling-etsicatalog'
+    - 'modeling/etsicatalog'
 committers:
     - <<: *onap_modeling_ptl
     - name: 'Yuanhong Deng'
