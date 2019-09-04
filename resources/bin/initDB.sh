@@ -20,15 +20,15 @@ MYSQL_USER=$1
 MYSQL_PASSWORD=$2
 MYSQL_PORT=$3
 MYSQL_IP=$4
-echo "start create gengricparser db"
+echo "start create etsicatalog db"
 sql_path=$HOME/../
-mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -P$MYSQL_PORT -h$MYSQL_IP <$sql_path/dbscripts/mysql/modeling-gengricparser-createdb.sql
+mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -P$MYSQL_PORT -h$MYSQL_IP <$sql_path/dbscripts/mysql/modeling-etsicatalog-createdb.sql
 sql_result=$?
 if [ $sql_result -ne 0 ] ; then
-    echo "Failed to create gengricparser database"
+    echo "Failed to create etsicatalog database"
     exit 1
 else
-    echo "Create gengricparser database successfully"
+    echo "Create etsicatalog database successfully"
     exit 0
 fi
 

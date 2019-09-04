@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Micro service of generic parser.
+# Micro service of etsicatalog.
 
 1. Code structure guide
    ./         project files
@@ -29,6 +29,6 @@
              ./tests          All the test case. At least each API should have a test case
        ./jobs      Related job
        ./pub       Common class, including database, external micro service API, utils, and config parameters.
-       ./samples   generic parser micro service health check
-       ./swagger   Auto-generate generic parser swagger json or yaml files
-   ./static/genericparser  package storage
+       ./samples   Catalog micro service health check
+       ./swagger   Auto-generate catalog swagger json or yaml files
+   ./static/catalog  package storage

@@ -2,18 +2,18 @@
 
 MSB_IP=`echo $MSB_ADDR | cut -d: -f 1`
 MSB_PORT=`echo $MSB_ADDR | cut -d: -f 2`
-# modeling/genericparser
+# modeling/etsicatalog
 
 if [ $MSB_IP ]; then
-    sed -i "s|MSB_SERVICE_IP.*|MSB_SERVICE_IP = '$MSB_IP'|"  modeling/genericparser/genericparser/pub/config/config.py
+    sed -i "s|MSB_SERVICE_IP.*|MSB_SERVICE_IP = '$MSB_IP'|"  modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 if [ $MSB_PORT ]; then
-    sed -i "s|MSB_SERVICE_PORT.*|MSB_SERVICE_PORT = '$MSB_PORT'|" modeling/genericparser/genericparser/pub/config/config.py
+    sed -i "s|MSB_SERVICE_PORT.*|MSB_SERVICE_PORT = '$MSB_PORT'|" modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 if [ $SERVICE_IP ]; then
-    sed -i "s|\"ip\": \".*\"|\"ip\": \"$SERVICE_IP\"|" modeling/genericparser/genericparser/pub/config/config.py
+    sed -i "s|\"ip\": \".*\"|\"ip\": \"$SERVICE_IP\"|" modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 MYSQL_IP=`echo $MYSQL_ADDR | cut -d: -f 1`
@@ -27,8 +27,8 @@ else
 fi
 
 
-sed -i "s|DB_IP.*|DB_IP = '$MYSQL_IP'|" modeling/genericparser/genericparser/pub/config/config.py
-sed -i "s|DB_PORT.*|DB_PORT = $MYSQL_PORT|" modeling/genericparser/genericparser/pub/config/config.py
-sed -i "s|REDIS_HOST.*|REDIS_HOST = '$REDIS_IP'|"modeling/genericparser/genericparser/pub/config/config.py
+sed -i "s|DB_IP.*|DB_IP = '$MYSQL_IP'|" modeling/etsicatalog/catalog/pub/config/config.py
+sed -i "s|DB_PORT.*|DB_PORT = $MYSQL_PORT|" modeling/etsicatalog/catalog/pub/config/config.py
+sed -i "s|REDIS_HOST.*|REDIS_HOST = '$REDIS_IP'|"modeling/etsicatalog/catalog/pub/config/config.py
 
-cat modeling/genericparser/genericparser/pub/config/config.py
+cat modeling/etsicatalog/catalog/pub/config/config.py

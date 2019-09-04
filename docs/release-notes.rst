@@ -2,10 +2,10 @@
 .. http://creativecommons.org/licenses/by/4.0
 
 
-genericparser Release Notes
+etsicatalog Release Notes
 ==================
 
-genericparser provides package management service and parser service as Micro Service.
+etsicatalog provides package management service and parser service as Micro Service.
 
 Version: 1.0.2
 --------------
