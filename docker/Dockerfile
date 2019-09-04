@@ -15,4 +15,4 @@ EXPOSE 8806
 USER onap
 WORKDIR /service
 
-ENTRYPOINT modeling/genericparser/docker/docker-entrypoint.sh
+ENTRYPOINT modeling/etsicatalog/docker/docker-entrypoint.sh

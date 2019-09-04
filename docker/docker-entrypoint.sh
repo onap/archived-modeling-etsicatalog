@@ -35,12 +35,12 @@ for i in {1..5}; do
 done
 
 # Configure service based on docker environment variables
-modeling/genericparser/docker/instance_config.sh
+modeling/etsicatalog/docker/instance_config.sh
 
 # microservice-specific one-time initialization
-modeling/genericparser/docker/instance_init.sh
+modeling/etsicatalog/docker/instance_init.sh
 
 date > init.log
 
 # Start the microservice
-modeling/genericparser/docker/instance_run.sh
+modeling/etsicatalog/docker/instance_run.sh

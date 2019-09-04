@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cd /service/modeling/genericparser
+cd /service/modeling/etsicatalog
 
 ./run.sh
 
-while [ ! -f logs/runtime_genericparser.log ]; do
+while [ ! -f logs/runtime_etsicatalog.log ]; do
     sleep 1
 done
-tail -F logs/runtime_genericparser.log
+tail -F logs/runtime_etsicatalog.log
