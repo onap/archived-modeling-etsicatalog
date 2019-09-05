@@ -1,0 +1,251 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+capability_types: 
+ 
+  tosca.capabilities.nfv.VirtualLinkable:
+    derived_from: tosca.capabilities.Root
+
+data_types:
+ 
+  tosca.datatypes.nfv.ConnectivityType:
+    derived_from: tosca.datatypes.Root
+    properties: 
+      layer_protocol:
+        type: string
+        required: true
+        constraints:
+          - valid_values: [ethernet, mpls, odu2, ipv4, ipv6, pseudo_wire ]  
+      flow_pattern:
+        type: string
+        required: false
+        constraints: # not defined in IFA011 v2.4.1 and SOL001 v.6.0
+          - valid_values: [Line, Tree, Mesh]
+  
+  tosca.datatypes.nfv.VlProfile:
+      derived_from: tosca.datatypes.Root
+      properties:
+        max_bit_rate_requirements:
+           type: tosca.datatypes.nfv.LinkBitRateRequirements
+           required: true
+        min_bit_rate_requirements:
+           type: tosca.datatypes.nfv.LinkBitRateRequirements
+           required: true
+        qos:
+           type: tosca.datatypes.nfv.Qos
+           required: false
+        initiationParameters: #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: map
+           entry_schema:
+             type: string
+           required: false
+        cidr: #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        networkName:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        startIp:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        endIp:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        gatewayIp:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        segmentationId:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: integer
+           required: false
+        physicalNetwork:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+        networkType:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: string
+           required: false
+           constraints:
+             - valid_values: [VLAN, VXLAN]
+        dhcpEnabled:  # not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: boolean
+           required: false
+        vlanTransparent:  #Align with ONAP R2 IM. not defined in IFA011 v2.4.1 and SOL001 v.6.0
+           type: boolean
+           required: false
+  
+  tosca.datatypes.nfv.Qos:
+    derived_from: tosca.datatypes.Root
+    properties:
+      latency:
+         type: integer #Number [ms]
+         required: true
+      packet_delay_variation:
+         type: integer #Number [ms]
+         required: true
+      packet_loss_ratio:
+         type: float
+         constraints:
+           - in_range: [ 0.0, 1.0 ]
+         required: false
+  
+  tosca.datatypes.nfv.ServiceAvailability:
+   derived_from: tosca.datatypes.Root
+   description: service availability
+   properties:
+     Level:
+       type: string
+       description: service availability levels
+       required: true
+       constraints:
+          - valid_values: [ Level1, Level2,Level3 ]
+          
+node_types:  
+  tosca.nodes.nfv.VNF:
+    derived_from: tosca.nodes.Root
+    properties:
+      descriptor_id: 
+        type: string # GUID
+        required: true
+      descriptor_version: 
+        type: string
+        required: true
+      provider: 
+        type: string
+        required: true
+      product_name: 
+        type: string
+        required: true
+      software_version: 
+        type: string
+        required: true
+      product_info_name: 
+        type: string
+        required: false
+      product_info_description: 
+        type: string
+        required: false
+      vnfm_info:
+        type: list
+        entry_schema:
+          type: string
+        required: true
+      localization_languages:
+        type: list
+        entry_schema:
+          type: string
+        required: false
+      default_localization_language:
+        type: string
+        required: false
+      configurable_properties:
+        type: tosca.datatypes.nfv.VnfConfigurableProperties
+        required: false
+      modifiable_attributes:
+        type: tosca.datatypes.nfv.VnfInfoModifiableAttributes
+        required: false  
+      flavour_id:
+        type: string
+        required: true
+      flavour_description:
+        type: string
+        required: true
+    requirements:
+      - virtual_link:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          relationship: tosca.relationships.nfv.VirtualLinksTo
+          node: tosca.nodes.nfv.VnfVirtualLink
+          occurrences: [ 0, UNBOUNDED ]
+    interfaces:
+      Nfv:
+        type: tosca.interfaces.nfv.vnf.lifecycle.Nfv  
+  tosca.nodes.nfv.PNF:
+    derived_from: tosca.nodes.Root
+    properties:
+      descriptor_id:
+        type: string
+        required: true
+      provider:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      descriptor_invariant_id:
+        type: string
+        required: true
+      name:
+        type: string
+        required: true
+      function_description:
+        type: string
+        required: true
+      #geographical_location_info:       
+      #  type: TBD
+      #  required: true
+    requirements:
+       - virtual_link:
+           capability: tosca.capabilities.nfv.VirtualLinkable
+           relationship: tosca.relationships.nfv.VirtualLinksTo
+
+  tosca.nodes.nfv.PnfExtPort:           
+    derived_from: tosca.nodes.Root
+           
+  tosca.nodes.nfv.NsVirtualLink:
+    derived_from: tosca.nodes.Root
+    description: node definition of Virtual Links
+    properties:
+      provider:
+        type: string
+        required: false
+      version:
+        type: string
+        required: true
+      vl_profile:
+        type: tosca.datatypes.nfv.VlProfile
+        required: true
+      connectivity_type:
+        type: tosca.datatypes.nfv.ConnectivityType
+        required: true
+      qos:
+        type: tosca.datatypes.nfv.Qos
+        required: false
+      service_availability:
+        type: tosca.datatypes.nfv.ServiceAvailability
+        required: false
+    capabilities:
+      VirtualLinkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+  tosca.nodes.nfv.NS:
+    derived_from: tosca.nodes.Root
+    properties:
+      ns_id:
+        type: string
+        required: true
+      designer:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      name:
+        type: string
+        required: true
+      invariant_id:
+        type: string
+        required: true
+    capabilities:
+      #monitoring_parameter:
+        # modelled as ad hoc capabilities in VNF node template
+    requirements:
+      - virtual_link:
+          capability:
+             tosca.capabilities.nfv.VirtualLinkable
+          relationship:
+             tosca.relationships.nfv.VirtualLinksTo
+          node: tosca.nodes.nfv.NsVirtualLink
+          occurrences: [ 0, UNBOUNDED ]
+
+relationship_types:
+  
+  tosca.relationships.nfv.VirtualLinksTo:
+    derived_from: tosca.relationships.DependsOn
+    valid_target_types: [ tosca.capabilities.nfv.VirtualLinkable]
+

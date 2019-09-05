@@ -1,0 +1,2371 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  org.openecomp.service.VimsV2:
+    derived_from: org.openecomp.resource.abstract.nodes.service
+    capabilities:
+      sbchuawei0.intranet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.cmu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      cscfnokia0.oam.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.hru.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      cscfnokia0.lb_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      cscfnokia0.oam.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      cscfnokia0.cscf.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.bsu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      cscfnokia0.oam_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.intranet2.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      cscfnokia0.lb.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.ccu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      oamnet.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      cscfnokia0.cscf.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.scu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.lbu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.omu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lbcpd_diameter.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.vpu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.vpu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.vpu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.cmu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.vpu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.vpu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.ccu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.lbu2signalnet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb_internal.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      servicenet.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.ccu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.omu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      cscfnokia0.lbcpd_om.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.vpu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.vpu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.bsu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      cscfnokia0.lb_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      cscfnokia0.oamcpd_om.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam_internal.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.upiru_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.hru.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      servicenet.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.cscf_internal.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.cscf.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.ccu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.lbu2signalnet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.lbu_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.cmu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      cscfnokia0.cscf.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.cscf.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.lbu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.vpu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.omu2managenet.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.cmu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.internal.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.omu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru2medianet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru2medianet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.ccu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lbcpd_sip.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.cscf.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.hru.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.upiru_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.cscf.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.bsu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.bsu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.intranet1.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.vpu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      cscfnokia0.cscf.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      sbchuawei0.hru.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.cmu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      cscfnokia0.cscf.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      sbchuawei0.scu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      cscfnokia0.oam.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.omu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      sbchuawei0.ccu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.vpu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.omu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      sbchuawei0.bsu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.internal.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.lbu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      oamnet.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.hru_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.oam.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.vpu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.scu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.ccu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      sbchuawei0.cmu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      sbchuawei0.intranet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cscfnokia0.lb.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+    requirements:
+    - sbchuawei0.scu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.vpu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.cmu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.omu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.bsu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.intranet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.vpu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.intranet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.scu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.upiru_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.upiru_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.cmu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.bsu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.omu2managenet.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.ccu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.omu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.ccu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.cmu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.omu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.scu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.bsu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu2signalnet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu2signalnet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.ccu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.lbu_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru2medianet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.hru2medianet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.cscf.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.oam_internal.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.cscf_internal.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.internal.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lb_internal.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lbcpd_om.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lbcpd_diameter.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.oam.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.oamcpd_om.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lb_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lb.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.lbcpd_sip.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cscfnokia0.oam_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - servicenet.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - oamnet.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - sbchuawei0.vpu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.bsu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.lbu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.cmu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.ccu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.omu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.scu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.hru.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - cscfnokia0.cscf.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - cscfnokia0.oam.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - cscfnokia0.lb.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - sbchuawei0.hru_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.omu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.hru_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.scu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.upiru_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.upiru_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.omu2managenet.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.ccu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.cmu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.bsu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.lbu2signalnet1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.lbu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.lbu2signalnet2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.lbu_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.hru2medianet1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.hru2medianet2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.oam_internal.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.cscf_internal.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.lb_internal.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.lbcpd_om.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.lbcpd_diameter.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.oamcpd_om.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cscfnokia0.lbcpd_sip.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - sbchuawei0.vpu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.bsu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.lbu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.cmu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.ccu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.omu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.scu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.hru.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - cscfnokia0.cscf.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - cscfnokia0.oam.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - cscfnokia0.lb.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - sbchuawei0.hru_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.omu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.hru_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.scu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.upiru_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.upiru_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.omu2managenet.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.ccu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.cmu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.bsu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.lbu2signalnet1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.lbu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.lbu2signalnet2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.lbu_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.hru2medianet1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - sbchuawei0.hru2medianet2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.oam_internal.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.cscf_internal.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.lb_internal.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.lbcpd_om.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.lbcpd_diameter.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.oamcpd_om.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cscfnokia0.lbcpd_sip.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable

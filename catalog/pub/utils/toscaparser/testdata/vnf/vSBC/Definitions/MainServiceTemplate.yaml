@@ -1,0 +1,192 @@
+tosca_definitions_version: tosca_simple_profile_yaml_1_1
+description: the VNFD of Huawei SBC
+
+imports:
+  - onap_dm.yaml
+
+node_types:
+  org.openecomp.resource.vfc.Huawei.SBC.18.1:  
+    derived_from: tosca.nodes.nfv.VNF
+    properties:
+      descriptor_id:
+        type: string
+        constraints: 
+        - valid_values: 
+          - b1bb0ce7-ebca-4fa7-95ed-4840d70a1177
+        default: b1bb0ce7-ebca-4fa7-95ed-4840d70a1177
+      provider:
+        type: string
+        constraints:
+        - valid_values:
+          - Huawei
+        default: Huawei
+      product_name:
+        type: string
+        constraints:
+        - valid_values:
+          - SBC
+        default: SBC
+      software_version:
+        type: string
+        constraints:
+        - valid_values:
+          - 18
+        default: 18
+      descriptor_version:
+        type: string
+        constraints:
+        - valid_values:
+          - 1.0
+        default: 1.0
+      flavour_id:
+        type: string
+        constraints:
+        - valid_values:
+          - simple
+        default: simple   
+topology_template: 
+  node_templates:
+    SBC_VNF:
+      type: org.openecomp.resource.vfc.Huawei.SBC.18.1
+      properties:
+          descriptor_id: b1bb0ce7-ebca-4fa7-95ed-4840d70a1177
+          provider: Huawei
+          product_name: SBC
+          software_version: '1.0'
+          descriptor_version: '1.0'
+          flavour_id: simple 
+      requirements:
+      - virtual_link:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          node: LBU_ACCESS
+      - virtual_link:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          node: HRU_ACCESS
+      
+    LBU:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: LBU
+        description: LBU
+        configurable_properties: 
+          test: {"additional_vnfc_configurable_properties":{"aaa":"1"}}
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 4
+      capabilities:
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8096 MB
+            virtual_cpu:
+              cpu_architecture: x86
+              num_virtual_cpu: 2
+              virtual_cpu_clock: 1800 MHz
+      requirements:
+      - virtual_storage:
+          capability: tosca.capabilities.nfv.VirtualStorage
+          node: LBU_Storage        
+  
+    LBU_Storage:
+      type: tosca.nodes.nfv.Vdu.VirtualStorage
+      properties:
+        type_of_storage: LBU_Storage
+        size_of_storage: 4 GB
+        rdma_enabled:  true     
+
+    LBU_ACCESS_CP:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocol: [ ipv4 ]
+        role: leaf
+        description: External connection point to access LBU_access
+      requirements:
+      - virtual_link:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          node: LBU_ACCESS
+      - virtual_binding: 
+          capability: tosca.capabilities.nfv.VirtualBindable
+          node: LBU   
+    
+    LBU_ACCESS:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocol: [ ipv4 ]
+          flow_pattern: mesh
+        description: access network for LBU
+        vl_profile:
+          cidr: 192.168.1.24/24
+          networkName: LBU_ACCESS
+          startIp: 192.168.1.1
+          endIp: 192.168.1.10
+          gatewayIp: 192.168.1.0
+          segmentationId: 4000
+          physicalNetwork: physicalNetwork
+          networkType: VLAN
+          dhcpEnabled: true
+          vlanTransparent: false
+
+    HRU:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: HRU
+        description: HRU
+        configurable_properties: 
+          test: {"additional_vnfc_configurable_properties":{"bbb":"1"}}
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 4
+      capabilities:
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8096 MB
+            virtual_cpu:
+              cpu_architecture: x86
+              num_virtual_cpu: 3
+              virtual_cpu_clock: 1800 MHz
+      requirements:
+      - virtual_storage:
+          capability: tosca.capabilities.nfv.VirtualStorage
+          node: HRU_Storage  
+  
+    HRU_Storage:
+      type: tosca.nodes.nfv.Vdu.VirtualStorage
+      properties:
+        type_of_storage: HRU_Storage
+        size_of_storage: 12 GB
+        rdma_enabled:  true     
+
+    HRU_ACCESS_CP:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocol: [ ipv4 ]
+        role: leaf
+        description: External connection point to access HRU_access
+      requirements:
+      - virtual_link:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          node: HRU_ACCESS
+      - virtual_binding: 
+          capability: tosca.capabilities.nfv.VirtualBindable
+          node: HRU   
+    
+    HRU_ACCESS:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocol: [ ipv4 ]
+          flow_pattern: mesh
+        description: access network for HRU
+        vl_profile:
+          cidr: 192.168.1.24/24
+          networkName: HRU_ACCESS
+          startIp: 192.168.2.1
+          endIp: 192.168.2.10
+          gatewayIp: 192.168.2.0
+          segmentationId: 3000
+          physicalNetwork: physicalNetwork
+          networkType: VLAN
+          dhcpEnabled: true
+          vlanTransparent: false

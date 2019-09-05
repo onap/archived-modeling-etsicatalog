@@ -1,0 +1,124 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+metadata:
+  nsd_invariant_id: 1zx2323523xc
+  nsd_name: RAN-NS
+  nsd_file_structure_version: "1.0"
+  nsd_designer: ZTE
+  nsd_release_date_time: "2018-11-05 12:00:00"
+  
+description: RAN Network Service
+
+imports:
+  - type_definition.yaml
+
+node_types:
+  onap.ran.ns:
+    derived_from: tosca.nodes.nfv.NS
+    properties:
+      descriptor_id:
+        type: string
+        required: true
+      designer:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      name:
+        type: string
+        required: true       
+      invariant_id:
+        type: string
+        required: true
+          
+  onap.ran.cucp:
+    derived_from: tosca.nodes.nfv.VNF
+    requirements:
+      - ran_ext_net:           
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          relationship: tosca.relationships.nfv.VirtualLinksTo 
+      - ran_flat_net:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          relationship: tosca.relationships.nfv.VirtualLinksTo
+
+  onap.ran.cuup:
+    derived_from: tosca.nodes.nfv.VNF
+    requirements:
+      - ran_ext_net:           
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          relationship: tosca.relationships.nfv.VirtualLinksTo 
+      - ran_flat_net:
+          capability: tosca.capabilities.nfv.VirtualLinkable
+          relationship: tosca.relationships.nfv.VirtualLinksTo
+          
+topology_template:
+  substitution_mappings:
+    node_type: onap.ran.ns
+    properties:
+       descriptor_id: test_01
+       designer: ZTE
+       version: 1.0.1
+       name: ZTE RAN
+       invariant_id: 1zx2323523xc
+
+  node_templates:
+  
+    vl_ext_net:
+      type: tosca.nodes.nfv.NsVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocol: ipv4
+        version: 1.0.1
+        vl_profile:
+          max_bit_rate_requirements:
+            root: 10000000
+            leaf: 10000000
+          min_bit_rate_requirements:
+            root: 10000000
+            leaf: 10000000
+          networkName: ran_ext_net
+          cidr: 10.0.0.0/24
+          dhcpEnabled: false
+ 
+    vl_flat_net:
+      type: tosca.nodes.nfv.NsVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocol: ipv4
+        version: 1.0.1
+        vl_profile:
+          max_bit_rate_requirements:
+            root: 10000000
+            leaf: 10000000
+          min_bit_rate_requirements:
+            root: 10000000
+            leaf: 10000000
+          networkName: ran_flat_net
+          cidr: 10.1.0.0/24
+          dhcpEnabled: false
+ 
+    cu:
+      type: onap.ran.cucp
+      properties:
+        descriptor_id: zte_ran_cu_0001
+        descriptor_version: 1.0
+        provider: ZTE
+        product_name: ran
+        software_version: 1.0.1
+        vnfm_info: [ 'gvnfmdriver' ]
+        flavour_id: 1
+        flavour_description: default
+      requirements:
+        - ran_ext_net: vl_ext_net
+        - ran_flat_net: vl_flat_net
+        
+         
+    du:
+      type: tosca.nodes.nfv.PNF
+      properties:
+        descriptor_id: pnf_test_01
+        provider: ZTE
+        version: 1.0
+        descriptor_invariant_id: 1111
+        name: ZTE RAN DU
+        function_description: RAN DU Function

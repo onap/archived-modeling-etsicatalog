@@ -1,0 +1,1099 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: 19943f91-1dc1-4a8b-85bf-40a762f4803a
+  UUID: 3933006e-e87b-4a64-aedb-6358fcd67f0d
+  name: vIMS_v2
+  description: vIMS v2
+  type: Service
+  category: Network Service
+  serviceType: ''
+  serviceRole: ''
+  serviceEcompNaming: true
+  ecompGeneratedNaming: true
+  namingPolicy: ''
+  environmentContext: General_Revenue-Bearing
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+- service-vIMS_v2-interface:
+    file: service-VimsV2-template-interface.yml
+- resource-ext ZTE VL:
+    file: resource-ExtZteVl-template.yml
+- resource-SBC Huawei:
+    file: resource-SbcHuawei-template.yml
+- resource-SBC Huawei-interface:
+    file: resource-SbcHuawei-template-interface.yml
+- resource-CSCF Nokia:
+    file: resource-CscfNokia-template.yml
+- resource-CSCF Nokia-interface:
+    file: resource-CscfNokia-template-interface.yml
+topology_template:
+  node_templates:
+    SBC Huawei 0:
+      type: org.openecomp.resource.vf.SbcHuawei
+      metadata:
+        invariantUUID: 459372a6-51a2-4f35-8193-b11ca47c2a24
+        UUID: 4563686a-a63a-457d-8232-a3d07b314028
+        customizationUUID: d0f6a032-c865-4c5f-957c-db72c5957b37
+        version: '1.0'
+        name: SBC Huawei
+        description: SBC Huawei
+        type: VF
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: onap
+        resourceVendorRelease: '1.0'
+        resourceVendorModelNumber: ''
+      properties:
+        nf_naming:
+          ecomp_generated_naming: true
+        multi_stage_design: false
+        availability_zone_max_count: 1
+        nf_type: huaweivnfmdriver
+      requirements:
+      - hru2medianet1.virtual_link:
+          capability: virtual_linkable
+          node: ServiceNet
+      - omu2managenet.virtual_link:
+          capability: virtual_linkable
+          node: OamNet
+      capabilities:
+        lbu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 4
+        ccu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 16G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 2
+        lbu.endpoint:
+          properties:
+            secure: true
+        bsu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 1
+        omu.endpoint:
+          properties:
+            secure: true
+        vpu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 5
+        hru.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 12G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 3
+        ccu.endpoint:
+          properties:
+            secure: true
+        vpu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        hru.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        cmu.endpoint:
+          properties:
+            secure: true
+        scu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        bsu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        lbu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        scu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 2
+        omu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 16G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 4
+        omu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        ccu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        cmu.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 1
+        scu.endpoint:
+          properties:
+            secure: true
+        vpu.endpoint:
+          properties:
+            secure: true
+        cmu.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        hru.endpoint:
+          properties:
+            secure: true
+        bsu.endpoint:
+          properties:
+            secure: true
+    CSCF Nokia 0:
+      type: org.openecomp.resource.vf.CscfNokia
+      metadata:
+        invariantUUID: 2ed01e73-2a23-4717-a7fe-8d067ff6bb87
+        UUID: 8612efa5-9df9-43ef-8e76-5a3cca97a15e
+        customizationUUID: b3cf8a5a-7fe9-435a-ab8e-d413f88a2f32
+        version: '1.0'
+        name: CSCF Nokia
+        description: CSCF Nokia
+        type: VF
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: onap
+        resourceVendorRelease: '1.0'
+        resourceVendorModelNumber: ''
+      properties:
+        nf_naming:
+          ecomp_generated_naming: true
+        multi_stage_design: false
+        availability_zone_max_count: 1
+        nf_type: NokiaSVNFM
+      requirements:
+      - lbcpd_om.virtual_link:
+          capability: virtual_linkable
+          node: OamNet
+      - lbcpd_sip.virtual_link:
+          capability: virtual_linkable
+          node: ServiceNet
+      capabilities:
+        cscf.endpoint:
+          properties:
+            secure: true
+        lb.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 32G
+            virtual_cpu:
+              num_virtual_cpu: 12
+        oam.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 32G
+            virtual_cpu:
+              num_virtual_cpu: 4
+        lb.endpoint:
+          properties:
+            secure: true
+        lb.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        cscf.virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            virtual_cpu:
+              num_virtual_cpu: 8
+        oam.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        oam.endpoint:
+          properties:
+            secure: true
+        cscf.scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+    OamNet:
+      type: tosca.nodes.nfv.ext.zte.VL
+      metadata:
+        invariantUUID: d0d43bd0-4088-4b1c-9ac1-c6303d9f923a
+        UUID: 0f93d9d8-a815-4da9-820f-6cc77f670623
+        customizationUUID: 4de4666a-a6bc-4a80-b1b9-f80014b4a847
+        version: '2.0'
+        name: ext ZTE VL
+        description: Ext ZTE VL
+        type: VL
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+    ServiceNet:
+      type: tosca.nodes.nfv.ext.zte.VL
+      metadata:
+        invariantUUID: d0d43bd0-4088-4b1c-9ac1-c6303d9f923a
+        UUID: 0f93d9d8-a815-4da9-820f-6cc77f670623
+        customizationUUID: 0705b47f-ad55-4a25-be6d-d90748acb4dd
+        version: '2.0'
+        name: ext ZTE VL
+        description: Ext ZTE VL
+        type: VL
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+  substitution_mappings:
+    node_type: org.openecomp.service.VimsV2
+    capabilities:
+      sbchuawei0.intranet2.feature:
+      - sbchuawei0
+      - intranet2.feature
+      sbchuawei0.scu_storage.virtual_storage:
+      - sbchuawei0
+      - scu_storage.virtual_storage
+      sbchuawei0.ccu_storage.virtual_storage:
+      - sbchuawei0
+      - ccu_storage.virtual_storage
+      sbchuawei0.ccu.endpoint:
+      - sbchuawei0
+      - ccu.endpoint
+      sbchuawei0.cmu.virtual_compute:
+      - sbchuawei0
+      - cmu.virtual_compute
+      cscfnokia0.oam.endpoint:
+      - cscfnokia0
+      - oam.endpoint
+      sbchuawei0.hru.scalable:
+      - sbchuawei0
+      - hru.scalable
+      cscfnokia0.lb_storage.virtual_storage:
+      - cscfnokia0
+      - lb_storage.virtual_storage
+      sbchuawei0.bsu.endpoint:
+      - sbchuawei0
+      - bsu.endpoint
+      cscfnokia0.oam.host:
+      - cscfnokia0
+      - oam.host
+      cscfnokia0.cscf.binding:
+      - cscfnokia0
+      - cscf.binding
+      sbchuawei0.omu.virtual_compute:
+      - sbchuawei0
+      - omu.virtual_compute
+      sbchuawei0.bsu_storage.virtual_storage:
+      - sbchuawei0
+      - bsu_storage.virtual_storage
+      sbchuawei0.hru.monitoring_parameter:
+      - sbchuawei0
+      - hru.monitoring_parameter
+      sbchuawei0.scu.virtual_compute:
+      - sbchuawei0
+      - scu.virtual_compute
+      cscfnokia0.oam_storage.feature:
+      - cscfnokia0
+      - oam_storage.feature
+      sbchuawei0.lbu.virtual_binding:
+      - sbchuawei0
+      - lbu.virtual_binding
+      sbchuawei0.intranet2.virtual_linkable:
+      - sbchuawei0
+      - intranet2.virtual_linkable
+      sbchuawei0.bsu.os:
+      - sbchuawei0
+      - bsu.os
+      cscfnokia0.lb.endpoint:
+      - cscfnokia0
+      - lb.endpoint
+      sbchuawei0.ccu_vducpd_intra1.feature:
+      - sbchuawei0
+      - ccu_vducpd_intra1.feature
+      oamnet.feature:
+      - oamnet
+      - feature
+      cscfnokia0.lb.virtual_compute:
+      - cscfnokia0
+      - lb.virtual_compute
+      cscfnokia0.cscf.os:
+      - cscfnokia0
+      - cscf.os
+      sbchuawei0.scu_vducpd_intra1.feature:
+      - sbchuawei0
+      - scu_vducpd_intra1.feature
+      cscfnokia0.oam.os:
+      - cscfnokia0
+      - oam.os
+      sbchuawei0.lbu.endpoint:
+      - sbchuawei0
+      - lbu.endpoint
+      sbchuawei0.omu.binding:
+      - sbchuawei0
+      - omu.binding
+      sbchuawei0.hru_vducpd_intra1.feature:
+      - sbchuawei0
+      - hru_vducpd_intra1.feature
+      cscfnokia0.lbcpd_diameter.feature:
+      - cscfnokia0
+      - lbcpd_diameter.feature
+      sbchuawei0.vpu.monitoring_parameter:
+      - sbchuawei0
+      - vpu.monitoring_parameter
+      sbchuawei0.bsu.binding:
+      - sbchuawei0
+      - bsu.binding
+      cscfnokia0.lb.host:
+      - cscfnokia0
+      - lb.host
+      sbchuawei0.vpu.scalable:
+      - sbchuawei0
+      - vpu.scalable
+      sbchuawei0.vpu.virtual_binding:
+      - sbchuawei0
+      - vpu.virtual_binding
+      sbchuawei0.scu.virtual_binding:
+      - sbchuawei0
+      - scu.virtual_binding
+      sbchuawei0.lbu.feature:
+      - sbchuawei0
+      - lbu.feature
+      sbchuawei0.cmu_vducpd_intra1.feature:
+      - sbchuawei0
+      - cmu_vducpd_intra1.feature
+      sbchuawei0.hru.os:
+      - sbchuawei0
+      - hru.os
+      sbchuawei0.cmu_storage.virtual_storage:
+      - sbchuawei0
+      - cmu_storage.virtual_storage
+      sbchuawei0.ccu.scalable:
+      - sbchuawei0
+      - ccu.scalable
+      sbchuawei0.vpu_storage.feature:
+      - sbchuawei0
+      - vpu_storage.feature
+      sbchuawei0.vpu.virtual_compute:
+      - sbchuawei0
+      - vpu.virtual_compute
+      sbchuawei0.ccu.virtual_binding:
+      - sbchuawei0
+      - ccu.virtual_binding
+      sbchuawei0.cmu.binding:
+      - sbchuawei0
+      - cmu.binding
+      sbchuawei0.lbu_vducpd_intra1.feature:
+      - sbchuawei0
+      - lbu_vducpd_intra1.feature
+      cscfnokia0.oam_storage.virtual_storage:
+      - cscfnokia0
+      - oam_storage.virtual_storage
+      sbchuawei0.ccu.os:
+      - sbchuawei0
+      - ccu.os
+      sbchuawei0.lbu2signalnet2.feature:
+      - sbchuawei0
+      - lbu2signalnet2.feature
+      cscfnokia0.lb_internal.feature:
+      - cscfnokia0
+      - lb_internal.feature
+      servicenet.feature:
+      - servicenet
+      - feature
+      sbchuawei0.cmu.virtual_binding:
+      - sbchuawei0
+      - cmu.virtual_binding
+      sbchuawei0.lbu.scalable:
+      - sbchuawei0
+      - lbu.scalable
+      sbchuawei0.ccu_storage.feature:
+      - sbchuawei0
+      - ccu_storage.feature
+      sbchuawei0.lbu_storage.virtual_storage:
+      - sbchuawei0
+      - lbu_storage.virtual_storage
+      sbchuawei0.lbu_storage.feature:
+      - sbchuawei0
+      - lbu_storage.feature
+      cscfnokia0.lb.scalable:
+      - cscfnokia0
+      - lb.scalable
+      sbchuawei0.omu_storage.virtual_storage:
+      - sbchuawei0
+      - omu_storage.virtual_storage
+      sbchuawei0.omu.host:
+      - sbchuawei0
+      - omu.host
+      cscfnokia0.lbcpd_om.feature:
+      - cscfnokia0
+      - lbcpd_om.feature
+      cscfnokia0.oam.binding:
+      - cscfnokia0
+      - oam.binding
+      sbchuawei0.cmu.host:
+      - sbchuawei0
+      - cmu.host
+      sbchuawei0.vpu.endpoint:
+      - sbchuawei0
+      - vpu.endpoint
+      sbchuawei0.vpu.feature:
+      - sbchuawei0
+      - vpu.feature
+      sbchuawei0.lbu.virtual_compute:
+      - sbchuawei0
+      - lbu.virtual_compute
+      sbchuawei0.bsu_vducpd_intra1.feature:
+      - sbchuawei0
+      - bsu_vducpd_intra1.feature
+      cscfnokia0.lb.binding:
+      - cscfnokia0
+      - lb.binding
+      sbchuawei0.scu.scalable:
+      - sbchuawei0
+      - scu.scalable
+      cscfnokia0.lb_storage.feature:
+      - cscfnokia0
+      - lb_storage.feature
+      sbchuawei0.scu.os:
+      - sbchuawei0
+      - scu.os
+      cscfnokia0.oamcpd_om.feature:
+      - cscfnokia0
+      - oamcpd_om.feature
+      cscfnokia0.oam_internal.feature:
+      - cscfnokia0
+      - oam_internal.feature
+      sbchuawei0.ccu.virtual_compute:
+      - sbchuawei0
+      - ccu.virtual_compute
+      sbchuawei0.upiru_vducpd_intra1.feature:
+      - sbchuawei0
+      - upiru_vducpd_intra1.feature
+      sbchuawei0.omu.virtual_binding:
+      - sbchuawei0
+      - omu.virtual_binding
+      sbchuawei0.bsu_storage.feature:
+      - sbchuawei0
+      - bsu_storage.feature
+      cscfnokia0.oam.monitoring_parameter:
+      - cscfnokia0
+      - oam.monitoring_parameter
+      sbchuawei0.lbu.host:
+      - sbchuawei0
+      - lbu.host
+      sbchuawei0.hru.virtual_binding:
+      - sbchuawei0
+      - hru.virtual_binding
+      sbchuawei0.omu_storage.feature:
+      - sbchuawei0
+      - omu_storage.feature
+      servicenet.virtual_linkable:
+      - servicenet
+      - virtual_linkable
+      sbchuawei0.hru_storage.feature:
+      - sbchuawei0
+      - hru_storage.feature
+      cscfnokia0.cscf_internal.feature:
+      - cscfnokia0
+      - cscf_internal.feature
+      cscfnokia0.cscf.host:
+      - cscfnokia0
+      - cscf.host
+      sbchuawei0.ccu.binding:
+      - sbchuawei0
+      - ccu.binding
+      cscfnokia0.lb.os:
+      - cscfnokia0
+      - lb.os
+      sbchuawei0.lbu2signalnet1.feature:
+      - sbchuawei0
+      - lbu2signalnet1.feature
+      sbchuawei0.cmu.os:
+      - sbchuawei0
+      - cmu.os
+      sbchuawei0.lbu_vducpd_intra2.feature:
+      - sbchuawei0
+      - lbu_vducpd_intra2.feature
+      sbchuawei0.bsu.feature:
+      - sbchuawei0
+      - bsu.feature
+      sbchuawei0.bsu.host:
+      - sbchuawei0
+      - bsu.host
+      sbchuawei0.cmu_storage.feature:
+      - sbchuawei0
+      - cmu_storage.feature
+      sbchuawei0.scu.monitoring_parameter:
+      - sbchuawei0
+      - scu.monitoring_parameter
+      sbchuawei0.cmu.endpoint:
+      - sbchuawei0
+      - cmu.endpoint
+      cscfnokia0.cscf.feature:
+      - cscfnokia0
+      - cscf.feature
+      cscfnokia0.cscf.scalable:
+      - cscfnokia0
+      - cscf.scalable
+      sbchuawei0.lbu.binding:
+      - sbchuawei0
+      - lbu.binding
+      cscfnokia0.oam.scalable:
+      - cscfnokia0
+      - oam.scalable
+      sbchuawei0.vpu.host:
+      - sbchuawei0
+      - vpu.host
+      sbchuawei0.omu2managenet.feature:
+      - sbchuawei0
+      - omu2managenet.feature
+      sbchuawei0.scu.feature:
+      - sbchuawei0
+      - scu.feature
+      sbchuawei0.lbu.monitoring_parameter:
+      - sbchuawei0
+      - lbu.monitoring_parameter
+      sbchuawei0.cmu.monitoring_parameter:
+      - sbchuawei0
+      - cmu.monitoring_parameter
+      cscfnokia0.internal.feature:
+      - cscfnokia0
+      - internal.feature
+      sbchuawei0.scu.binding:
+      - sbchuawei0
+      - scu.binding
+      sbchuawei0.hru.binding:
+      - sbchuawei0
+      - hru.binding
+      cscfnokia0.oam.virtual_compute:
+      - cscfnokia0
+      - oam.virtual_compute
+      sbchuawei0.omu_vducpd_intra1.feature:
+      - sbchuawei0
+      - omu_vducpd_intra1.feature
+      sbchuawei0.hru.feature:
+      - sbchuawei0
+      - hru.feature
+      sbchuawei0.hru2medianet1.feature:
+      - sbchuawei0
+      - hru2medianet1.feature
+      sbchuawei0.bsu.virtual_binding:
+      - sbchuawei0
+      - bsu.virtual_binding
+      sbchuawei0.omu.feature:
+      - sbchuawei0
+      - omu.feature
+      sbchuawei0.hru2medianet2.feature:
+      - sbchuawei0
+      - hru2medianet2.feature
+      sbchuawei0.hru_storage.virtual_storage:
+      - sbchuawei0
+      - hru_storage.virtual_storage
+      sbchuawei0.ccu.monitoring_parameter:
+      - sbchuawei0
+      - ccu.monitoring_parameter
+      cscfnokia0.lbcpd_sip.feature:
+      - cscfnokia0
+      - lbcpd_sip.feature
+      sbchuawei0.scu_storage.feature:
+      - sbchuawei0
+      - scu_storage.feature
+      sbchuawei0.omu.monitoring_parameter:
+      - sbchuawei0
+      - omu.monitoring_parameter
+      cscfnokia0.cscf.virtual_compute:
+      - cscfnokia0
+      - cscf.virtual_compute
+      sbchuawei0.hru.host:
+      - sbchuawei0
+      - hru.host
+      sbchuawei0.upiru_vducpd_intra2.feature:
+      - sbchuawei0
+      - upiru_vducpd_intra2.feature
+      cscfnokia0.cscf.monitoring_parameter:
+      - cscfnokia0
+      - cscf.monitoring_parameter
+      cscfnokia0.lb.monitoring_parameter:
+      - cscfnokia0
+      - lb.monitoring_parameter
+      sbchuawei0.bsu.virtual_compute:
+      - sbchuawei0
+      - bsu.virtual_compute
+      sbchuawei0.bsu.scalable:
+      - sbchuawei0
+      - bsu.scalable
+      sbchuawei0.intranet1.virtual_linkable:
+      - sbchuawei0
+      - intranet1.virtual_linkable
+      sbchuawei0.vpu_storage.virtual_storage:
+      - sbchuawei0
+      - vpu_storage.virtual_storage
+      sbchuawei0.omu.endpoint:
+      - sbchuawei0
+      - omu.endpoint
+      cscfnokia0.cscf.virtual_binding:
+      - cscfnokia0
+      - cscf.virtual_binding
+      sbchuawei0.hru.virtual_compute:
+      - sbchuawei0
+      - hru.virtual_compute
+      sbchuawei0.hru.endpoint:
+      - sbchuawei0
+      - hru.endpoint
+      sbchuawei0.cmu.scalable:
+      - sbchuawei0
+      - cmu.scalable
+      cscfnokia0.cscf.endpoint:
+      - cscfnokia0
+      - cscf.endpoint
+      sbchuawei0.scu.endpoint:
+      - sbchuawei0
+      - scu.endpoint
+      cscfnokia0.oam.feature:
+      - cscfnokia0
+      - oam.feature
+      sbchuawei0.omu.scalable:
+      - sbchuawei0
+      - omu.scalable
+      sbchuawei0.ccu.feature:
+      - sbchuawei0
+      - ccu.feature
+      sbchuawei0.vpu.os:
+      - sbchuawei0
+      - vpu.os
+      sbchuawei0.omu.os:
+      - sbchuawei0
+      - omu.os
+      sbchuawei0.bsu.monitoring_parameter:
+      - sbchuawei0
+      - bsu.monitoring_parameter
+      cscfnokia0.internal.virtual_linkable:
+      - cscfnokia0
+      - internal.virtual_linkable
+      sbchuawei0.lbu.os:
+      - sbchuawei0
+      - lbu.os
+      oamnet.virtual_linkable:
+      - oamnet
+      - virtual_linkable
+      sbchuawei0.hru_vducpd_intra2.feature:
+      - sbchuawei0
+      - hru_vducpd_intra2.feature
+      cscfnokia0.lb.feature:
+      - cscfnokia0
+      - lb.feature
+      cscfnokia0.oam.virtual_binding:
+      - cscfnokia0
+      - oam.virtual_binding
+      sbchuawei0.vpu.binding:
+      - sbchuawei0
+      - vpu.binding
+      sbchuawei0.scu.host:
+      - sbchuawei0
+      - scu.host
+      sbchuawei0.ccu.host:
+      - sbchuawei0
+      - ccu.host
+      sbchuawei0.cmu.feature:
+      - sbchuawei0
+      - cmu.feature
+      sbchuawei0.intranet1.feature:
+      - sbchuawei0
+      - intranet1.feature
+      cscfnokia0.lb.virtual_binding:
+      - cscfnokia0
+      - lb.virtual_binding
+    requirements:
+      sbchuawei0.bsu.local_storage:
+      - sbchuawei0
+      - bsu.local_storage
+      sbchuawei0.omu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - omu_vducpd_intra1.dependency
+      sbchuawei0.lbu2signalnet1.virtual_link:
+      - sbchuawei0
+      - lbu2signalnet1.virtual_link
+      sbchuawei0.omu_storage.dependency:
+      - sbchuawei0
+      - omu_storage.dependency
+      sbchuawei0.hru2medianet2.dependency:
+      - sbchuawei0
+      - hru2medianet2.dependency
+      sbchuawei0.hru_vducpd_intra2.dependency:
+      - sbchuawei0
+      - hru_vducpd_intra2.dependency
+      sbchuawei0.omu2managenet.dependency:
+      - sbchuawei0
+      - omu2managenet.dependency
+      sbchuawei0.omu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - omu_vducpd_intra1.virtual_link
+      sbchuawei0.scu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - scu_vducpd_intra1.virtual_link
+      sbchuawei0.scu.local_storage:
+      - sbchuawei0
+      - scu.local_storage
+      sbchuawei0.hru_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - hru_vducpd_intra1.virtual_binding
+      sbchuawei0.hru_storage.dependency:
+      - sbchuawei0
+      - hru_storage.dependency
+      sbchuawei0.upiru_vducpd_intra2.dependency:
+      - sbchuawei0
+      - upiru_vducpd_intra2.dependency
+      sbchuawei0.lbu2signalnet2.dependency:
+      - sbchuawei0
+      - lbu2signalnet2.dependency
+      cscfnokia0.lb_internal.virtual_binding:
+      - cscfnokia0
+      - lb_internal.virtual_binding
+      cscfnokia0.oam_internal.dependency:
+      - cscfnokia0
+      - oam_internal.dependency
+      sbchuawei0.lbu_vducpd_intra2.virtual_binding:
+      - sbchuawei0
+      - lbu_vducpd_intra2.virtual_binding
+      sbchuawei0.lbu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - lbu_vducpd_intra1.virtual_link
+      sbchuawei0.lbu_vducpd_intra2.virtual_link:
+      - sbchuawei0
+      - lbu_vducpd_intra2.virtual_link
+      sbchuawei0.bsu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - bsu_vducpd_intra1.virtual_link
+      sbchuawei0.lbu.virtual_storage:
+      - sbchuawei0
+      - lbu.virtual_storage
+      sbchuawei0.bsu.dependency:
+      - sbchuawei0
+      - bsu.dependency
+      cscfnokia0.lbcpd_om.virtual_link:
+      - cscfnokia0
+      - lbcpd_om.virtual_link
+      sbchuawei0.omu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - omu_vducpd_intra1.virtual_binding
+      cscfnokia0.oamcpd_om.dependency:
+      - cscfnokia0
+      - oamcpd_om.dependency
+      cscfnokia0.oam_storage.dependency:
+      - cscfnokia0
+      - oam_storage.dependency
+      cscfnokia0.lbcpd_om.virtual_binding:
+      - cscfnokia0
+      - lbcpd_om.virtual_binding
+      sbchuawei0.omu.virtual_storage:
+      - sbchuawei0
+      - omu.virtual_storage
+      sbchuawei0.scu.dependency:
+      - sbchuawei0
+      - scu.dependency
+      sbchuawei0.bsu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - bsu_vducpd_intra1.virtual_binding
+      sbchuawei0.hru.local_storage:
+      - sbchuawei0
+      - hru.local_storage
+      sbchuawei0.cmu.virtual_storage:
+      - sbchuawei0
+      - cmu.virtual_storage
+      sbchuawei0.lbu2signalnet2.virtual_link:
+      - sbchuawei0
+      - lbu2signalnet2.virtual_link
+      sbchuawei0.hru2medianet1.virtual_link:
+      - sbchuawei0
+      - hru2medianet1.virtual_link
+      cscfnokia0.lb_internal.dependency:
+      - cscfnokia0
+      - lb_internal.dependency
+      servicenet.dependency:
+      - servicenet
+      - dependency
+      cscfnokia0.cscf_internal.virtual_link:
+      - cscfnokia0
+      - cscf_internal.virtual_link
+      sbchuawei0.hru2medianet1.virtual_binding:
+      - sbchuawei0
+      - hru2medianet1.virtual_binding
+      sbchuawei0.scu.virtual_storage:
+      - sbchuawei0
+      - scu.virtual_storage
+      sbchuawei0.bsu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - bsu_vducpd_intra1.dependency
+      cscfnokia0.oam.local_storage:
+      - cscfnokia0
+      - oam.local_storage
+      sbchuawei0.bsu_storage.dependency:
+      - sbchuawei0
+      - bsu_storage.dependency
+      sbchuawei0.ccu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - ccu_vducpd_intra1.virtual_binding
+      sbchuawei0.ccu.dependency:
+      - sbchuawei0
+      - ccu.dependency
+      sbchuawei0.hru2medianet1.dependency:
+      - sbchuawei0
+      - hru2medianet1.dependency
+      sbchuawei0.scu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - scu_vducpd_intra1.dependency
+      sbchuawei0.omu.dependency:
+      - sbchuawei0
+      - omu.dependency
+      sbchuawei0.hru_vducpd_intra1.dependency:
+      - sbchuawei0
+      - hru_vducpd_intra1.dependency
+      sbchuawei0.ccu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - ccu_vducpd_intra1.dependency
+      cscfnokia0.cscf.virtual_storage:
+      - cscfnokia0
+      - cscf.virtual_storage
+      sbchuawei0.ccu.local_storage:
+      - sbchuawei0
+      - ccu.local_storage
+      cscfnokia0.lbcpd_diameter.virtual_link:
+      - cscfnokia0
+      - lbcpd_diameter.virtual_link
+      cscfnokia0.lbcpd_diameter.virtual_binding:
+      - cscfnokia0
+      - lbcpd_diameter.virtual_binding
+      sbchuawei0.vpu.virtual_storage:
+      - sbchuawei0
+      - vpu.virtual_storage
+      cscfnokia0.oam_internal.virtual_link:
+      - cscfnokia0
+      - oam_internal.virtual_link
+      oamnet.dependency:
+      - oamnet
+      - dependency
+      cscfnokia0.cscf_internal.virtual_binding:
+      - cscfnokia0
+      - cscf_internal.virtual_binding
+      cscfnokia0.internal.dependency:
+      - cscfnokia0
+      - internal.dependency
+      sbchuawei0.cmu.local_storage:
+      - sbchuawei0
+      - cmu.local_storage
+      cscfnokia0.lbcpd_sip.virtual_binding:
+      - cscfnokia0
+      - lbcpd_sip.virtual_binding
+      cscfnokia0.lb_storage.dependency:
+      - cscfnokia0
+      - lb_storage.dependency
+      sbchuawei0.bsu.virtual_storage:
+      - sbchuawei0
+      - bsu.virtual_storage
+      sbchuawei0.omu2managenet.virtual_binding:
+      - sbchuawei0
+      - omu2managenet.virtual_binding
+      sbchuawei0.upiru_vducpd_intra2.virtual_link:
+      - sbchuawei0
+      - upiru_vducpd_intra2.virtual_link
+      cscfnokia0.lb.dependency:
+      - cscfnokia0
+      - lb.dependency
+      sbchuawei0.omu2managenet.virtual_link:
+      - sbchuawei0
+      - omu2managenet.virtual_link
+      sbchuawei0.lbu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - lbu_vducpd_intra1.dependency
+      cscfnokia0.oamcpd_om.virtual_binding:
+      - cscfnokia0
+      - oamcpd_om.virtual_binding
+      sbchuawei0.lbu.dependency:
+      - sbchuawei0
+      - lbu.dependency
+      cscfnokia0.oamcpd_om.virtual_link:
+      - cscfnokia0
+      - oamcpd_om.virtual_link
+      sbchuawei0.hru.dependency:
+      - sbchuawei0
+      - hru.dependency
+      sbchuawei0.lbu2signalnet2.virtual_binding:
+      - sbchuawei0
+      - lbu2signalnet2.virtual_binding
+      sbchuawei0.scu_storage.dependency:
+      - sbchuawei0
+      - scu_storage.dependency
+      sbchuawei0.cmu.dependency:
+      - sbchuawei0
+      - cmu.dependency
+      sbchuawei0.hru_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - hru_vducpd_intra1.virtual_link
+      sbchuawei0.hru.virtual_storage:
+      - sbchuawei0
+      - hru.virtual_storage
+      cscfnokia0.lbcpd_sip.virtual_link:
+      - cscfnokia0
+      - lbcpd_sip.virtual_link
+      sbchuawei0.upiru_vducpd_intra1.dependency:
+      - sbchuawei0
+      - upiru_vducpd_intra1.dependency
+      sbchuawei0.cmu_vducpd_intra1.dependency:
+      - sbchuawei0
+      - cmu_vducpd_intra1.dependency
+      cscfnokia0.lbcpd_diameter.dependency:
+      - cscfnokia0
+      - lbcpd_diameter.dependency
+      sbchuawei0.ccu.virtual_storage:
+      - sbchuawei0
+      - ccu.virtual_storage
+      sbchuawei0.hru_vducpd_intra2.virtual_binding:
+      - sbchuawei0
+      - hru_vducpd_intra2.virtual_binding
+      cscfnokia0.lb.local_storage:
+      - cscfnokia0
+      - lb.local_storage
+      sbchuawei0.upiru_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - upiru_vducpd_intra1.virtual_binding
+      cscfnokia0.oam.virtual_storage:
+      - cscfnokia0
+      - oam.virtual_storage
+      sbchuawei0.hru2medianet2.virtual_binding:
+      - sbchuawei0
+      - hru2medianet2.virtual_binding
+      sbchuawei0.lbu_storage.dependency:
+      - sbchuawei0
+      - lbu_storage.dependency
+      sbchuawei0.lbu.local_storage:
+      - sbchuawei0
+      - lbu.local_storage
+      sbchuawei0.lbu2signalnet1.virtual_binding:
+      - sbchuawei0
+      - lbu2signalnet1.virtual_binding
+      sbchuawei0.ccu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - ccu_vducpd_intra1.virtual_link
+      sbchuawei0.intranet2.dependency:
+      - sbchuawei0
+      - intranet2.dependency
+      cscfnokia0.oam.dependency:
+      - cscfnokia0
+      - oam.dependency
+      sbchuawei0.lbu2signalnet1.dependency:
+      - sbchuawei0
+      - lbu2signalnet1.dependency
+      cscfnokia0.cscf.dependency:
+      - cscfnokia0
+      - cscf.dependency
+      sbchuawei0.lbu_vducpd_intra2.dependency:
+      - sbchuawei0
+      - lbu_vducpd_intra2.dependency
+      sbchuawei0.cmu_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - cmu_vducpd_intra1.virtual_link
+      sbchuawei0.upiru_vducpd_intra2.virtual_binding:
+      - sbchuawei0
+      - upiru_vducpd_intra2.virtual_binding
+      sbchuawei0.hru_vducpd_intra2.virtual_link:
+      - sbchuawei0
+      - hru_vducpd_intra2.virtual_link
+      sbchuawei0.upiru_vducpd_intra1.virtual_link:
+      - sbchuawei0
+      - upiru_vducpd_intra1.virtual_link
+      cscfnokia0.lb.virtual_storage:
+      - cscfnokia0
+      - lb.virtual_storage
+      sbchuawei0.hru2medianet2.virtual_link:
+      - sbchuawei0
+      - hru2medianet2.virtual_link
+      sbchuawei0.intranet1.dependency:
+      - sbchuawei0
+      - intranet1.dependency
+      sbchuawei0.cmu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - cmu_vducpd_intra1.virtual_binding
+      cscfnokia0.cscf_internal.dependency:
+      - cscfnokia0
+      - cscf_internal.dependency
+      sbchuawei0.scu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - scu_vducpd_intra1.virtual_binding
+      sbchuawei0.omu.local_storage:
+      - sbchuawei0
+      - omu.local_storage
+      sbchuawei0.vpu.local_storage:
+      - sbchuawei0
+      - vpu.local_storage
+      cscfnokia0.lbcpd_sip.dependency:
+      - cscfnokia0
+      - lbcpd_sip.dependency
+      cscfnokia0.lb_internal.virtual_link:
+      - cscfnokia0
+      - lb_internal.virtual_link
+      sbchuawei0.vpu_storage.dependency:
+      - sbchuawei0
+      - vpu_storage.dependency
+      sbchuawei0.lbu_vducpd_intra1.virtual_binding:
+      - sbchuawei0
+      - lbu_vducpd_intra1.virtual_binding
+      cscfnokia0.lbcpd_om.dependency:
+      - cscfnokia0
+      - lbcpd_om.dependency
+      sbchuawei0.vpu.dependency:
+      - sbchuawei0
+      - vpu.dependency
+      sbchuawei0.ccu_storage.dependency:
+      - sbchuawei0
+      - ccu_storage.dependency
+      cscfnokia0.oam_internal.virtual_binding:
+      - cscfnokia0
+      - oam_internal.virtual_binding
+      sbchuawei0.cmu_storage.dependency:
+      - sbchuawei0
+      - cmu_storage.dependency
+      cscfnokia0.cscf.local_storage:
+      - cscfnokia0
+      - cscf.local_storage

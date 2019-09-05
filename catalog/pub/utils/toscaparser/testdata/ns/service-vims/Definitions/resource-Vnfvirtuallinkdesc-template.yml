@@ -1,0 +1,50 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: ffa0bcc5-7903-4332-adb9-3c44f577621e
+  UUID: ecb39b27-06c8-4337-9304-d6a88c8c0fae
+  name: VnfVirtualLinkDesc
+  description: VnfVirtualLinkDesc
+  type: VL
+  category: Generic
+  subcategory: Infrastructure
+  resourceVendor: ATT (Tosca)
+  resourceVendorRelease: 1.0.0.wd03
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  tosca.nodes.nfv.VnfVirtualLinkDesc:
+    derived_from: tosca.nodes.Root
+    description: VnfVirtualLinkDesc
+    properties:
+      vl_flavours:
+        type: map
+        entry_schema:
+          type: tosca.datatypes.nfv.VlFlavour
+      description:
+        type: string
+      test_access:
+        type: list
+        entry_schema:
+          type: string
+      connectivity_type:
+        type: tosca.datatypes.nfv.ConnectivityType
+    capabilities:
+      virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]

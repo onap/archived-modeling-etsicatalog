@@ -1,0 +1,65 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+metadata:
+  template_name: RAN_DU
+  template_version: "1.0"
+  template_author: ZTE-0
+  descriptor_id: pnf_test_01
+description: RAN_DU
+
+imports:
+  - type_definition.yaml
+
+node_types:
+  onap.ran.du:
+    derived_from: tosca.nodes.nfv.PNF
+    properties:
+      descriptor_id:
+        type: string
+        required: true
+        default: b1bb0ce7-2222-4fa7-95ed-4840d70a1177
+      provider:
+        type: string
+        required: true
+        default: ZTE
+      version:
+        type: string
+        required: true
+        default: v1.1.0
+      descriptor_invariant_id:
+        type: string
+        required: true
+        default: b1bb0ce7-2222-4fa7-95ed-4840d70a1177
+      name:
+        type: string
+        required: true
+        default: ZTE-RAN-DU
+      function_description:
+        type: string
+        required: true
+        default: RAN DU
+      config_script:
+         type: string
+         required: false          
+
+topology_template:
+  substitution_mappings:
+    node_type: onap.ran.du
+    properties:
+      descriptor_id: 1
+      provider: ZTE
+      version: 1.1.0
+      descriptor_invariant_id: 1
+      name: 1
+      function_description: 1
+      config_data: "/artifacts/config_data.conf"
+      
+    requirements:
+      - virtual_link: [ extCp2Du, virtual_link ]
+      - virtual_link: [ extCp2Ru, virtual_link ]
+      
+  node_templates:
+    extCp2Ru:
+      type: tosca.nodes.nfv.PnfExtPort
+    extCp2CU:
+      type: tosca.nodes.nfv.PnfExtPort
+                 

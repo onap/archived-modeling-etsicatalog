@@ -1,0 +1,8 @@
+metadata:
+    vnf_product_name: vSBC
+    vnf_provider_id: Huawei
+    vnf_package_version: 1.0
+    vnf_release_data_time: 2018.05.16T10:00+03:00
+
+source: MainServiceTemplate.yaml
+

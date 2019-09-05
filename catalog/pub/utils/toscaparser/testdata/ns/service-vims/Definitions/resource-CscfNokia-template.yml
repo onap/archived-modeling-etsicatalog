@@ -1,0 +1,600 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: 2ed01e73-2a23-4717-a7fe-8d067ff6bb87
+  UUID: 8612efa5-9df9-43ef-8e76-5a3cca97a15e
+  name: CSCF Nokia
+  description: CSCF Nokia
+  type: VF
+  category: Generic
+  subcategory: Network Elements
+  resourceVendor: onap
+  resourceVendorRelease: '1.0'
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+- resource-CSCF Nokia-interface:
+    file: resource-CscfNokia-template-interface.yml
+- resource-VDU Compute:
+    file: resource-VduCompute-template.yml
+- resource-VDU Cpd:
+    file: resource-VduCpd-template.yml
+- resource-VnfVirtualLinkDesc:
+    file: resource-Vnfvirtuallinkdesc-template.yml
+- resource-VDU VirtualStorage:
+    file: resource-VduVirtualstorage-template.yml
+topology_template:
+  inputs:
+    nf_naming:
+      type: org.openecomp.datatypes.Naming
+      default:
+        ecomp_generated_naming: true
+    multi_stage_design:
+      type: boolean
+      default: false
+    nf_function:
+      type: string
+    nf_naming_code:
+      type: string
+    availability_zone_max_count:
+      type: integer
+      default: 1
+    nf_role:
+      type: string
+    min_instances:
+      type: integer
+    max_instances:
+      type: integer
+    nf_type:
+      type: string
+  node_templates:
+    internal:
+      type: tosca.nodes.nfv.VnfVirtualLinkDesc
+      metadata:
+        invariantUUID: ffa0bcc5-7903-4332-adb9-3c44f577621e
+        UUID: ecb39b27-06c8-4337-9304-d6a88c8c0fae
+        customizationUUID: 582c18d7-d466-4b8c-9cab-536e45f3a14a
+        version: '2.0'
+        name: VnfVirtualLinkDesc
+        description: VnfVirtualLinkDesc
+        type: VL
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        vl_flavours:
+          flavours:
+            flavourId: test
+        connectivity_type:
+          layer_protocol: ipv4
+    lbCpd_SIP:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 1ec6019b-ea02-4065-8db3-dc631e468f61
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: lb
+    lbCpd_Diameter:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 1c9bfa55-d4fe-43ff-b8ad-984e26795fc9
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: lb
+    oam_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 845ba157-b397-4ed1-8c1c-02bfa29b2515
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 300G
+        id: oam_Storage
+        type_of_storage: volume
+    oamCpd_OM:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 2a71f014-924a-4966-8bba-db5d68f5088a
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: oam
+    lbCpd_OM:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 9bf40aab-eff2-4c22-b516-b1f106b6a797
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: lb
+    lb_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 3d22021f-f602-45f1-8bcd-d339ba5fd536
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 300G
+        id: lb_Storage
+        type_of_storage: volume
+    lb:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: d87fb984-012e-4789-8098-b20115fae393
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: lb_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 32G
+            virtual_cpu:
+              num_virtual_cpu: 12
+        endpoint:
+          properties:
+            secure: true
+    cscf_internal:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: d9e1d2f1-4a0c-4a19-9472-1aa819acd79f
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: internal
+      - virtual_binding:
+          capability: virtual_binding
+          node: cscf
+    oam_internal:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 7e9afa7a-ed8a-4445-9e01-c7eea12e761a
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: internal
+      - virtual_binding:
+          capability: virtual_binding
+          node: oam
+    oam:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 77154a9e-8fc7-4158-b79e-eecb034384bd
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: oam_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 32G
+            virtual_cpu:
+              num_virtual_cpu: 4
+        endpoint:
+          properties:
+            secure: true
+    lb_internal:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: b009969e-472e-4956-90e0-15237838baca
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: leaf
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: internal
+      - virtual_binding:
+          capability: virtual_binding
+          node: lb
+    cscf:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 133b949c-b711-4c5f-a7ce-8ed33ff401ea
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            virtual_cpu:
+              num_virtual_cpu: 8
+        endpoint:
+          properties:
+            secure: true
+  substitution_mappings:
+    node_type: org.openecomp.resource.vf.CscfNokia
+    capabilities:
+      lb_storage.feature:
+      - lb_storage
+      - feature
+      oam.host:
+      - oam
+      - host
+      lb.os:
+      - lb
+      - os
+      cscf.virtual_binding:
+      - cscf
+      - virtual_binding
+      oam.virtual_binding:
+      - oam
+      - virtual_binding
+      cscf.host:
+      - cscf
+      - host
+      oam.endpoint:
+      - oam
+      - endpoint
+      internal.virtual_linkable:
+      - internal
+      - virtual_linkable
+      cscf.endpoint:
+      - cscf
+      - endpoint
+      oam.binding:
+      - oam
+      - binding
+      lb_internal.feature:
+      - lb_internal
+      - feature
+      lb.virtual_binding:
+      - lb
+      - virtual_binding
+      oam.feature:
+      - oam
+      - feature
+      lbcpd_diameter.feature:
+      - lbcpd_diameter
+      - feature
+      oam.scalable:
+      - oam
+      - scalable
+      cscf.scalable:
+      - cscf
+      - scalable
+      cscf.monitoring_parameter:
+      - cscf
+      - monitoring_parameter
+      lb_storage.virtual_storage:
+      - lb_storage
+      - virtual_storage
+      lb.virtual_compute:
+      - lb
+      - virtual_compute
+      oam.virtual_compute:
+      - oam
+      - virtual_compute
+      oam.os:
+      - oam
+      - os
+      lbcpd_sip.feature:
+      - lbcpd_sip
+      - feature
+      lb.endpoint:
+      - lb
+      - endpoint
+      cscf.feature:
+      - cscf
+      - feature
+      cscf_internal.feature:
+      - cscf_internal
+      - feature
+      oamcpd_om.feature:
+      - oamcpd_om
+      - feature
+      oam_internal.feature:
+      - oam_internal
+      - feature
+      lbcpd_om.feature:
+      - lbcpd_om
+      - feature
+      lb.host:
+      - lb
+      - host
+      cscf.binding:
+      - cscf
+      - binding
+      lb.scalable:
+      - lb
+      - scalable
+      cscf.os:
+      - cscf
+      - os
+      lb.feature:
+      - lb
+      - feature
+      cscf.virtual_compute:
+      - cscf
+      - virtual_compute
+      lb.monitoring_parameter:
+      - lb
+      - monitoring_parameter
+      oam_storage.feature:
+      - oam_storage
+      - feature
+      oam.monitoring_parameter:
+      - oam
+      - monitoring_parameter
+      internal.feature:
+      - internal
+      - feature
+      lb.binding:
+      - lb
+      - binding
+      oam_storage.virtual_storage:
+      - oam_storage
+      - virtual_storage
+    requirements:
+      lbcpd_diameter.virtual_link:
+      - lbcpd_diameter
+      - virtual_link
+      lbcpd_om.dependency:
+      - lbcpd_om
+      - dependency
+      oam.dependency:
+      - oam
+      - dependency
+      lbcpd_diameter.virtual_binding:
+      - lbcpd_diameter
+      - virtual_binding
+      cscf_internal.virtual_link:
+      - cscf_internal
+      - virtual_link
+      oamcpd_om.virtual_binding:
+      - oamcpd_om
+      - virtual_binding
+      lb.dependency:
+      - lb
+      - dependency
+      lb_storage.dependency:
+      - lb_storage
+      - dependency
+      cscf_internal.virtual_binding:
+      - cscf_internal
+      - virtual_binding
+      lb_internal.virtual_link:
+      - lb_internal
+      - virtual_link
+      lbcpd_om.virtual_binding:
+      - lbcpd_om
+      - virtual_binding
+      cscf.local_storage:
+      - cscf
+      - local_storage
+      lbcpd_diameter.dependency:
+      - lbcpd_diameter
+      - dependency
+      lbcpd_sip.virtual_link:
+      - lbcpd_sip
+      - virtual_link
+      cscf_internal.dependency:
+      - cscf_internal
+      - dependency
+      lb_internal.virtual_binding:
+      - lb_internal
+      - virtual_binding
+      oam_storage.dependency:
+      - oam_storage
+      - dependency
+      oam_internal.dependency:
+      - oam_internal
+      - dependency
+      internal.dependency:
+      - internal
+      - dependency
+      oam_internal.virtual_binding:
+      - oam_internal
+      - virtual_binding
+      lb_internal.dependency:
+      - lb_internal
+      - dependency
+      oamcpd_om.dependency:
+      - oamcpd_om
+      - dependency
+      oam.virtual_storage:
+      - oam
+      - virtual_storage
+      cscf.dependency:
+      - cscf
+      - dependency
+      lbcpd_om.virtual_link:
+      - lbcpd_om
+      - virtual_link
+      cscf.virtual_storage:
+      - cscf
+      - virtual_storage
+      oamcpd_om.virtual_link:
+      - oamcpd_om
+      - virtual_link
+      oam.local_storage:
+      - oam
+      - local_storage
+      lbcpd_sip.virtual_binding:
+      - lbcpd_sip
+      - virtual_binding
+      lbcpd_sip.dependency:
+      - lbcpd_sip
+      - dependency
+      lb.virtual_storage:
+      - lb
+      - virtual_storage
+      lb.local_storage:
+      - lb
+      - local_storage
+      oam_internal.virtual_link:
+      - oam_internal
+      - virtual_link

@@ -1,0 +1,1716 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  org.openecomp.resource.vf.SbcHuawei:
+    derived_from: org.openecomp.resource.abstract.nodes.VF
+    properties:
+      nf_naming:
+        type: org.openecomp.datatypes.Naming
+        default:
+          ecomp_generated_naming: true
+      multi_stage_design:
+        type: boolean
+        default: false
+      nf_function:
+        type: string
+      nf_naming_code:
+        type: string
+      availability_zone_max_count:
+        type: integer
+        default: 1
+      nf_role:
+        type: string
+      min_instances:
+        type: integer
+      max_instances:
+        type: integer
+      nf_type:
+        type: string
+    capabilities:
+      ccu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      bsu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru2medianet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      bsu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      scu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      cmu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      scu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      lbu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      ccu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      vpu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      ccu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      cmu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      hru.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      bsu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      bsu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      hru_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      omu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      cmu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      vpu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      lbu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      omu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu2managenet.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      upiru_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu2signalnet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      ccu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      hru.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      ccu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      ccu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      lbu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      bsu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      ccu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      ccu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      bsu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      ccu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      bsu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      bsu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      bsu.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      omu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      bsu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      intranet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      upiru_vducpd_intra2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      intranet1.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      ccu.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      lbu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      lbu_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu2signalnet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      bsu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      scu.binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru2medianet1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru_storage.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      omu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      ccu.scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      scu.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      hru.endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      intranet2.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      vpu.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      cmu_vducpd_intra1.feature:
+        type: tosca.capabilities.Node
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      bsu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      scu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      intranet2.virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      hru.os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      omu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      ccu.monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      lbu.virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      scu_storage.virtual_storage:
+        type: tosca.capabilities.nfv.VirtualStorage
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+    requirements:
+    - scu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - vpu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cmu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - omu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - bsu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - intranet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - vpu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - intranet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - scu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - upiru_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cmu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - upiru_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - bsu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - omu2managenet.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - ccu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - omu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - ccu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - cmu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - omu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - scu.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - bsu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu2signalnet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu_vducpd_intra1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - ccu_storage.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu2signalnet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - lbu_vducpd_intra2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru2medianet1.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - hru2medianet2.dependency:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Node
+        node: tosca.nodes.Root
+        relationship: tosca.relationships.DependsOn
+    - vpu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - bsu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - lbu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - cmu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - ccu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - omu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - scu.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - hru.virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - omu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - hru_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - hru_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - scu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - upiru_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - upiru_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - omu2managenet.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - ccu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - cmu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - bsu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - lbu2signalnet1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - lbu_vducpd_intra1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - lbu2signalnet2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - lbu_vducpd_intra2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - hru2medianet1.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - hru2medianet2.virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - vpu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - bsu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - lbu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - cmu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - ccu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - omu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - scu.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - hru.local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment
+    - omu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - hru_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - hru_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - scu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - upiru_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - upiru_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - omu2managenet.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - ccu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - cmu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - bsu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - lbu2signalnet1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - lbu_vducpd_intra1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - lbu2signalnet2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - lbu_vducpd_intra2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - hru2medianet1.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable
+    - hru2medianet2.virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable

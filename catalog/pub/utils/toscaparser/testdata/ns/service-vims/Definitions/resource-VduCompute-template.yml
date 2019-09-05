@@ -1,0 +1,169 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+  UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+  name: VDU Compute
+  description: VDU Compute
+  type: VFC
+  category: Generic
+  subcategory: Infrastructure
+  resourceVendor: ATT (Tosca)
+  resourceVendorRelease: 1.0.0.wd03
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  tosca.nodes.nfv.VDU.Compute:
+    derived_from: tosca.nodes.Root
+    description: VDU Compute
+    properties:
+      configurable_properties:
+        type: map
+        entry_schema:
+          type: tosca.datatypes.nfv.VnfcConfigurableProperties
+      name:
+        type: string
+      nfvi_constraints:
+        type: list
+        entry_schema:
+          type: string
+      descrption:
+        type: string
+      boot_order:
+        type: list
+        entry_schema:
+          type: string
+    capabilities:
+      scalable:
+        type: tosca.capabilities.Scalable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          max_instances:
+            type: integer
+            default: 1
+            required: false
+          min_instances:
+            type: integer
+            default: 1
+            required: false
+          default_instances:
+            type: integer
+            required: false
+      virtual_compute:
+        type: tosca.capabilities.nfv.VirtualCompute
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          virtual_memory:
+            type: tosca.datatypes.nfv.VirtualMemory
+            required: true
+          requested_additional_capabilities:
+            type: map
+            required: false
+            entry_schema:
+              type: tosca.datatypes.nfv.RequestedAdditionalCapability
+          virtual_cpu:
+            type: tosca.datatypes.nfv.VirtualCpu
+            required: true
+      endpoint:
+        type: tosca.capabilities.Endpoint.Admin
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          secure:
+            type: boolean
+            default: true
+            required: false
+      os:
+        type: tosca.capabilities.OperatingSystem
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          distribution:
+            type: string
+            required: false
+          type:
+            type: string
+            required: false
+          version:
+            type: version
+            required: false
+          architecture:
+            type: string
+            required: false
+      virtual_binding:
+        type: tosca.capabilities.nfv.VirtualBindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      host:
+        type: tosca.capabilities.Container
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+        properties:
+          num_cpus:
+            type: integer
+            required: false
+          disk_size:
+            type: scalar-unit.size
+            required: false
+          cpu_frequency:
+            type: scalar-unit.frequency
+            required: false
+          mem_size:
+            type: scalar-unit.size
+            required: false
+      binding:
+        type: tosca.capabilities.network.Bindable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+      monitoring_parameter:
+        type: tosca.capabilities.nfv.Metric
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]
+    requirements:
+    - virtual_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualStorage
+    - local_storage:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.Attachment

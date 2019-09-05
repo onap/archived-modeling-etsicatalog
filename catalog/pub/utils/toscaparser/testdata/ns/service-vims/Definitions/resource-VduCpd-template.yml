@@ -1,0 +1,57 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+  UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+  name: VDU Cpd
+  description: VDU Cpd
+  type: CP
+  category: Generic
+  subcategory: Network Elements
+  resourceVendor: ATT (Tosca)
+  resourceVendorRelease: 1.0.0.wd03
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  tosca.nodes.nfv.VduCpd:
+    derived_from: tosca.nodes.Root
+    description: VDU Cpd
+    properties:
+      virtual_network_interface_requirements:
+        type: list
+        entry_schema:
+          type: tosca.datatypes.nfv.VirtualNetworkInterfaceRequirements
+      role:
+        type: string
+      bitrate_requirement:
+        type: integer
+      description:
+        type: string
+      layer_protocol:
+        type: string
+      address_data:
+        type: list
+        entry_schema:
+          type: tosca.datatype.nfv.AddressData
+    requirements:
+    - virtual_link:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualLinkable
+    - virtual_binding:
+        occurrences:
+        - 0
+        - UNBOUNDED
+        capability: tosca.capabilities.nfv.VirtualBindable

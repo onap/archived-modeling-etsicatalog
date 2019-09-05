@@ -1,0 +1,80 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: d0d43bd0-4088-4b1c-9ac1-c6303d9f923a
+  UUID: 0f93d9d8-a815-4da9-820f-6cc77f670623
+  name: ext ZTE VL
+  description: Ext ZTE VL
+  type: VL
+  category: Generic
+  subcategory: Network Elements
+  resourceVendor: ATT (Tosca)
+  resourceVendorRelease: 1.0.0.wd03
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+node_types:
+  tosca.nodes.nfv.ext.zte.VL:
+    derived_from: tosca.nodes.Root
+    description: Ext ZTE VL
+    properties:
+      segmentation_id:
+        type: string
+      network_name:
+        type: string
+      is_predefined:
+        type: boolean
+      mtu:
+        type: integer
+      dns_nameservers:
+        type: list
+        entry_schema:
+          type: string
+      physical_network:
+        type: string
+      dhcp_enabled:
+        type: boolean
+      network_id:
+        type: string
+      host_routes:
+        type: list
+        entry_schema:
+          type: tosca.datatypes.nfv.ext.HostRouteInfo
+      ip_version:
+        type: integer
+      vendor:
+        type: string
+      name:
+        type: string
+      start_ip:
+        type: string
+      vlan_transparent:
+        type: boolean
+      cidr:
+        type: string
+      gateway_ip:
+        type: string
+      network_type:
+        type: string
+      end_ip:
+        type: string
+      location_info:
+        type: tosca.datatypes.nfv.ext.LocationInfo
+    capabilities:
+      virtual_linkable:
+        type: tosca.capabilities.nfv.VirtualLinkable
+        occurrences:
+        - 1
+        - UNBOUNDED
+        valid_source_types: [
+          ]

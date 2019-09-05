@@ -1,0 +1,1546 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+metadata:
+  invariantUUID: 459372a6-51a2-4f35-8193-b11ca47c2a24
+  UUID: 4563686a-a63a-457d-8232-a3d07b314028
+  name: SBC Huawei
+  description: SBC Huawei
+  type: VF
+  category: Generic
+  subcategory: Network Elements
+  resourceVendor: onap
+  resourceVendorRelease: '1.0'
+  resourceVendorModelNumber: ''
+imports:
+- nodes:
+    file: nodes.yml
+- datatypes:
+    file: data.yml
+- capabilities:
+    file: capabilities.yml
+- relationships:
+    file: relationships.yml
+- groups:
+    file: groups.yml
+- policies:
+    file: policies.yml
+- resource-SBC Huawei-interface:
+    file: resource-SbcHuawei-template-interface.yml
+- resource-VDU VirtualStorage:
+    file: resource-VduVirtualstorage-template.yml
+- resource-VDU Compute:
+    file: resource-VduCompute-template.yml
+- resource-VDU Cpd:
+    file: resource-VduCpd-template.yml
+- resource-VnfVirtualLinkDesc:
+    file: resource-Vnfvirtuallinkdesc-template.yml
+topology_template:
+  inputs:
+    nf_naming:
+      type: org.openecomp.datatypes.Naming
+      default:
+        ecomp_generated_naming: true
+    multi_stage_design:
+      type: boolean
+      default: false
+    nf_function:
+      type: string
+    nf_naming_code:
+      type: string
+    availability_zone_max_count:
+      type: integer
+      default: 1
+    nf_role:
+      type: string
+    min_instances:
+      type: integer
+    max_instances:
+      type: integer
+    nf_type:
+      type: string
+  node_templates:
+    SCU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 592668f7-6eab-451a-bccb-018db1fd17d1
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: SCU
+        descrption: the virtual machine of SCU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: SCU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 2
+        endpoint:
+          properties:
+            secure: true
+    LBU2SignalNet1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 19e73b12-a0d0-49f0-8f9b-7fac22688c70
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ethernet
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: LBU
+    CCU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 4daec8ff-8dc2-44c3-abac-4580c5d5c292
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+      - virtual_binding:
+          capability: virtual_binding
+          node: CCU
+    LBU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: c6b492b3-2674-4d29-b190-04788e08ab39
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: LBU
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+    OMU2ManageNet:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: e2967dfa-15fb-4b71-b5aa-a4f0a95fff60
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+    LBU_VduCpd_Intra2:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 8a4b0534-8c48-4631-a1a4-7de4a090faf7
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet2
+      - virtual_binding:
+          capability: virtual_binding
+          node: LBU
+    OMU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 156e7686-96a2-4ade-8a52-1f2d2e291653
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        rdma_enabled: false
+        size_of_storage: 256G
+        id: OMU_Storage
+        type_of_storage: volume
+    HRU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 1ef6b212-4bd3-4e58-878d-29e18c2ce930
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: HRU
+        descrption: the virtual machine of HRU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: HRU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 12G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 3
+        endpoint:
+          properties:
+            secure: true
+    VPU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 69c6e716-f8c4-4ee7-b517-908dc23f0c74
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: VPU_Storage
+        type_of_storage: volume
+    SCU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 482a3f60-5c44-4587-840d-53df210df213
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: SCU
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+    HRU_VduCpd_Intra2:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 69c33f3b-75ba-4766-865d-e751439ceb63
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet2
+      - virtual_binding:
+          capability: virtual_binding
+          node: HRU
+    HRU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 9a844ac0-6676-42d1-b10e-b766eeb2582e
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: HRU
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+    CCU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 6d15fa4c-77d4-4f6e-9635-d8d95c5e0476
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: CCU_Storage
+        type_of_storage: volume
+    BSU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: e95a5f3f-8037-48a6-80cd-a245b71429c8
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+      - virtual_binding:
+          capability: virtual_binding
+          node: BSU
+    Intranet1:
+      type: tosca.nodes.nfv.VnfVirtualLinkDesc
+      metadata:
+        invariantUUID: ffa0bcc5-7903-4332-adb9-3c44f577621e
+        UUID: ecb39b27-06c8-4337-9304-d6a88c8c0fae
+        customizationUUID: 4635dd5e-a3f6-4fa2-9701-42b843de0da4
+        version: '2.0'
+        name: VnfVirtualLinkDesc
+        description: VnfVirtualLinkDesc
+        type: VL
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        vl_flavours:
+          flavours:
+            flavourId: test1
+        connectivity_type:
+          layer_protocol: ipv4
+    Intranet2:
+      type: tosca.nodes.nfv.VnfVirtualLinkDesc
+      metadata:
+        invariantUUID: ffa0bcc5-7903-4332-adb9-3c44f577621e
+        UUID: ecb39b27-06c8-4337-9304-d6a88c8c0fae
+        customizationUUID: bf49e290-c9da-446e-b32f-4ca63462f0be
+        version: '2.0'
+        name: VnfVirtualLinkDesc
+        description: VnfVirtualLinkDesc
+        type: VL
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        vl_flavours:
+          flavours:
+            flavourId: test2
+        connectivity_type:
+          layer_protocol: ipv4
+    VPU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 6ef26ba3-0abb-48b4-bfba-20a86b521f36
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: VPU
+        descrption: the virtual machine of VPU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: VPU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 5
+        endpoint:
+          properties:
+            secure: true
+    LBU2SignalNet2:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 7df93c99-cdd6-49be-be6d-1769760442cf
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: LBU
+    OMU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: baf8ef19-47ea-406c-95ef-483690b32171
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+      - virtual_binding:
+          capability: virtual_binding
+          node: OMU
+    LBU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 34020892-4b2b-412b-9acf-91cfb80f5d0f
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: LBU
+        descrption: the virtual machine of LBU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: LBU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 24G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 4
+        endpoint:
+          properties:
+            secure: true
+    CMU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: db655574-25ed-48d1-ae39-b6e041148064
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+      - virtual_binding:
+          capability: virtual_binding
+          node: CMU
+    CMU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: 269f5f42-ef96-465f-892e-361d6dcb12ee
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: CMU_Storage
+        type_of_storage: volume
+    BSU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 66e9d293-68b6-4086-a700-df7b4ffc6689
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: BSU
+        descrption: the virtual machine of BSU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: BSU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 1
+        endpoint:
+          properties:
+            secure: true
+    CMU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 0ba6264c-1b85-4c7b-89f1-7533ce9b08e0
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: CMU
+        descrption: the virtual machine of CMU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: CMU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 8G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 1
+        endpoint:
+          properties:
+            secure: true
+    SCU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: b5df1233-babf-44f1-b565-fa41a30c9f7b
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: SCU_Storage
+        type_of_storage: volume
+    HRU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: c24eae39-81a5-4ca2-af7d-3cdb81a46b40
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: HRU_Storage
+        type_of_storage: volume
+    CCU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 51f263d2-9d80-4c93-afbd-442cd7276477
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: CCU
+        descrption: the virtual machine of CCU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: CCU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 16G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 2
+        endpoint:
+          properties:
+            secure: true
+    OMU:
+      type: tosca.nodes.nfv.VDU.Compute
+      metadata:
+        invariantUUID: 63007034-0330-4132-b51e-87c6a64065f3
+        UUID: 9c6a1271-b443-48e3-8049-f5433db3d5f2
+        customizationUUID: 4ad39620-ccff-4067-aa1f-12216c0c8ebf
+        version: '2.0'
+        name: VDU Compute
+        description: VDU Compute
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        configurable_properties:
+          test:
+            additional_vnfc_configurable_properties:
+              aaa: '1'
+        name: OMU
+        descrption: the virtual machine of OMU
+      requirements:
+      - virtual_storage:
+          capability: virtual_storage
+          node: OMU_Storage
+      capabilities:
+        scalable:
+          properties:
+            max_instances: 1
+            min_instances: 1
+        virtual_compute:
+          properties:
+            virtual_memory:
+              virtual_mem_size: 16G
+            requested_additional_capabilities: {
+              }
+            virtual_cpu:
+              num_virtual_cpu: 4
+        endpoint:
+          properties:
+            secure: true
+    BSU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: e483151b-38fd-4ea3-b13f-11d6f085e276
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: BSU_Storage
+        type_of_storage: volume
+    UPIRU_VduCpd_Intra1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 940826f5-4339-4370-8d93-f82cc5821c89
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: VPU
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet1
+    UPIRU_VduCpd_Intra2:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: cc7fd241-a3a3-4ad9-a173-6834b2363ae6
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: VPU
+      - virtual_link:
+          capability: virtual_linkable
+          node: Intranet2
+    HRU2MediaNet1:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: b8f4d611-3e0e-495f-a6b5-612f6b9acc99
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ethernet
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: HRU
+    LBU_Storage:
+      type: tosca.nodes.nfv.VDU.VirtualStorage
+      metadata:
+        invariantUUID: fabee67b-5538-453d-9dc0-41c5655c9105
+        UUID: e852ea2a-3a48-4521-8ef7-f12682c75e86
+        customizationUUID: bae734f4-21b8-44e3-bd54-8561c4de821f
+        version: '2.0'
+        name: VDU VirtualStorage
+        description: VDU VirtualStorage
+        type: VFC
+        category: Generic
+        subcategory: Infrastructure
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        size_of_storage: 4G
+        id: LBU_Storage
+        type_of_storage: volume
+    HRU2MediaNet2:
+      type: tosca.nodes.nfv.VduCpd
+      metadata:
+        invariantUUID: a79633fa-0a7f-4858-9064-93d7f1bb8f88
+        UUID: 04dcc383-181f-41c3-9ca0-49fa56278d2a
+        customizationUUID: 05ee15f6-ce45-4278-9567-9a2978b881d2
+        version: '2.0'
+        name: VDU Cpd
+        description: VDU Cpd
+        type: CP
+        category: Generic
+        subcategory: Network Elements
+        resourceVendor: ATT (Tosca)
+        resourceVendorRelease: 1.0.0.wd03
+        resourceVendorModelNumber: ''
+      properties:
+        role: root
+        layer_protocol: ipv4
+      requirements:
+      - virtual_binding:
+          capability: virtual_binding
+          node: HRU
+  substitution_mappings:
+    node_type: org.openecomp.resource.vf.SbcHuawei
+    capabilities:
+      ccu_storage.feature:
+      - ccu_storage
+      - feature
+      bsu.binding:
+      - bsu
+      - binding
+      hru2medianet2.feature:
+      - hru2medianet2
+      - feature
+      vpu.os:
+      - vpu
+      - os
+      bsu.os:
+      - bsu
+      - os
+      scu.scalable:
+      - scu
+      - scalable
+      cmu.host:
+      - cmu
+      - host
+      scu.virtual_compute:
+      - scu
+      - virtual_compute
+      lbu_vducpd_intra1.feature:
+      - lbu_vducpd_intra1
+      - feature
+      omu.scalable:
+      - omu
+      - scalable
+      ccu.virtual_binding:
+      - ccu
+      - virtual_binding
+      cmu.binding:
+      - cmu
+      - binding
+      lbu.virtual_compute:
+      - lbu
+      - virtual_compute
+      vpu.virtual_binding:
+      - vpu
+      - virtual_binding
+      ccu.feature:
+      - ccu
+      - feature
+      lbu.feature:
+      - lbu
+      - feature
+      scu.host:
+      - scu
+      - host
+      cmu.os:
+      - cmu
+      - os
+      hru.virtual_binding:
+      - hru
+      - virtual_binding
+      omu.os:
+      - omu
+      - os
+      bsu_storage.feature:
+      - bsu_storage
+      - feature
+      cmu.feature:
+      - cmu
+      - feature
+      omu.endpoint:
+      - omu
+      - endpoint
+      bsu.virtual_binding:
+      - bsu
+      - virtual_binding
+      vpu.binding:
+      - vpu
+      - binding
+      vpu.scalable:
+      - vpu
+      - scalable
+      hru_vducpd_intra2.feature:
+      - hru_vducpd_intra2
+      - feature
+      hru.feature:
+      - hru
+      - feature
+      cmu_storage.virtual_storage:
+      - cmu_storage
+      - virtual_storage
+      omu.virtual_compute:
+      - omu
+      - virtual_compute
+      omu.binding:
+      - omu
+      - binding
+      vpu_storage.feature:
+      - vpu_storage
+      - feature
+      cmu.virtual_compute:
+      - cmu
+      - virtual_compute
+      cmu.scalable:
+      - cmu
+      - scalable
+      vpu.host:
+      - vpu
+      - host
+      lbu_storage.virtual_storage:
+      - lbu_storage
+      - virtual_storage
+      omu_vducpd_intra1.feature:
+      - omu_vducpd_intra1
+      - feature
+      lbu_vducpd_intra2.feature:
+      - lbu_vducpd_intra2
+      - feature
+      scu_storage.feature:
+      - scu_storage
+      - feature
+      hru.host:
+      - hru
+      - host
+      omu_storage.virtual_storage:
+      - omu_storage
+      - virtual_storage
+      omu2managenet.feature:
+      - omu2managenet
+      - feature
+      cmu.endpoint:
+      - cmu
+      - endpoint
+      upiru_vducpd_intra1.feature:
+      - upiru_vducpd_intra1
+      - feature
+      lbu2signalnet2.feature:
+      - lbu2signalnet2
+      - feature
+      lbu.monitoring_parameter:
+      - lbu
+      - monitoring_parameter
+      cmu.monitoring_parameter:
+      - cmu
+      - monitoring_parameter
+      vpu.monitoring_parameter:
+      - vpu
+      - monitoring_parameter
+      hru_vducpd_intra1.feature:
+      - hru_vducpd_intra1
+      - feature
+      cmu_storage.feature:
+      - cmu_storage
+      - feature
+      scu_vducpd_intra1.feature:
+      - scu_vducpd_intra1
+      - feature
+      vpu.virtual_compute:
+      - vpu
+      - virtual_compute
+      ccu.endpoint:
+      - ccu
+      - endpoint
+      hru.scalable:
+      - hru
+      - scalable
+      ccu.binding:
+      - ccu
+      - binding
+      ccu_vducpd_intra1.feature:
+      - ccu_vducpd_intra1
+      - feature
+      cmu.virtual_binding:
+      - cmu
+      - virtual_binding
+      omu_storage.feature:
+      - omu_storage
+      - feature
+      omu.feature:
+      - omu
+      - feature
+      lbu.scalable:
+      - lbu
+      - scalable
+      lbu.os:
+      - lbu
+      - os
+      bsu_vducpd_intra1.feature:
+      - bsu_vducpd_intra1
+      - feature
+      hru.monitoring_parameter:
+      - hru
+      - monitoring_parameter
+      scu.virtual_binding:
+      - scu
+      - virtual_binding
+      ccu_storage.virtual_storage:
+      - ccu_storage
+      - virtual_storage
+      ccu.host:
+      - ccu
+      - host
+      bsu.endpoint:
+      - bsu
+      - endpoint
+      ccu.virtual_compute:
+      - ccu
+      - virtual_compute
+      bsu_storage.virtual_storage:
+      - bsu_storage
+      - virtual_storage
+      hru.binding:
+      - hru
+      - binding
+      bsu.feature:
+      - bsu
+      - feature
+      bsu.virtual_compute:
+      - bsu
+      - virtual_compute
+      omu.virtual_binding:
+      - omu
+      - virtual_binding
+      hru.virtual_compute:
+      - hru
+      - virtual_compute
+      bsu.monitoring_parameter:
+      - bsu
+      - monitoring_parameter
+      scu.os:
+      - scu
+      - os
+      intranet1.feature:
+      - intranet1
+      - feature
+      scu.feature:
+      - scu
+      - feature
+      upiru_vducpd_intra2.feature:
+      - upiru_vducpd_intra2
+      - feature
+      lbu.binding:
+      - lbu
+      - binding
+      intranet1.virtual_linkable:
+      - intranet1
+      - virtual_linkable
+      vpu.endpoint:
+      - vpu
+      - endpoint
+      ccu.os:
+      - ccu
+      - os
+      lbu.endpoint:
+      - lbu
+      - endpoint
+      lbu_storage.feature:
+      - lbu_storage
+      - feature
+      hru_storage.virtual_storage:
+      - hru_storage
+      - virtual_storage
+      lbu2signalnet1.feature:
+      - lbu2signalnet1
+      - feature
+      bsu.scalable:
+      - bsu
+      - scalable
+      scu.binding:
+      - scu
+      - binding
+      vpu_storage.virtual_storage:
+      - vpu_storage
+      - virtual_storage
+      hru2medianet1.feature:
+      - hru2medianet1
+      - feature
+      hru_storage.feature:
+      - hru_storage
+      - feature
+      omu.host:
+      - omu
+      - host
+      ccu.scalable:
+      - ccu
+      - scalable
+      scu.endpoint:
+      - scu
+      - endpoint
+      hru.endpoint:
+      - hru
+      - endpoint
+      intranet2.feature:
+      - intranet2
+      - feature
+      vpu.feature:
+      - vpu
+      - feature
+      cmu_vducpd_intra1.feature:
+      - cmu_vducpd_intra1
+      - feature
+      bsu.host:
+      - bsu
+      - host
+      scu.monitoring_parameter:
+      - scu
+      - monitoring_parameter
+      intranet2.virtual_linkable:
+      - intranet2
+      - virtual_linkable
+      hru.os:
+      - hru
+      - os
+      omu.monitoring_parameter:
+      - omu
+      - monitoring_parameter
+      lbu.host:
+      - lbu
+      - host
+      ccu.monitoring_parameter:
+      - ccu
+      - monitoring_parameter
+      lbu.virtual_binding:
+      - lbu
+      - virtual_binding
+      scu_storage.virtual_storage:
+      - scu_storage
+      - virtual_storage
+    requirements:
+      scu_vducpd_intra1.dependency:
+      - scu_vducpd_intra1
+      - dependency
+      cmu_vducpd_intra1.dependency:
+      - cmu_vducpd_intra1
+      - dependency
+      lbu2signalnet1.dependency:
+      - lbu2signalnet1
+      - dependency
+      hru2medianet2.dependency:
+      - hru2medianet2
+      - dependency
+      cmu_vducpd_intra1.virtual_link:
+      - cmu_vducpd_intra1
+      - virtual_link
+      vpu.local_storage:
+      - vpu
+      - local_storage
+      scu_vducpd_intra1.virtual_binding:
+      - scu_vducpd_intra1
+      - virtual_binding
+      lbu_vducpd_intra2.virtual_binding:
+      - lbu_vducpd_intra2
+      - virtual_binding
+      cmu.dependency:
+      - cmu
+      - dependency
+      omu2managenet.dependency:
+      - omu2managenet
+      - dependency
+      hru_vducpd_intra1.virtual_binding:
+      - hru_vducpd_intra1
+      - virtual_binding
+      upiru_vducpd_intra2.dependency:
+      - upiru_vducpd_intra2
+      - dependency
+      bsu_vducpd_intra1.dependency:
+      - bsu_vducpd_intra1
+      - dependency
+      hru_vducpd_intra2.virtual_link:
+      - hru_vducpd_intra2
+      - virtual_link
+      scu.local_storage:
+      - scu
+      - local_storage
+      bsu_storage.dependency:
+      - bsu_storage
+      - dependency
+      bsu.virtual_storage:
+      - bsu
+      - virtual_storage
+      hru2medianet2.virtual_binding:
+      - hru2medianet2
+      - virtual_binding
+      hru_vducpd_intra1.dependency:
+      - hru_vducpd_intra1
+      - dependency
+      lbu2signalnet1.virtual_link:
+      - lbu2signalnet1
+      - virtual_link
+      bsu.local_storage:
+      - bsu
+      - local_storage
+      ccu_vducpd_intra1.dependency:
+      - ccu_vducpd_intra1
+      - dependency
+      upiru_vducpd_intra1.virtual_link:
+      - upiru_vducpd_intra1
+      - virtual_link
+      omu_vducpd_intra1.virtual_link:
+      - omu_vducpd_intra1
+      - virtual_link
+      omu_storage.dependency:
+      - omu_storage
+      - dependency
+      lbu_vducpd_intra1.virtual_link:
+      - lbu_vducpd_intra1
+      - virtual_link
+      bsu_vducpd_intra1.virtual_binding:
+      - bsu_vducpd_intra1
+      - virtual_binding
+      lbu.dependency:
+      - lbu
+      - dependency
+      lbu_vducpd_intra2.dependency:
+      - lbu_vducpd_intra2
+      - dependency
+      upiru_vducpd_intra2.virtual_link:
+      - upiru_vducpd_intra2
+      - virtual_link
+      hru_vducpd_intra2.dependency:
+      - hru_vducpd_intra2
+      - dependency
+      omu_vducpd_intra1.virtual_binding:
+      - omu_vducpd_intra1
+      - virtual_binding
+      scu.dependency:
+      - scu
+      - dependency
+      lbu_vducpd_intra2.virtual_link:
+      - lbu_vducpd_intra2
+      - virtual_link
+      lbu2signalnet2.virtual_binding:
+      - lbu2signalnet2
+      - virtual_binding
+      hru2medianet1.virtual_binding:
+      - hru2medianet1
+      - virtual_binding
+      hru2medianet1.dependency:
+      - hru2medianet1
+      - dependency
+      upiru_vducpd_intra1.virtual_binding:
+      - upiru_vducpd_intra1
+      - virtual_binding
+      lbu_vducpd_intra1.dependency:
+      - lbu_vducpd_intra1
+      - dependency
+      upiru_vducpd_intra1.dependency:
+      - upiru_vducpd_intra1
+      - dependency
+      lbu2signalnet2.virtual_link:
+      - lbu2signalnet2
+      - virtual_link
+      hru_storage.dependency:
+      - hru_storage
+      - dependency
+      hru.dependency:
+      - hru
+      - dependency
+      omu2managenet.virtual_binding:
+      - omu2managenet
+      - virtual_binding
+      omu.local_storage:
+      - omu
+      - local_storage
+      scu_storage.dependency:
+      - scu_storage
+      - dependency
+      cmu_vducpd_intra1.virtual_binding:
+      - cmu_vducpd_intra1
+      - virtual_binding
+      scu.virtual_storage:
+      - scu
+      - virtual_storage
+      omu2managenet.virtual_link:
+      - omu2managenet
+      - virtual_link
+      bsu_vducpd_intra1.virtual_link:
+      - bsu_vducpd_intra1
+      - virtual_link
+      vpu.virtual_storage:
+      - vpu
+      - virtual_storage
+      scu_vducpd_intra1.virtual_link:
+      - scu_vducpd_intra1
+      - virtual_link
+      upiru_vducpd_intra2.virtual_binding:
+      - upiru_vducpd_intra2
+      - virtual_binding
+      cmu_storage.dependency:
+      - cmu_storage
+      - dependency
+      bsu.dependency:
+      - bsu
+      - dependency
+      lbu2signalnet2.dependency:
+      - lbu2signalnet2
+      - dependency
+      hru_vducpd_intra1.virtual_link:
+      - hru_vducpd_intra1
+      - virtual_link
+      hru_vducpd_intra2.virtual_binding:
+      - hru_vducpd_intra2
+      - virtual_binding
+      vpu.dependency:
+      - vpu
+      - dependency
+      cmu.local_storage:
+      - cmu
+      - local_storage
+      lbu_vducpd_intra1.virtual_binding:
+      - lbu_vducpd_intra1
+      - virtual_binding
+      cmu.virtual_storage:
+      - cmu
+      - virtual_storage
+      ccu.local_storage:
+      - ccu
+      - local_storage
+      lbu_storage.dependency:
+      - lbu_storage
+      - dependency
+      lbu.virtual_storage:
+      - lbu
+      - virtual_storage
+      omu_vducpd_intra1.dependency:
+      - omu_vducpd_intra1
+      - dependency
+      ccu_vducpd_intra1.virtual_binding:
+      - ccu_vducpd_intra1
+      - virtual_binding
+      omu.dependency:
+      - omu
+      - dependency
+      ccu_vducpd_intra1.virtual_link:
+      - ccu_vducpd_intra1
+      - virtual_link
+      ccu_storage.dependency:
+      - ccu_storage
+      - dependency
+      lbu.local_storage:
+      - lbu
+      - local_storage
+      ccu.dependency:
+      - ccu
+      - dependency
+      intranet1.dependency:
+      - intranet1
+      - dependency
+      hru.local_storage:
+      - hru
+      - local_storage
+      lbu2signalnet1.virtual_binding:
+      - lbu2signalnet1
+      - virtual_binding
+      omu.virtual_storage:
+      - omu
+      - virtual_storage
+      hru.virtual_storage:
+      - hru
+      - virtual_storage
+      vpu_storage.dependency:
+      - vpu_storage
+      - dependency
+      hru2medianet2.virtual_link:
+      - hru2medianet2
+      - virtual_link
+      intranet2.dependency:
+      - intranet2
+      - dependency
+      hru2medianet1.virtual_link:
+      - hru2medianet1
+      - virtual_link
+      ccu.virtual_storage:
+      - ccu
+      - virtual_storage
