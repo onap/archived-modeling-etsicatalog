@@ -21,12 +21,12 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.modeling.genericparser</groupId>
-    <artifactId>modeling-genericparser</artifactId>
+    <groupId>org.onap.modeling.etsicatalog</groupId>
+    <artifactId>modeling-etsicatalog</artifactId>
     <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>modeling-genericparser</name>
-    <description>modeling genericparser</description>
+    <name>modeling-etsicatalog</name>
+    <description>modeling etsicatalog</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.sources>.</sonar.sources>

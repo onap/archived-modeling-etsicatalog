@@ -6,13 +6,13 @@ install_sf(){
     apk --no-cache add bash curl gcc wget mysql-client openssl-dev
     apk --no-cache add python36-dev libffi-dev musl-dev py3-virtualenv
 
-    # get binary zip from nexus - vfc-nfvo-genericparser
+    # get binary zip from nexus - modeling-etsicatalog
 
-    wget -q -O modeling-genericparser.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.genericparser&a=modeling-genericparser&e=zip&v=${pkg_version}-SNAPSHOT&e=zip" && \
-    unzip modeling-genericparser.zip && \
-    rm -rf modeling-genericparser.zip && \
+    wget -q -O modeling-etsicatalog.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.genericparser&a=modeling-genericparser&e=zip&v=${pkg_version}-SNAPSHOT&e=zip" && \
+    unzip modeling-etsicatalog.zip && \
+    rm -rf modeling-etsicatalog.zip && \
     pip install --upgrade setuptools pip  && \
-    pip install --no-cache-dir --pre -r  /service/modeling/genericparser/requirements.txt
+    pip install --no-cache-dir --pre -r  /service/modeling/etsicatalog/requirements.txt
 }
 
 add_user(){
