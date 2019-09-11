@@ -46,6 +46,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='POST',
     operation_description="On distribute NS package",
+    tags=["NS packages API"],
     request_body=NsPackageDistributeRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: NsPackageDistributeResponseSerializer,
@@ -53,6 +54,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='GET',
     operation_description="Query NS packages",
+    tags=["NS packages API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsPackagesSerializer,
@@ -98,6 +100,7 @@ def nspackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="On distribute Nf package",
+    tags=["NF packages API"],
     request_body=NfPackageDistributeRequestSerializer(),
     responses={
         status.HTTP_202_ACCEPTED: PostJobResponseSerializer,
@@ -105,6 +108,7 @@ def nspackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query Nf packages",
+    tags=["NF packages API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NfPackagesSerializer,
@@ -158,6 +162,7 @@ def nfpackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete one NS package",
+    tags=["NS packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -174,6 +179,7 @@ def nfpackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query one NS package",
+    tags=["NS packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -216,6 +222,7 @@ def ns_rd_csar(request, *args, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="On distribute Service package",
+    tags=["Service packages API"],
     request_body=ServicePackageDistributeRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: "",
@@ -224,6 +231,7 @@ def ns_rd_csar(request, *args, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query Service packages",
+    tags=["Service packages API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: ServicePackagesSerializer,
@@ -267,6 +275,7 @@ def servicepackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete one Service package",
+    tags=["Service packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -281,6 +290,7 @@ def servicepackages_rc(request, *args, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query one Service package",
+    tags=["Service packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -327,6 +337,7 @@ def service_rd_csar(request, *args, **kwargs):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete one Nf package",
+    tags=["NF packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -343,6 +354,7 @@ def service_rd_csar(request, *args, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query one Nf package",
+    tags=["NF packages API"],
     request_body=no_body,
     manual_parameters=[
         openapi.Parameter(
@@ -393,6 +405,7 @@ def nf_rd_csar(request, *args, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Parse model(NS, Service, VNF, PNF)",
+    tags=["Parser API"],
     request_body=ParseModelRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: ParseModelResponseSerializer,
@@ -453,6 +466,7 @@ def model_parser(request, *args, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Parse NS model",
+    tags=["Parser API"],
     request_body=ParseModelRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: ParseModelResponseSerializer,
@@ -486,6 +500,7 @@ def ns_model_parser(request, *args, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Parse NF model",
+    tags=["Parser API"],
     request_body=ParseModelRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: ParseModelResponseSerializer,

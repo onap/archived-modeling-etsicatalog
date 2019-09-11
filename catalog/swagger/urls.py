@@ -19,7 +19,7 @@ from rest_framework import permissions
 
 # Add code for generating swagger automatically.
 swagger_info = openapi.Info(
-    title="VFC Catalog API",
+    title="Modeling etsicatalog API",
     default_version='v1',
     description="""
 

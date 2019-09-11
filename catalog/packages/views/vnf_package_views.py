@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method="GET",
     operation_description="Query multiple VNF package resource",
+    tags=["VNF Package API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfosSerializer(),
@@ -46,6 +47,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method="POST",
     operation_description="Create an individual VNF package resource",
+    tags=["VNF Package API"],
     request_body=CreateVnfPkgInfoRequestSerializer,
     responses={
         status.HTTP_201_CREATED: VnfPkgInfoSerializer(),
@@ -73,6 +75,7 @@ def vnf_packages_rc(request):
 @swagger_auto_schema(
     method='PUT',
     operation_description="Upload VNF package content",
+    tags=["VNF Package API"],
     request_body=no_body,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
@@ -82,6 +85,7 @@ def vnf_packages_rc(request):
 @swagger_auto_schema(
     method="GET",
     operation_description="Fetch VNF package content",
+    tags=["VNF Package API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfosSerializer(),
@@ -113,6 +117,7 @@ def package_content_ru(request, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Upload VNF package content from uri",
+    tags=["VNF Package API"],
     request_body=UploadVnfPackageFromUriRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
@@ -136,6 +141,7 @@ def upload_from_uri_c(request, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query an individual VNF package resource",
+    tags=["VNF Package API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfoSerializer(),
@@ -146,6 +152,7 @@ def upload_from_uri_c(request, **kwargs):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete an individual VNF package resource",
+    tags=["VNF Package API"],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",

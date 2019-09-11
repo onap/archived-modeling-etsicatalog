@@ -38,6 +38,7 @@ VALID_FILTERS = [
 class FetchVnfPkgmArtifactsView(APIView):
 
     @swagger_auto_schema(
+        tags=["VNF Package API"],
         responses={
             status.HTTP_200_OK: "HTTP_200_OK",
             status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),

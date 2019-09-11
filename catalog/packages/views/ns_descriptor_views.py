@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='GET',
     operation_description="Query a NSD",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdInfoSerializer(),
@@ -44,6 +45,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete a NSD",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
@@ -66,6 +68,7 @@ def ns_info_rd(request, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Create a NSD",
+    tags=["NSD API"],
     request_body=CreateNsdInfoRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: NsdInfoSerializer(),
@@ -75,6 +78,7 @@ def ns_info_rd(request, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query multiple NSDs",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdInfosSerializer(),
@@ -100,6 +104,7 @@ def ns_descriptors_rc(request):
 @swagger_auto_schema(
     method='PUT',
     operation_description="Upload NSD content",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'PNFD file',
@@ -109,6 +114,7 @@ def ns_descriptors_rc(request):
 @swagger_auto_schema(
     method='GET',
     operation_description="Download NSD content",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",

@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 class HealthCheckView(APIView):
     @swagger_auto_schema(
+        tags=["Health check API"],
         responses={
             status.HTTP_200_OK: 'Active'})
     def get(self, request, format=None):

@@ -18,7 +18,7 @@
    ./         project files
    ./docker   docker related scripts
    ./logs     log file
-   ./genericparser  generic parser management
+   ./catalog  generic parser management
        ./packages      package life cycle API& logic
              ./               API url definition
              ./views          API related views, each operation is a view

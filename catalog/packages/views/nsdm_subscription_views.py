@@ -44,6 +44,7 @@ def validate_data(data, serializer):
 @swagger_auto_schema(
     method='POST',
     operation_description="Create Subscription for NSD Management",
+    tags=["NSD API"],
     request_body=NsdmSubscriptionRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: NsdmSubscriptionSerializer,
@@ -55,6 +56,7 @@ def validate_data(data, serializer):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query subscriptions for Nsd Management",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdmSubscriptionsSerializer(),
@@ -94,6 +96,7 @@ def nsd_subscription_rc(request):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query subscriptions for Nsd Management",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdmSubscriptionSerializer(),
@@ -105,6 +108,7 @@ def nsd_subscription_rc(request):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete subscription for Nsd Management",
+    tags=["NSD API"],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'No_Content',

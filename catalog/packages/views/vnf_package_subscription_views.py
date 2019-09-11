@@ -46,6 +46,7 @@ VALID_FILTERS = [
 class CreateQuerySubscriptionView(APIView):
 
     @swagger_auto_schema(
+        tags=["VNF Package API"],
         request_body=PkgmSubscriptionRequestSerializer,
         responses={
             status.HTTP_201_CREATED: PkgmSubscriptionSerializer(),
@@ -62,6 +63,7 @@ class CreateQuerySubscriptionView(APIView):
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
+        tags=["VNF Package API"],
         responses={
             status.HTTP_200_OK: PkgmSubscriptionSerializer(),
             status.HTTP_400_BAD_REQUEST: ProblemDetailsSerializer(),
@@ -87,6 +89,7 @@ class CreateQuerySubscriptionView(APIView):
 class QueryTerminateSubscriptionView(APIView):
 
     @swagger_auto_schema(
+        tags=["VNF Package API"],
         responses={
             status.HTTP_200_OK: PkgmSubscriptionSerializer(),
             status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
@@ -106,6 +109,7 @@ class QueryTerminateSubscriptionView(APIView):
         return Response(data=subscription_serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
+        tags=["VNF Package API"],
         responses={
             status.HTTP_204_NO_CONTENT: "",
             status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
