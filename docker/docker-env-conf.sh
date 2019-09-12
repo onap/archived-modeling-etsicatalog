@@ -8,7 +8,7 @@ install_sf(){
 
     # get binary zip from nexus - modeling-etsicatalog
 
-    wget -q -O modeling-etsicatalog.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.genericparser&a=modeling-genericparser&e=zip&v=${pkg_version}-SNAPSHOT&e=zip" && \
+    wget -q -O modeling-etsicatalog.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.etsicatalog&a=modeling-etsicatalog&e=zip&v=${pkg_version}-SNAPSHOT&e=zip" && \
     unzip modeling-etsicatalog.zip && \
     rm -rf modeling-etsicatalog.zip && \
     pip install --upgrade setuptools pip  && \
