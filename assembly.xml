@@ -22,8 +22,8 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>etsicatalog</directory>
-            <outputDirectory>/etsicatalog</outputDirectory>
+            <directory>catalog</directory>
+            <outputDirectory>/catalog</outputDirectory>
             <includes>
                 <include>**/*.py</include>
                 <include>**/*.json</include>
