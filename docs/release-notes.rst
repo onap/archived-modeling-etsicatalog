@@ -2,10 +2,49 @@
 .. http://creativecommons.org/licenses/by/4.0
 
 
-genericparser Release Notes
+etsicatalog Release Notes
 ==================
 
-genericparser provides package management service and parser service as Micro Service.
+etsicatalog provides package management service and parser service as Micro Service.
+
+Version: 1.0.4
+--------------
+
+:Release Date: 2019-09-17
+
+**New Features**
+
+- Update to python3.
+- Optimize the process of service package distribution.
+- Merge with vfc/catalog
+
+
+Released components:
+ - etsicatalog 1.0.4
+
+**Bug Fixes**
+
+None
+
+**Known Issues**
+
+None
+
+**Security Issues**
+
+- ` El Alto Vulnerability Report <https://wiki.onap.org/pages/viewpage.action?pageId=68541425>`_
+
+**Upgrade Notes**
+
+None
+
+**Deprecation Notes**
+
+None
+
+**Other**
+
+===========
 
 Version: 1.0.2
 --------------
@@ -19,7 +58,7 @@ Version: 1.0.2
 
 
 Released components:
- - genericparser 1.0.2
+ - etsicatalog 1.0.2
 
 **Bug Fixes**
 
@@ -42,7 +81,6 @@ This is the initial release
 This is the initial release
 
 **Other**
-	NA
 
 ===========
 
