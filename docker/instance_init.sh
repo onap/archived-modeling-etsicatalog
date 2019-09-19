@@ -13,13 +13,13 @@ fi
 
 function create_database {
 
-    cd /service/modeling/catalog/resources/bin
+    cd /service/modeling/etsicatalog/resources/bin
     bash initDB.sh $MYSQL_ROOT_USER $MYSQL_ROOT_PASSWORD $MYSQL_PORT $MYSQL_IP
 
  }
 
 function migrate_database {
-    cd /service/modeling/catalog
+    cd /service/modeling/etsicatalog
     python manage.py migrate
 }
 
