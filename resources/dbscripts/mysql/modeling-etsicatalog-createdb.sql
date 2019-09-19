@@ -17,7 +17,7 @@
 /******************create database and user***************************/
 use mysql;
 
-create database if not exists genericparser CHARACTER SET utf8;
+create database if not exists etsicatalog CHARACTER SET utf8;
 
 
 GRANT ALL PRIVILEGES ON etsicatalog.* TO 'etsicatalog'@'%' IDENTIFIED BY 'etsicatalog' WITH GRANT OPTION;
