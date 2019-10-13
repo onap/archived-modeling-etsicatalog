@@ -3,7 +3,7 @@
 
 
 etsicatalog Release Notes
-==================
+============================
 
 etsicatalog provides package management service and parser service as Micro Service.
 
