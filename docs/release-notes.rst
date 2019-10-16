@@ -1,11 +1,13 @@
-.. This work is licensed under a Creative Commons Attribution 4.0 International License.
+.. This work is licensed under a Creative
+.. Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
 
 
 etsicatalog Release Notes
-============================
+=========================
 
-etsicatalog provides package management service and parser service as Micro Service.
+etsicatalog provides package management service and parser service as Micro
+Service.
 
 Version: 1.0.4
 --------------
@@ -14,8 +16,8 @@ Version: 1.0.4
 
 **New Features**
 
-- Update to python3.
-- Optimize the process of service package distribution.
+- Update to python3
+- Optimize the process of service package distribution
 - Merge with vfc/catalog
 
 
