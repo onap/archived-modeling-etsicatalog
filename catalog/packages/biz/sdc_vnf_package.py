@@ -122,9 +122,25 @@ class NfDistributeThread(threading.Thread):
         csar_name = "%s.csar" % artifact.get("name", self.csar_id)
         local_file_name = sdc.download_artifacts(artifact["toscaModelURL"], local_path, csar_name)
         if local_file_name.endswith(".csar") or local_file_name.endswith(".zip"):
-            artifact_vnf_file = fileutil.unzip_file(local_file_name, local_path, "Artifacts/Deployment/OTHER/vnf.csar")
-            if os.path.exists(artifact_vnf_file):
-                local_file_name = artifact_vnf_file
+            fileutil.unzip_csar(local_file_name, local_path)
+            vendor_vnf_file = ""
+            # find original vendor ETSI package under the ONBOARDING_PACKAGE directory
+            onboarding_package_dir = os.path.join(local_path, "Artifacts/Deployment/ONBOARDED_PACKAGE")
+            if os.path.exists(onboarding_package_dir):
+                files = os.listdir(onboarding_package_dir)
+                for file_name in files:
+                    a_file = os.path.join(onboarding_package_dir, file_name)
+                    if os.path.isfile(a_file) & file_name.endswith(".csar"):
+                        vendor_vnf_file = a_file
+                        break
+
+            # find original vendor ETSI package under Artifacts/Deployment/OTHER directory
+            if vendor_vnf_file.isspace():
+                vendor_vnf_file = os.path.join(local_path, "Artifacts/Deployment/OTHER/vnf.csar")
+                if os.path.exists(vendor_vnf_file):
+                    local_file_name = vendor_vnf_file
+            else:
+                local_file_name = vendor_vnf_file
 
         vnfd_json = toscaparser.parse_vnfd(local_file_name)
         vnfd = json.JSONDecoder().decode(vnfd_json)

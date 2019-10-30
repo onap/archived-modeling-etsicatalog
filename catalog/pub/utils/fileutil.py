@@ -19,7 +19,6 @@ import traceback
 import urllib
 import zipfile
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -61,6 +60,17 @@ def unzip_file(zip_src, dst_dir, csar_path):
             fz.extract(file, dst_dir)
         return os.path.join(dst_dir, csar_path)
     else:
+        return ""
+
+
+def unzip_csar(zip_src, dst_dir):
+    if os.path.exists(zip_src):
+        fz = zipfile.ZipFile(zip_src, 'r')
+        for file in fz.namelist():
+            fz.extract(file, dst_dir)
+        return dst_dir
+    else:
+        logger.error("%s doesn't exist", zip_src)
         return ""
 
 
