@@ -18,7 +18,9 @@ import os
 import sys
 import threading
 import traceback
+import zipfile
 
+from catalog.packages.biz.vnf_package import VnfPackage
 from catalog.packages.const import PKG_STATUS
 from catalog.pub.config.config import CATALOG_ROOT_PATH, CATALOG_URL_PATH
 from catalog.pub.config.config import REG_TO_MSB_REG_PARAM
@@ -123,7 +125,7 @@ class NfDistributeThread(threading.Thread):
         local_file_name = sdc.download_artifacts(artifact["toscaModelURL"], local_path, csar_name)
         if local_file_name.endswith(".csar") or local_file_name.endswith(".zip"):
             fileutil.unzip_csar(local_file_name, local_path)
-            vendor_vnf_file = ""
+            vendor_vnf_file = ''
             # find original vendor ETSI package under the ONBOARDING_PACKAGE directory
             onboarding_package_dir = os.path.join(local_path, "Artifacts/Deployment/ONBOARDED_PACKAGE")
             if os.path.exists(onboarding_package_dir):
@@ -135,12 +137,15 @@ class NfDistributeThread(threading.Thread):
                         break
 
             # find original vendor ETSI package under Artifacts/Deployment/OTHER directory
-            if vendor_vnf_file.isspace():
+            if vendor_vnf_file.strip() == '':
                 vendor_vnf_file = os.path.join(local_path, "Artifacts/Deployment/OTHER/vnf.csar")
                 if os.path.exists(vendor_vnf_file):
                     local_file_name = vendor_vnf_file
             else:
                 local_file_name = vendor_vnf_file
+
+        # create VNFD zip file
+        self.create_vnfd_zip(self.csar_id, vendor_vnf_file)
 
         vnfd_json = toscaparser.parse_vnfd(local_file_name)
         vnfd = json.JSONDecoder().decode(vnfd_json)
@@ -172,6 +177,32 @@ class NfDistributeThread(threading.Thread):
             usageState=PKG_STATUS.NOT_IN_USE
         ).save()
         JobUtil.add_job_status(self.job_id, 100, "CSAR(%s) distribute successfully." % self.csar_id)
+
+    def create_vnfd_zip(self, csar_id, vendor_vnf_file):
+        """
+        Create VNFD zip file.
+        :param csar_id: CSAR Id
+        :param vendor_vnf_file: the vendor original package(csar)
+        :return:
+        """
+        if os.path.exists(vendor_vnf_file):
+            # create VNFD from vendor original package
+            VnfPackage().creat_vnfd(csar_id, vendor_vnf_file)
+        else:
+            try:
+                vnf_package_path = os.path.join(CATALOG_ROOT_PATH, self.csar_id)
+                vnfd_zip_file = os.path.join(vnf_package_path, 'VNFD.zip')
+                with zipfile.ZipFile(vnfd_zip_file, 'w', zipfile.ZIP_DEFLATED) as vnfd_zip:
+                    def_path = os.path.join(vnf_package_path, "Definitions")
+                    if os.path.exists(def_path):
+                        def_files = os.listdir(def_path)
+                        for def_file in def_files:
+                            full_path = os.path.join(def_path, def_file)
+                            vnfd_zip.write(full_path, def_file)
+            except Exception as e:
+                logger.error(e)
+                if os.path.exists(vnfd_zip_file):
+                    os.remove(vnfd_zip_file)
 
     def rollback_distribute(self):
         try:

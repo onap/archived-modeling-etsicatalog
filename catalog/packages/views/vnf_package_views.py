@@ -73,6 +73,30 @@ def vnf_packages_rc(request):
 
 
 @swagger_auto_schema(
+    method="GET",
+    operation_description="Read VNFD of an on-boarded VNF package",
+    tags=["VNF Package API"],
+    request_body=no_body,
+    responses={
+        status.HTTP_200_OK: VnfPkgInfosSerializer(),
+        status.HTTP_404_NOT_FOUND: "VNF package does not exist",
+        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+    }
+)
+@api_view(http_method_names=["GET"])
+@view_safe_call_with_log(logger=logger)
+def vnfd_rd(request, **kwargs):
+    vnf_pkg_id = kwargs.get("vnfPkgId")
+    logger.debug("Read VNFD for  VNF package %s" % vnf_pkg_id)
+    try:
+        file_iterator = VnfPackage().download_vnfd(vnf_pkg_id)
+        return StreamingHttpResponse(file_iterator, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(e)
+        raise e
+
+
+@swagger_auto_schema(
     method='PUT',
     operation_description="Upload VNF package content",
     tags=["VNF Package API"],
