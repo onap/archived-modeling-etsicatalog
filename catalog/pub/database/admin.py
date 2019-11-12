@@ -261,10 +261,10 @@ class SoftwareImageModelAdmin(admin.ModelAdmin):
 
 @admin.register(NsdmSubscriptionModel)
 class NsdmSubscriptionModelAdmin(admin.ModelAdmin):
-    list_display_links = ('subscriptionid', 'notificationTypes')
+    list_display_links = ('subscription_id', 'notification_types')
     fields = [
-        "subscriptionid",
-        "notificationTypes",
+        "subscription_id",
+        "notification_types",
         "auth_info",
         "callback_uri",
         "nsdInfoId",
@@ -290,8 +290,8 @@ class NsdmSubscriptionModelAdmin(admin.ModelAdmin):
     ]
 
     list_display = [
-        "subscriptionid",
-        "notificationTypes",
+        "subscription_id",
+        "notification_types",
         "auth_info",
         "callback_uri",
         "nsdInfoId",
@@ -317,8 +317,8 @@ class NsdmSubscriptionModelAdmin(admin.ModelAdmin):
     ]
 
     search_fields = (
-        "subscriptionid",
-        "notificationTypes"
+        "subscription_id",
+        "notification_types"
     )
 
 

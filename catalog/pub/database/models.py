@@ -166,8 +166,8 @@ class JobStatusModel(models.Model):
 
 
 class NsdmSubscriptionModel(models.Model):
-    subscriptionid = models.CharField(db_column='SUBSCRIPTIONID', max_length=255, primary_key=True)
-    notificationTypes = models.TextField(db_column='NOTIFICATIONTYPES', null=True)
+    subscription_id = models.CharField(db_column='SUBSCRIPTION_ID', max_length=255, primary_key=True, default='SOME STRING')
+    notification_types = models.TextField(db_column='NOTIFICATION_TYPES', null=True)
     auth_info = models.TextField(db_column='AUTHINFO', null=True)
     callback_uri = models.CharField(db_column='CALLBACKURI', max_length=255)
     nsdInfoId = models.TextField(db_column='NSDINFOID', null=True)
