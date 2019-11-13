@@ -15,6 +15,7 @@
 import platform
 import unittest
 import mock
+
 from . import fileutil
 import urllib
 from . import syscomm

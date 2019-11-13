@@ -27,7 +27,8 @@ from catalog.pub.database.models import VnfPackageModel, NSPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils.values import ignore_case_get
 from catalog.pub.utils import fileutil, toscaparser
-from catalog.packages.const import PKG_STATUS
+from catalog.packages import const
+from catalog.packages.biz.notificationsutil import prepare_vnfpkg_notification, NotificationsUtil
 
 
 logger = logging.getLogger(__name__)
@@ -43,16 +44,16 @@ class VnfPackage(object):
         vnf_pkg_id = str(uuid.uuid4())
         VnfPackageModel.objects.create(
             vnfPackageId=vnf_pkg_id,
-            onboardingState=PKG_STATUS.CREATED,
-            operationalState=PKG_STATUS.DISABLED,
-            usageState=PKG_STATUS.NOT_IN_USE,
+            onboardingState=const.PKG_STATUS.CREATED,
+            operationalState=const.PKG_STATUS.DISABLED,
+            usageState=const.PKG_STATUS.NOT_IN_USE,
             userDefinedData=json.dumps(user_defined_data)
         )
         data = {
             "id": vnf_pkg_id,
-            "onboardingState": PKG_STATUS.CREATED,
-            "operationalState": PKG_STATUS.DISABLED,
-            "usageState": PKG_STATUS.NOT_IN_USE,
+            "onboardingState": const.PKG_STATUS.CREATED,
+            "operationalState": const.PKG_STATUS.DISABLED,
+            "usageState": const.PKG_STATUS.NOT_IN_USE,
             "userDefinedData": user_defined_data,
             "_links": None
         }
@@ -96,6 +97,9 @@ class VnfPackage(object):
                 if del_vnfd_id == vnf["properties"]["descriptor_id"]:
                     raise CatalogException('VNFD(%s) is referenced.' % del_vnfd_id)
         vnf_pkg.delete()
+        send_notification(vnf_pkg_id, const.PKG_NOTIFICATION_TYPE.CHANGE,
+                          const.PKG_CHANGE_TYPE.PKG_DELETE)
+
         vnf_pkg_path = os.path.join(CATALOG_ROOT_PATH, vnf_pkg_id)
         fileutil.delete_dirs(vnf_pkg_path)
         logger.info('VNF package(%s) has been deleted.' % vnf_pkg_id)
@@ -106,7 +110,9 @@ class VnfPackage(object):
         # if vnf_pkg[0].onboardingState != PKG_STATUS.CREATED:
         #     logger.error("VNF package(%s) is not CREATED" % vnf_pkg_id)
         #     raise CatalogException("VNF package(%s) is not CREATED" % vnf_pkg_id)
-        vnf_pkg.update(onboardingState=PKG_STATUS.UPLOADING)
+        vnf_pkg.update(onboardingState=const.PKG_STATUS.UPLOADING)
+        send_notification(vnf_pkg_id, const.PKG_NOTIFICATION_TYPE.ONBOARDING,
+                          const.PKG_CHANGE_TYPE.OP_STATE_CHANGE)
 
         local_file_name = save(remote_file, vnf_pkg_id)
         logger.info('VNF package(%s) has been uploaded.' % vnf_pkg_id)
@@ -118,7 +124,7 @@ class VnfPackage(object):
         if not nf_pkg.exists():
             logger.error('VNF package(%s) does not exist.' % vnf_pkg_id)
             raise ResourceNotFoundException('VNF package(%s) does not exist.' % vnf_pkg_id)
-        if nf_pkg[0].onboardingState != PKG_STATUS.ONBOARDED:
+        if nf_pkg[0].onboardingState != const.PKG_STATUS.ONBOARDED:
             raise CatalogException("VNF package (%s) is not on-boarded" % vnf_pkg_id)
 
         local_file_path = nf_pkg[0].localFilePath
@@ -148,10 +154,12 @@ class VnfPkgUploadThread(threading.Thread):
     def upload_vnf_pkg_from_uri(self):
         logger.info("Start to upload VNF packge(%s) from URI..." % self.vnf_pkg_id)
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=self.vnf_pkg_id)
-        if vnf_pkg[0].onboardingState != PKG_STATUS.CREATED:
+        if vnf_pkg[0].onboardingState != const.PKG_STATUS.CREATED:
             logger.error("VNF package(%s) is not CREATED" % self.vnf_pkg_id)
             raise CatalogException("VNF package (%s) is not created" % self.vnf_pkg_id)
-        vnf_pkg.update(onboardingState=PKG_STATUS.UPLOADING)
+        vnf_pkg.update(onboardingState=const.PKG_STATUS.UPLOADING)
+        send_notification(self.vnf_pkg_id, const.PKG_NOTIFICATION_TYPE.ONBOARDING,
+                          const.PKG_CHANGE_TYPE.OP_STATE_CHANGE)
 
         uri = ignore_case_get(self.data, "addressInformation")
         response = urllib.request.urlopen(uri)
@@ -189,7 +197,7 @@ def fill_response_data(nf_pkg):
 def parse_vnfd_and_save(vnf_pkg_id, vnf_pkg_path):
     logger.info('Start to process VNF package(%s)...' % vnf_pkg_id)
     vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
-    vnf_pkg.update(onboardingState=PKG_STATUS.PROCESSING)
+    vnf_pkg.update(onboardingState=const.PKG_STATUS.PROCESSING)
     vnfd_json = toscaparser.parse_vnfd(vnf_pkg_path)
     vnfd = json.JSONDecoder().decode(vnfd_json)
 
@@ -211,9 +219,9 @@ def parse_vnfd_and_save(vnf_pkg_id, vnf_pkg_path):
             vnfdVersion=vnfd_ver,
             vnfSoftwareVersion=vnf_software_version,
             vnfdModel=vnfd_json,
-            onboardingState=PKG_STATUS.ONBOARDED,
-            operationalState=PKG_STATUS.ENABLED,
-            usageState=PKG_STATUS.NOT_IN_USE,
+            onboardingState=const.PKG_STATUS.ONBOARDED,
+            operationalState=const.PKG_STATUS.ENABLED,
+            usageState=const.PKG_STATUS.NOT_IN_USE,
             localFilePath=vnf_pkg_path,
             vnfPackageUri=os.path.split(vnf_pkg_path)[-1]
         )
@@ -224,4 +232,18 @@ def parse_vnfd_and_save(vnf_pkg_id, vnf_pkg_path):
 
 def handle_upload_failed(vnf_pkg_id):
     vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
-    vnf_pkg.update(onboardingState=PKG_STATUS.CREATED)
+    vnf_pkg.update(onboardingState=const.PKG_STATUS.CREATED)
+
+
+def send_notification(pkg_id, type, pkg_change_type, operational_state=None):
+    data = prepare_vnfpkg_notification(vnf_pkg_id=pkg_id,
+                                       notification_type=type,
+                                       pkg_change_type=pkg_change_type,
+                                       operational_state=operational_state)
+    filters = {
+        'vnfdId': 'vnfd_id',
+        'vnfPkgId': 'vnf_pkg_id'
+    }
+    logger.debug('Notify request data = %s' % data)
+    logger.debug('Notify request filters = %s' % filters)
+    NotificationsUtil().send_notification(data, filters, True)

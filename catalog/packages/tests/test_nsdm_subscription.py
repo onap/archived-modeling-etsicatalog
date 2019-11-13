@@ -21,6 +21,10 @@ from rest_framework import status
 
 from catalog.packages.biz.nsdm_subscription import NsdmSubscription
 from catalog.pub.database.models import NsdmSubscriptionModel
+from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_nsd_notification, prepare_pnfd_notification
+from catalog.packages import const
+from catalog.pub.config import config as pub_config
+import catalog.pub.utils.timeutil
 
 
 class TestNsdmSubscription(TestCase):
@@ -519,3 +523,97 @@ class TestNsdmSubscription(TestCase):
                                       format='json')
         self.assertEqual(response.status_code,
                          status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class NotificationTest(TestCase):
+    def setUp(self):
+        NsdmSubscriptionModel(subscriptionid="1",
+                              callback_uri="http://127.0.0.1/self",
+                              notificationTypes=const.NOTIFICATION_TYPES,
+                              nsdId="nsdid1",
+                              nsdInfoId="nsdinfoid1",
+                              pnfdInfoIds="pnfdInfoIds1",
+                              pnfdId="pnfdId1"
+                              ).save()
+
+    def tearDown(self):
+        NsdmSubscriptionModel.objects.all().delete()
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_nsdpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
+        mock_nowtime.return_value = "nowtime()"
+        mock_uuid.return_value = "1111"
+        notification_content = prepare_nsd_notification("nsdinfoid1", "nsdid1",
+                                                        const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
+                                                        "NSD(nsdid1) already exists.", operational_state=None)
+        filters = {
+            'nsdInfoId': 'nsdInfoId',
+            'nsdId': 'nsdId',
+        }
+        NotificationsUtil().send_notification(notification_content, filters, False)
+        expect_callbackuri = "http://127.0.0.1/self"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
+            'timeStamp': "nowtime()",
+            'nsdInfoId': "nsdinfoid1",
+            'nsdId': "nsdid1",
+            'onboardingFailureDetails': "NSD(nsdid1) already exists.",
+            'nsdOperationalState': None,
+            "subscriptionId": "1",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+                'nsdInfo': {
+                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                   pub_config.MSB_SERVICE_PORT,
+                                                                   const.NSD_URL_PREFIX,
+                                                                   "nsdinfoid1")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_pnfpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
+        mock_nowtime.return_value = "nowtime()"
+        mock_uuid.return_value = "1111"
+        notification_content = prepare_pnfd_notification("pnfdInfoIds1", 'pnfdId1',
+                                                         const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING)
+        filters = {
+            'pnfdId': 'pnfdId',
+            'pnfdInfoIds': 'pnfdInfoIds',
+        }
+        NotificationsUtil().send_notification(notification_content, filters, False)
+        expect_callbackuri = "http://127.0.0.1/self"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING,
+            'timeStamp': "nowtime()",
+            'pnfdInfoIds': "pnfdInfoIds1",
+            'pnfdId': "pnfdId1",
+            'onboardingFailureDetails': None,
+            "subscriptionId": "1",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+                'pnfdInfo': {
+                    'href': 'http://%s:%s/%s/pnf_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                    pub_config.MSB_SERVICE_PORT,
+                                                                    const.NSD_URL_PREFIX,
+                                                                    "pnfdInfoIds1")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+                                              headers={'Connection': 'close'})
