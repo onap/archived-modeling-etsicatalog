@@ -39,6 +39,22 @@ NOTIFICATION_TYPES = [
     "VnfPackageOnboardingNotification",
     "VnfPackageChangeNotification"
 ]
+PKG_CHANGE_TYPE = enum(OP_STATE_CHANGE="OP_STATE_CHANGE", PKG_DELETE="PKG_DELETE")
+
+PKG_NOTIFICATION_TYPE = enum(ONBOARDING="VnfPackageOnboardingNotification",
+                             CHANGE="VnfPackageChangeNotification")
+
+NSD_NOTIFICATION_TYPE = enum(NSD_ONBOARDING="NsdOnBoardingNotification",
+                              NSD_ONBOARDING_FAILURE="NsdOnboardingFailureNotification",
+                              NSD_CHANGE="NsdChangeNotification",
+                              NSD_DELETION="NsdDeletionNotification",
+                              PNFD_ONBOARDING="PnfdOnBoardingNotification",
+                              PNFD_ONBOARDING_FAILURE="PnfdOnBoardingFailureNotification",
+                              PNFD_DELETION="PnfdDeletionNotification")
+
+PKG_URL_PREFIX = "api/vnfpkgm/v1"
+
+NSD_URL_PREFIX = "api/nsd/v1"
 
 VNFPKG_SUBSCRIPTION_ROOT_URI = "api/vnfpkgm/v1/subscriptions/"
 
