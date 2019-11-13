@@ -15,14 +15,21 @@
 import platform
 import unittest
 import mock
+
 from . import fileutil
 import urllib
 from . import syscomm
 from . import timeutil
 from . import values
 
-from catalog.pub.database.models import JobStatusModel, JobModel
+from catalog.pub.database.models import JobStatusModel, JobModel, VnfPkgSubscriptionModel, \
+    VnfPackageModel, NsdmSubscriptionModel
 from catalog.pub.utils.jobutil import JobUtil
+from catalog.pub.utils.notificationsutil import NotificationsUtil, prepare_nsd_notification, \
+    prepare_pnfd_notification, prepare_vnfpkg_notification
+from catalog.packages import const
+from catalog.pub.config import config as pub_config
+import catalog.pub.utils.timeutil
 
 
 class MockReq():
@@ -219,3 +226,149 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual("def", values.ignore_case_get(data, 'abc'))
         self.assertEqual("klm", values.ignore_case_get(data, 'hig'))
         self.assertEqual("bbb", values.ignore_case_get(data, 'aaa', 'bbb'))
+
+
+class NotificationTest(unittest.TestCase):
+    def setUp(self):
+        VnfPackageModel(vnfPackageId="vnfpkgid1",
+                        vnfdId="vnfdid1"
+                        ).save()
+
+        VnfPkgSubscriptionModel(subscription_id="1",
+                                callback_uri="http://127.0.0.1/self",
+                                notification_types=const.NOTIFICATION_TYPES,
+                                vnfd_id="vnfdid1",
+                                vnf_pkg_id="vnfpkgid1"
+                                ).save()
+
+        NsdmSubscriptionModel(subscriptionid="1",
+                              callback_uri="http://127.0.0.1/self",
+                              notificationTypes=const.NOTIFICATION_TYPES,
+                              nsdId="nsdid1",
+                              nsdInfoId="nsdinfoid1",
+                              pnfdInfoIds="pnfdInfoIds1",
+                              pnfdId="pnfdId1"
+                              ).save()
+
+    def tearDown(self):
+        VnfPackageModel.objects.all().delete()
+        VnfPkgSubscriptionModel.objects.all().delete()
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_vnfpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
+        mock_nowtime.return_value = "nowtime()"
+        mock_uuid.return_value = "1111"
+        notification_content = prepare_vnfpkg_notification("vnfpkgid1", const.PKG_NOTIFICATION_TYPE.CHANGE,
+                                                           const.PKG_CHANGE_TYPE.OP_STATE_CHANGE, operational_state=None)
+        filters = {
+            'vnfdId': 'vnfd_id',
+            'vnfPkgId': 'vnf_pkg_id'
+        }
+        NotificationsUtil().send_notification(notification_content, filters, True)
+        expect_callbackuri = "http://127.0.0.1/self"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.PKG_NOTIFICATION_TYPE.CHANGE,
+            'timeStamp': "nowtime()",
+            'vnfPkgId': "vnfpkgid1",
+            'vnfdId': "vnfdid1",
+            'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
+            'operationalState': None,
+            "subscriptionId": "1",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+                'vnfPackage': {
+                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                 pub_config.MSB_SERVICE_PORT,
+                                                                 const.PKG_URL_PREFIX,
+                                                                 "vnfpkgid1")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_nsdpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
+        mock_nowtime.return_value = "nowtime()"
+        mock_uuid.return_value = "1111"
+        notification_content = prepare_nsd_notification("nsdinfoid1", "nsdid1",
+                                                        const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
+                                                        "NSD(nsdid1) already exists.", operational_state=None)
+        filters = {
+            'nsdInfoId': 'nsdInfoId',
+            'nsdId': 'nsdId',
+        }
+        NotificationsUtil().send_notification(notification_content, filters, False)
+        expect_callbackuri = "http://127.0.0.1/self"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
+            'timeStamp': "nowtime()",
+            'nsdInfoId': "nsdinfoid1",
+            'nsdId': "nsdid1",
+            'onboardingFailureDetails': "NSD(nsdid1) already exists.",
+            'nsdOperationalState': None,
+            "subscriptionId": "1",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+                'nsdInfo': {
+                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                   pub_config.MSB_SERVICE_PORT,
+                                                                   const.NSD_URL_PREFIX,
+                                                                   "nsdinfoid1")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_pnfpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
+        mock_nowtime.return_value = "nowtime()"
+        mock_uuid.return_value = "1111"
+        notification_content = prepare_pnfd_notification("pnfdInfoIds1", 'pnfdId1',
+                                                         const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING)
+        filters = {
+            'pnfdId': 'pnfdId',
+            'pnfdInfoIds': 'pnfdInfoIds',
+        }
+        NotificationsUtil().send_notification(notification_content, filters, False)
+        expect_callbackuri = "http://127.0.0.1/self"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING,
+            'timeStamp': "nowtime()",
+            'pnfdInfoIds': "pnfdInfoIds1",
+            'pnfdId': "pnfdId1",
+            'onboardingFailureDetails': None,
+            "subscriptionId": "1",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+                'pnfdInfo': {
+                    'href': 'http://%s:%s/%s/pnf_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                    pub_config.MSB_SERVICE_PORT,
+                                                                    const.NSD_URL_PREFIX,
+                                                                    "pnfdInfoIds1")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+                                              headers={'Connection': 'close'})
