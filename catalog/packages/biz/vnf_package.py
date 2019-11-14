@@ -148,6 +148,8 @@ class VnfPackage(object):
         :return:
         """
         vnf_package_path = os.path.join(CATALOG_ROOT_PATH, vnf_pkg_id)
+        if not os.path.exists(vnf_package_path):
+            os.makedirs(vnf_package_path)
         vnfd_zip_file = os.path.join(vnf_package_path, "VNFD.zip")
         if os.path.exists(vnfd_zip_file):
             return vnfd_zip_file
