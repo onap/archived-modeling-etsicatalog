@@ -2,7 +2,8 @@
 .. http://creativecommons.org/licenses/by/4.0
 
 
-ETSI Catalog Project Introduction
+etsicatalog Introduction
 =================================
 
-The ETSI Catalog project provides a runtime catalog service which can be consumed by other projects or components, such as UUI, VF-C, etc. The catalog can be used to store packages distributed by the SDC, and also include a TOSCA parser service.
+The ETSI Catalog project provides a runtime catalog service which can be consumed by other projects or components, such as UUI, VF-C, etc.
+The catalog can be used to store packages distributed by the SDC, and also include a TOSCA parser service.

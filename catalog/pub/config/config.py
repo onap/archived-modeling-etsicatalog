@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # [MSB]
-MSB_SERVICE_IP = '127.0.0.1'
-MSB_SERVICE_PORT = '80'
+# MSB_SERVICE_IP = '127.0.0.1'
+# MSB_SERVICE_PORT = '80'
+MSB_SERVICE_IP = '192.168.235.34'
+MSB_SERVICE_PORT = '30280'
 
 # [REDIS]
 REDIS_HOST = '127.0.0.1'
@@ -62,6 +64,17 @@ REG_TO_MSB_REG_PARAM = [{
     "serviceName": "vnfpkgm",
     "version": "v1",
     "url": "/api/vnfpkgm/v1",
+    "protocol": "REST",
+    "visualRange": "1",
+    "nodes": [{
+        "ip": "127.0.0.1",
+        "port": "8806",
+        "ttl": 0
+    }]
+}, {
+    "serviceName": "parser",
+    "version": "v1",
+    "url": "/api/parser/v1",
     "protocol": "REST",
     "visualRange": "1",
     "nodes": [{

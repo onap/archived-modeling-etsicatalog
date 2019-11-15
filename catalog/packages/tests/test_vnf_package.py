@@ -14,10 +14,11 @@
 
 import json
 import os
-import urllib
-import mock
 import shutil
+import urllib
+import zipfile
 
+import mock
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -28,6 +29,8 @@ from catalog.packages.tests.const import vnfd_data
 from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import VnfPackageModel
 from catalog.pub.utils import toscaparser
+
+VNF_BASE_URL = "/api/vnfpkgm/v1/vnf_packages"
 
 
 class MockReq():
@@ -55,7 +58,7 @@ class TestVnfPackage(TestCase):
             onboardingState="CREATED"
         )
         mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
+        response = self.client.put("%s/222/package_content" % VNF_BASE_URL, data=data)
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId="222")
         self.assertEqual("zte-hss-1.0", vnf_pkg[0].vnfdId)
         self.assertEqual(PKG_STATUS.ONBOARDED, vnf_pkg[0].onboardingState)
@@ -66,7 +69,7 @@ class TestVnfPackage(TestCase):
         VnfPackageModel.objects.create(
             vnfPackageId="222",
         )
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
+        response = self.client.put("%s/222/package_content" % VNF_BASE_URL, data=data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @mock.patch.object(toscaparser, 'parse_vnfd')
@@ -86,14 +89,14 @@ class TestVnfPackage(TestCase):
 
     def test_upload_from_uri_failed(self):
         req_data = {"username": "123"}
-        response = self.client.post("/api/vnfpkgm/v1/vnf_packages/111/package_content/upload_from_uri", data=req_data)
+        response = self.client.post("%s/111/package_content/upload_from_uri" % VNF_BASE_URL, data=req_data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_create_vnf_pkg(self):
         req_data = {
             "userDefinedData": {"a": "A"}
         }
-        response = self.client.post("/api/vnfpkgm/v1/vnf_packages", data=req_data, format="json")
+        response = self.client.post(VNF_BASE_URL, data=req_data, format="json")
         resp_data = json.loads(response.content)
         expect_resp_data = {
             "id": resp_data.get("id"),
@@ -120,7 +123,7 @@ class TestVnfPackage(TestCase):
             usageState="NOT_IN_USE",
             userDefinedData='{"a": "A"}'
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222")
+        response = self.client.get("%s/222" % VNF_BASE_URL)
         expect_data = {
             "id": "222",
             "vnfdId": "zte-hss-1.0",
@@ -140,7 +143,7 @@ class TestVnfPackage(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_query_single_vnf_failed(self):
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222")
+        response = self.client.get(VNF_BASE_URL + "/222")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_query_multiple_vnf(self):
@@ -170,7 +173,7 @@ class TestVnfPackage(TestCase):
             usageState="NOT_IN_USE",
             userDefinedData='{"a": "A"}'
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages")
+        response = self.client.get(VNF_BASE_URL)
         expect_data = [
             {
                 "id": "111",
@@ -220,12 +223,12 @@ class TestVnfPackage(TestCase):
             usageState="NOT_IN_USE",
             userDefinedData='{"a": "A"}'
         )
-        response = self.client.delete("/api/vnfpkgm/v1/vnf_packages/222")
+        response = self.client.delete(VNF_BASE_URL + "/222")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, None)
 
     def test_delete_when_vnf_pkg_not_exist(self):
-        response = self.client.delete("/api/vnfpkgm/v1/vnf_packages/222")
+        response = self.client.delete(VNF_BASE_URL + "/222")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, None)
 
@@ -237,7 +240,7 @@ class TestVnfPackage(TestCase):
             onboardingState="ONBOARDED",
             localFilePath="vnfPackage.csar"
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content")
+        response = self.client.get(VNF_BASE_URL + "/222/package_content")
         file_content = ''
         for data in response.streaming_content:
             file_content = file_content + data.decode()
@@ -253,7 +256,7 @@ class TestVnfPackage(TestCase):
             onboardingState="ONBOARDED",
             localFilePath="vnfPackage.csar"
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content", HTTP_RANGE="4-7")
+        response = self.client.get("%s/222/package_content" % VNF_BASE_URL, HTTP_RANGE="4-7")
         partial_file_content = ''
         for data in response.streaming_content:
             partial_file_content = partial_file_content + data.decode()
@@ -269,7 +272,7 @@ class TestVnfPackage(TestCase):
             onboardingState="ONBOARDED",
             localFilePath="vnfPackage.csar"
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content", HTTP_RANGE=" 4-")
+        response = self.client.get(VNF_BASE_URL + "/222/package_content", HTTP_RANGE=" 4-")
         partial_file_content = ''
         for data in response.streaming_content:
             partial_file_content = partial_file_content + data.decode()
@@ -278,7 +281,7 @@ class TestVnfPackage(TestCase):
         os.remove("vnfPackage.csar")
 
     def test_fetch_vnf_pkg_when_pkg_not_exist(self):
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content")
+        response = self.client.get(VNF_BASE_URL + "/222/package_content")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_fetch_vnf_pkg_when_catch_cataloge_exception(self):
@@ -287,96 +290,135 @@ class TestVnfPackage(TestCase):
             onboardingState="CREATED",
             localFilePath="vnfPackage.csar"
         )
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content")
+        response = self.client.get(VNF_BASE_URL + "/222/package_content")
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @mock.patch.object(VnfPackage, "create_vnf_pkg")
-    def test_create_vnf_pkg_when_catch_exception(self, mock_create_vnf_pkg):
-        mock_create_vnf_pkg.side_effect = TypeError('integer type')
-        req_data = {
-            "userDefinedData": {"a": "A"}
-        }
-        response = self.client.post("/api/vnfpkgm/v1/vnf_packages", data=req_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(VnfPackage, "delete_vnf_pkg")
-    def test_delete_single_when_catch_exception(self, mock_delete_vnf_pkg):
-        mock_delete_vnf_pkg.side_effect = TypeError("integer type")
-        response = self.client.delete("/api/vnfpkgm/v1/vnf_packages/222")
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(VnfPackage, "query_single")
-    def test_query_single_when_catch_exception(self, mock_query_single):
-        mock_query_single.side_effect = TypeError("integer type")
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222")
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(VnfPackage, "query_multiple")
-    def test_query_multiple_when_catch_exception(self, mock_query_muitiple):
-        mock_query_muitiple.side_effect = TypeError("integer type")
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages")
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(toscaparser, 'parse_vnfd')
-    def test_upload_when_catch_exception(self, mock_parse_vnfd):
-        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "empty.txt"), "rb")}
+    def test_download_vnfd(self):
         VnfPackageModel.objects.create(
             vnfPackageId="222",
-            onboardingState="CREATED"
+            onboardingState="ONBOARDED",
+            localFilePath=os.path.join(CATALOG_ROOT_PATH, "resource_test.csar")
         )
-        mock_parse_vnfd.side_effect = TypeError("integer type")
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(VnfPkgUploadThread, 'start')
-    def test_upload_from_uri_when_catch_exception(self, mock_start):
-        req_data = {"addressInformation": "https://127.0.0.1:1234/sdc/v1/hss.csar"}
-        mock_start.side_effect = TypeError("integer type")
-        response = self.client.post("/api/vnfpkgm/v1/vnf_packages/111/package_content/upload_from_uri", data=req_data)
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(VnfPackage, 'download')
-    def test_fetch_vnf_pkg_when_catch_exception(self, mock_download):
-        mock_download.side_effect = TypeError("integer type")
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/package_content")
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @mock.patch.object(toscaparser, 'parse_vnfd')
-    def test_fetch_vnf_artifact(self, mock_parse_vnfd):
-        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
-        VnfPackageModel.objects.create(
-            vnfPackageId="222",
-            onboardingState="CREATED"
-        )
-        mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
-        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/artifacts/image")
+        response = self.client.get(VNF_BASE_URL + "/222/vnfd")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.getvalue(), b"ubuntu_16.04\n")
+        with open("vnfd.csar", 'wb') as local_file:
+            for chunk in response.streaming_content:
+                local_file.write(chunk)
+        self.assertTrue(zipfile.is_zipfile("vnfd.csar"))
+        os.remove("vnfd.csar")
 
-    @mock.patch.object(toscaparser, 'parse_vnfd')
-    def test_fetch_vnf_artifact_not_exists(self, mock_parse_vnfd):
-        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
-        VnfPackageModel.objects.create(
-            vnfPackageId="222",
-            onboardingState="CREATED"
-        )
-        mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
-        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/1451/artifacts/image")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch.object(toscaparser, 'parse_vnfd')
-    def test_fetch_vnf_artifact_vnf_not_exists(self, mock_parse_vnfd):
-        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
-        VnfPackageModel.objects.create(
-            vnfPackageId="222",
-            onboardingState="CREATED"
-        )
-        mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
-        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/222/package_content", data=data)
-        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-        response = self.client.get("/api/vnfpkgm/v1/vnf_packages/222/artifacts/image1")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+def test_download_vnfd_when_pkg_not_exist(self):
+    response = self.client.get(VNF_BASE_URL + "/222/vnfd")
+    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+def test_download_vnfd_when_catch_cataloge_exception(self):
+    VnfPackageModel.objects.create(
+        vnfPackageId="222",
+        onboardingState="CREATED",
+        localFilePath="vnfPackage.csar"
+    )
+    response = self.client.get(VNF_BASE_URL + "/222/vnfd")
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPackage, "create_vnf_pkg")
+def test_create_vnf_pkg_when_catch_exception(self, mock_create_vnf_pkg):
+    mock_create_vnf_pkg.side_effect = TypeError('integer type')
+    req_data = {
+        "userDefinedData": {"a": "A"}
+    }
+    response = self.client.post(VNF_BASE_URL, data=req_data, format="json")
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPackage, "delete_vnf_pkg")
+def test_delete_single_when_catch_exception(self, mock_delete_vnf_pkg):
+    mock_delete_vnf_pkg.side_effect = TypeError("integer type")
+    response = self.client.delete(VNF_BASE_URL + "/222")
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPackage, "query_single")
+def test_query_single_when_catch_exception(self, mock_query_single):
+    mock_query_single.side_effect = TypeError("integer type")
+    response = self.client.get(VNF_BASE_URL + "/222")
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPackage, "query_multiple")
+def test_query_multiple_when_catch_exception(self, mock_query_muitiple):
+    mock_query_muitiple.side_effect = TypeError("integer type")
+    response = self.client.get(VNF_BASE_URL)
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(toscaparser, 'parse_vnfd')
+def test_upload_when_catch_exception(self, mock_parse_vnfd):
+    data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "empty.txt"), "rb")}
+    VnfPackageModel.objects.create(
+        vnfPackageId="222",
+        onboardingState="CREATED"
+    )
+    mock_parse_vnfd.side_effect = TypeError("integer type")
+    response = self.client.put(VNF_BASE_URL + "/222/package_content", data=data)
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPkgUploadThread, 'start')
+def test_upload_from_uri_when_catch_exception(self, mock_start):
+    req_data = {"addressInformation": "https://127.0.0.1:1234/sdc/v1/hss.csar"}
+    mock_start.side_effect = TypeError("integer type")
+    response = self.client.post(VNF_BASE_URL + "/111/package_content/upload_from_uri", data=req_data)
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(VnfPackage, 'download')
+def test_fetch_vnf_pkg_when_catch_exception(self, mock_download):
+    mock_download.side_effect = TypeError("integer type")
+    response = self.client.get(VNF_BASE_URL + "/222/package_content")
+    self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@mock.patch.object(toscaparser, 'parse_vnfd')
+def test_fetch_vnf_artifact(self, mock_parse_vnfd):
+    data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
+    VnfPackageModel.objects.create(
+        vnfPackageId="222",
+        onboardingState="CREATED"
+    )
+    mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
+    response = self.client.put(VNF_BASE_URL + "/222/package_content", data=data)
+    self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+    response = self.client.get(VNF_BASE_URL + "/222/artifacts/image")
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(response.getvalue(), b"ubuntu_16.04\n")
+
+
+@mock.patch.object(toscaparser, 'parse_vnfd')
+def test_fetch_vnf_artifact_not_exists(self, mock_parse_vnfd):
+    data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
+    VnfPackageModel.objects.create(
+        vnfPackageId="222",
+        onboardingState="CREATED"
+    )
+    mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
+    response = self.client.put(VNF_BASE_URL + "/222/package_content", data=data)
+    self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+    response = self.client.get(VNF_BASE_URL + "/1451/artifacts/image")
+    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+@mock.patch.object(toscaparser, 'parse_vnfd')
+def test_fetch_vnf_artifact_vnf_not_exists(self, mock_parse_vnfd):
+    data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "resource_test.csar"), "rb")}
+    VnfPackageModel.objects.create(
+        vnfPackageId="222",
+        onboardingState="CREATED"
+    )
+    mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
+    response = self.client.put(VNF_BASE_URL + "/222/package_content", data=data)
+    self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+    response = self.client.get(VNF_BASE_URL + "/222/artifacts/image1")
+    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
