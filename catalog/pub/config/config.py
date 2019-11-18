@@ -13,10 +13,8 @@
 # limitations under the License.
 
 # [MSB]
-# MSB_SERVICE_IP = '127.0.0.1'
-# MSB_SERVICE_PORT = '80'
-MSB_SERVICE_IP = '192.168.235.34'
-MSB_SERVICE_PORT = '30280'
+MSB_SERVICE_IP = '127.0.0.1'
+MSB_SERVICE_PORT = '80'
 
 # [REDIS]
 REDIS_HOST = '127.0.0.1'
@@ -86,6 +84,7 @@ REG_TO_MSB_REG_PARAM = [{
 MSB_SVC_CALALOG_URL = "/api/microservices/v1/services/catalog/version/v1"
 MSB_SVC_NSD_URL = "/api/microservices/v1/services/nsd/version/v1"
 MSB_SVC_VNFPKGM_URL = "/api/microservices/v1/services/vnfpkgm/version/v1"
+MSB_SVC_PARSER_URL = "/api/microservices/v1/services/parser/version/v1"
 
 # catalog path(values is defined in settings.py)
 CATALOG_ROOT_PATH = None
