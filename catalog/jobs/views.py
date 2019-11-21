@@ -27,10 +27,10 @@ from catalog.pub.utils.jobutil import JobUtil
 from catalog.pub.utils.values import ignore_case_get
 
 logger = logging.getLogger(__name__)
+CATALOG_API = "Catalog interface"
 
 
 class JobView(APIView):
-
     input_job_id = openapi.Parameter(
         'job_id',
         openapi.IN_QUERY,
@@ -44,6 +44,7 @@ class JobView(APIView):
 
     @swagger_auto_schema(
         operation_description="Get job status",
+        tags=[CATALOG_API],
         manual_parameters=[input_job_id, input_response_id],
         responses={
             status.HTTP_200_OK: GetJobResponseSerializer(),
@@ -53,8 +54,7 @@ class JobView(APIView):
         response_id = ignore_case_get(request.META, 'responseId')
         ret = GetJobInfoService(job_id, response_id).do_biz()
         response_serializer = GetJobResponseSerializer(data=ret)
-        validataion_error = self.handleValidatonError(
-            response_serializer, False)
+        validataion_error = self.handleValidatonError(response_serializer, False)
         if validataion_error:
             return validataion_error
 
@@ -65,6 +65,7 @@ class JobView(APIView):
     @swagger_auto_schema(
         request_body=PostJobRequestSerializer(),
         operation_description="Update job status",
+        tags=[CATALOG_API],
         manual_parameters=[input_job_id],
         responses={
             status.HTTP_202_ACCEPTED: PostJobResponseResultSerializer(),
@@ -80,24 +81,19 @@ class JobView(APIView):
             return Response(data=job_result_ok)
 
         request_serializer = PostJobRequestSerializer(data=request.data)
-        validataion_error = self.handleValidatonError(
-            request_serializer, True)
+        validataion_error = self.handleValidatonError(request_serializer, True)
         if not validataion_error:
             return validataion_error
 
         requestData = request_serializer.data
         progress = ignore_case_get(requestData, "progress")
         desc = ignore_case_get(requestData, "desc", '%s' % progress)
-        errcode = '0' if ignore_case_get(
-            requestData, 'errcode') in (
-            'true', 'active') else '255'
+        errcode = '0' if ignore_case_get(requestData, 'errcode') in ('true', 'active') else '255'
         logger.debug("errcode=%s", errcode)
         JobUtil.add_job_status(job_id, progress, desc, error_code=errcode)
 
-        response_serializer = PostJobResponseResultSerializer(
-            data=job_result_ok)
-        validataion_error = self.handleValidatonError(
-            response_serializer, False)
+        response_serializer = PostJobResponseResultSerializer(data=job_result_ok)
+        validataion_error = self.handleValidatonError(response_serializer, False)
         if validataion_error:
             return validataion_error
 

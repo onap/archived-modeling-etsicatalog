@@ -21,14 +21,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from catalog.packages.biz.pnf_descriptor import PnfDescriptor
+from catalog.packages.const import TAG_PNFD_API, TAG_PARSER_API
+from catalog.packages.serializers.catalog_serializers import InternalErrorRequestSerializer
+from catalog.packages.serializers.catalog_serializers import ParseModelRequestSerializer
+from catalog.packages.serializers.catalog_serializers import ParseModelResponseSerializer
 from catalog.packages.serializers.create_pnfd_info_request import CreatePnfdInfoRequestSerializer
 from catalog.packages.serializers.pnfd_info import PnfdInfoSerializer
 from catalog.packages.serializers.pnfd_infos import PnfdInfosSerializer
-from catalog.packages.views.common import validate_data
-from catalog.packages.serializers.catalog_serializers import ParseModelRequestSerializer
-from catalog.packages.serializers.catalog_serializers import ParseModelResponseSerializer
-from catalog.packages.serializers.catalog_serializers import InternalErrorRequestSerializer
 from catalog.packages.serializers.response import ProblemDetailsSerializer
+from catalog.packages.views.common import validate_data
 from catalog.pub.utils.syscomm import fun_name
 from catalog.pub.utils.values import ignore_case_get
 from .common import view_safe_call_with_log
@@ -39,7 +40,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='GET',
     operation_description="Query a PNFD",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: PnfdInfoSerializer(),
@@ -50,7 +51,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete a PNFD",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
@@ -76,7 +77,7 @@ def pnfd_info_rd(request, **kwargs):  # TODO
 @swagger_auto_schema(
     method='POST',
     operation_description="Create a  PNFD",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=CreatePnfdInfoRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: PnfdInfoSerializer(),
@@ -86,7 +87,7 @@ def pnfd_info_rd(request, **kwargs):  # TODO
 @swagger_auto_schema(
     method='GET',
     operation_description="Query multiple PNFDs",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: PnfdInfosSerializer(),
@@ -111,7 +112,7 @@ def pnf_descriptors_rc(request):
 @swagger_auto_schema(
     method='PUT',
     operation_description="Upload PNFD content",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
@@ -121,7 +122,7 @@ def pnf_descriptors_rc(request):
 @swagger_auto_schema(
     method='GET',
     operation_description="Fetch PNFD content",
-    tags=["PNFD API"],
+    tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'PNFD file',
@@ -151,7 +152,7 @@ def pnfd_content_ru(request, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Parse PNF model",
-    tags=["Parser API"],
+    tags=[TAG_PARSER_API],
     request_body=ParseModelRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: ParseModelResponseSerializer,

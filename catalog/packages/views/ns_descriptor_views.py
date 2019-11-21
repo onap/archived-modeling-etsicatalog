@@ -21,6 +21,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from catalog.packages.biz.ns_descriptor import NsDescriptor
+from catalog.packages.const import TAG_NSD_API
 from catalog.packages.serializers.create_nsd_info_request import CreateNsdInfoRequestSerializer
 from catalog.packages.serializers.nsd_info import NsdInfoSerializer
 from catalog.packages.serializers.nsd_infos import NsdInfosSerializer
@@ -34,7 +35,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='GET',
     operation_description="Query a NSD",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdInfoSerializer(),
@@ -45,7 +46,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete a NSD",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
@@ -68,7 +69,7 @@ def ns_info_rd(request, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Create a NSD",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=CreateNsdInfoRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: NsdInfoSerializer(),
@@ -78,7 +79,7 @@ def ns_info_rd(request, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query multiple NSDs",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdInfosSerializer(),
@@ -104,7 +105,7 @@ def ns_descriptors_rc(request):
 @swagger_auto_schema(
     method='PUT',
     operation_description="Upload NSD content",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'PNFD file',
@@ -114,7 +115,7 @@ def ns_descriptors_rc(request):
 @swagger_auto_schema(
     method='GET',
     operation_description="Download NSD content",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",

@@ -19,15 +19,15 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from catalog.packages.serializers.nsdm_filter_data import NsdmNotificationsFilter
-from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionsSerializer
-from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionIdSerializer
-from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionSerializer
-from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionRequestSerializer
-from catalog.packages.serializers.response import ProblemDetailsSerializer
-
-from catalog.pub.exceptions import NsdmBadRequestException
 from catalog.packages.biz.nsdm_subscription import NsdmSubscription
+from catalog.packages.const import TAG_NSD_API
+from catalog.packages.serializers.nsdm_filter_data import NsdmNotificationsFilter
+from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionIdSerializer
+from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionRequestSerializer
+from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionSerializer
+from catalog.packages.serializers.nsdm_subscription import NsdmSubscriptionsSerializer
+from catalog.packages.serializers.response import ProblemDetailsSerializer
+from catalog.pub.exceptions import NsdmBadRequestException
 from .common import view_safe_call_with_log
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def validate_data(data, serializer):
 @swagger_auto_schema(
     method='POST',
     operation_description="Create Subscription for NSD Management",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=NsdmSubscriptionRequestSerializer(),
     responses={
         status.HTTP_201_CREATED: NsdmSubscriptionSerializer,
@@ -56,7 +56,7 @@ def validate_data(data, serializer):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query subscriptions for Nsd Management",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdmSubscriptionsSerializer(),
@@ -96,7 +96,7 @@ def nsd_subscription_rc(request):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query subscriptions for Nsd Management",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: NsdmSubscriptionSerializer(),
@@ -108,7 +108,7 @@ def nsd_subscription_rc(request):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete subscription for Nsd Management",
-    tags=["NSD API"],
+    tags=[TAG_NSD_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: 'No_Content',

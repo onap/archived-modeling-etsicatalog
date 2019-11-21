@@ -14,13 +14,13 @@
 
 import logging
 
+from django.http import FileResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.views import APIView
-from django.http import FileResponse
 
-from catalog.packages.serializers.response import ProblemDetailsSerializer
 from catalog.packages.biz.vnf_pkg_artifacts import FetchVnfPkgArtifact
+from catalog.packages.const import TAG_VNF_PACKAGE_API
 from .common import view_safe_call_with_log
 
 logger = logging.getLogger(__name__)
@@ -38,11 +38,11 @@ VALID_FILTERS = [
 class FetchVnfPkgmArtifactsView(APIView):
 
     @swagger_auto_schema(
-        tags=["VNF Package API"],
+        tags=[TAG_VNF_PACKAGE_API],
         responses={
-            status.HTTP_200_OK: "HTTP_200_OK",
-            status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
-            status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
+            status.HTTP_200_OK: "Return the artifact file",
+            status.HTTP_404_NOT_FOUND: "Artifact not found",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
         }
     )
     @view_safe_call_with_log(logger=logger)

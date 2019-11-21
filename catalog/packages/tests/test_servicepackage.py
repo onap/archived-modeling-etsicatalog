@@ -24,7 +24,7 @@ from catalog.pub.exceptions import PackageNotFoundException, PackageHasExistsExc
 from catalog.pub.msapi import sdc
 from catalog.pub.utils import toscaparser
 
-PARSER_BASE_URL = "/api/parser/v1"
+CATALOG_BASE_URL = "/api/catalog/v1"
 
 
 class TestServicePackage(TestCase):
@@ -352,7 +352,7 @@ class TestServicePackage(TestCase):
     def test_api_service_pkg_distribute_when_pkg_exists(self):
         ServicePackageModel(servicePackageId="1", servicedId="2").save()
         resp = self.client.post(
-            PARSER_BASE_URL + "/service_packages", {"csarId": "1"}, format='json')
+            CATALOG_BASE_URL + "/service_packages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual("Service CSAR(1) already exists.", resp.data["errorMessage"])
 
@@ -391,7 +391,7 @@ class TestServicePackage(TestCase):
             servicedVersion="3",
             servicePackageUri="14.csar",
             servicedModel="").save()
-        resp = self.client.get(PARSER_BASE_URL + "/service_packages")
+        resp = self.client.get(CATALOG_BASE_URL + "/service_packages")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     ###############################################################
@@ -421,11 +421,11 @@ class TestServicePackage(TestCase):
             servicedVersion="4",
             servicePackageUri="14.csar",
             servicedModel="").save()
-        resp = self.client.get(PARSER_BASE_URL + "/service_packages/14")
+        resp = self.client.get(CATALOG_BASE_URL + "/service_packages/14")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_api_service_pkg_get_one_not_found(self):
-        resp = self.client.get(PARSER_BASE_URL + "/service_packages/22")
+        resp = self.client.get(CATALOG_BASE_URL + "/service_packages/22")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(
             {"errorMessage": "Service package[22] not Found.", 'error': 404},
@@ -449,7 +449,7 @@ class TestServicePackage(TestCase):
 
     def test_api_service_pkg_normal_delete(self):
         ServicePackageModel(servicePackageId="8", servicedId="2").save()
-        resp = self.client.delete(PARSER_BASE_URL + "/service_packages/8")
+        resp = self.client.delete(CATALOG_BASE_URL + "/service_packages/8")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
     ###############################################################
@@ -477,5 +477,5 @@ class TestServicePackage(TestCase):
             "packageType": "Service",
             "inputs": "string"
         }
-        resp = self.client.post(PARSER_BASE_URL + "/parser", query_data, format='json')
+        resp = self.client.post(CATALOG_BASE_URL + "/parser", query_data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)

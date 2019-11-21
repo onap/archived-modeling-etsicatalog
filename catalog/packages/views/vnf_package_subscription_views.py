@@ -16,19 +16,20 @@ import logging
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionRequestSerializer
-from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionSerializer
-from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionsSerializer
-from catalog.packages.serializers.response import ProblemDetailsSerializer
 from catalog.packages.biz.vnf_pkg_subscription import CreateSubscription
 from catalog.packages.biz.vnf_pkg_subscription import QuerySubscription
 from catalog.packages.biz.vnf_pkg_subscription import TerminateSubscription
+from catalog.packages.const import TAG_VNF_PACKAGE_API
+from catalog.packages.serializers.response import ProblemDetailsSerializer
+from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionRequestSerializer
+from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionSerializer
+from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionsSerializer
 from catalog.packages.views.common import validate_data
-from catalog.pub.exceptions import VnfPkgSubscriptionException
 from catalog.pub.exceptions import BadRequestException
+from catalog.pub.exceptions import VnfPkgSubscriptionException
 from .common import view_safe_call_with_log
 
 logger = logging.getLogger(__name__)
@@ -46,7 +47,7 @@ VALID_FILTERS = [
 class CreateQuerySubscriptionView(APIView):
 
     @swagger_auto_schema(
-        tags=["VNF Package API"],
+        tags=[TAG_VNF_PACKAGE_API],
         request_body=PkgmSubscriptionRequestSerializer,
         responses={
             status.HTTP_201_CREATED: PkgmSubscriptionSerializer(),
@@ -63,7 +64,7 @@ class CreateQuerySubscriptionView(APIView):
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        tags=["VNF Package API"],
+        tags=[TAG_VNF_PACKAGE_API],
         responses={
             status.HTTP_200_OK: PkgmSubscriptionSerializer(),
             status.HTTP_400_BAD_REQUEST: ProblemDetailsSerializer(),
@@ -89,7 +90,7 @@ class CreateQuerySubscriptionView(APIView):
 class QueryTerminateSubscriptionView(APIView):
 
     @swagger_auto_schema(
-        tags=["VNF Package API"],
+        tags=[TAG_VNF_PACKAGE_API],
         responses={
             status.HTTP_200_OK: PkgmSubscriptionSerializer(),
             status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
@@ -109,7 +110,7 @@ class QueryTerminateSubscriptionView(APIView):
         return Response(data=subscription_serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        tags=["VNF Package API"],
+        tags=[TAG_VNF_PACKAGE_API],
         responses={
             status.HTTP_204_NO_CONTENT: "",
             status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
