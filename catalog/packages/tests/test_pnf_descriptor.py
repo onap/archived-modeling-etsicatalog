@@ -15,14 +15,14 @@
 
 import copy
 import json
-import mock
 import os
 import shutil
 
-
+import mock
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+
 from catalog.packages.biz.pnf_descriptor import PnfDescriptor
 from catalog.packages.const import PKG_STATUS
 from catalog.packages.tests.const import pnfd_data
@@ -281,6 +281,6 @@ class TestPnfDescriptor(TestCase):
         PnfPackageModel(pnfPackageId="8", pnfdId="10").save()
         mock_parse_pnfd.return_value = json.JSONEncoder().encode({"c": "d"})
         req_data = {"csarId": "8", "inputs": []}
-        resp = self.client.post("/api/catalog/v1/parserpnfd", req_data, format='json')
+        resp = self.client.post("/api/parser/v1/parserpnfd", req_data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual({"model": '{"c": "d"}'}, resp.data)

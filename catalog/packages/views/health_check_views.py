@@ -19,12 +19,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from catalog.packages.const import TAG_HEALTH_CHECK
+
 logger = logging.getLogger(__name__)
 
 
 class HealthCheckView(APIView):
     @swagger_auto_schema(
-        tags=["Health check API"],
+        tags=[TAG_HEALTH_CHECK],
         responses={
             status.HTTP_200_OK: 'Active'})
     def get(self, request, format=None):

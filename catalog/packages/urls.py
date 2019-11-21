@@ -29,17 +29,14 @@ urlpatterns = [
     url(r'^api/catalog/v1/nspackages/(?P<csarId>[0-9a-zA-Z\-\_]+)$', catalog_views.ns_rd_csar, name='nspackage_rd'),
     url(r'^api/catalog/v1/vnfpackages$', catalog_views.nfpackages_rc, name='nfpackages_rc'),
     url(r'^api/catalog/v1/vnfpackages/(?P<csarId>[0-9a-zA-Z\-\_]+)$', catalog_views.nf_rd_csar, name='nfpackage_rd'),
-    url(r'^api/parser/v1/service_packages$', catalog_views.servicepackages_rc, name='servicepackages_rc'),
-    url(r'^api/parser/v1/service_packages/(?P<csarId>[0-9a-zA-Z\-\_]+)$', catalog_views.service_rd_csar, name='servicepackage_rd'),
+    url(r'^api/catalog/v1/service_packages$', catalog_views.servicepackages_rc, name='servicepackages_rc'),
+    url(r'^api/catalog/v1/service_packages/(?P<csarId>[0-9a-zA-Z\-\_]+)$', catalog_views.service_rd_csar, name='servicepackage_rd'),
 
     # NFV Model Parser
     url(r'^api/parser/v1/parser$', catalog_views.model_parser, name='modelparser_rc'),
     url(r'^api/parser/v1/parsernsd$', catalog_views.ns_model_parser, name='nsmodelparser_rc'),
     url(r'^api/parser/v1/parservnfd$', catalog_views.vnf_model_parser, name='vnfmodelparser_rc'),
     url(r'^api/parser/v1/parserpnfd$', pnf_descriptor_views.pnf_model_parser, name='pnfmodelparser_rc'),
-    url(r'^api/catalog/v1/parsernsd$', catalog_views.ns_model_parser, name='nsmodelparser_rc'),
-    url(r'^api/catalog/v1/parservnfd$', catalog_views.vnf_model_parser, name='vnfmodelparser_rc'),
-    url(r'^api/catalog/v1/parserpnfd$', pnf_descriptor_views.pnf_model_parser, name='pnfmodelparser_rc'),
 
     # ETSI SOL005 NSD API
     url(r'^api/nsd/v1/ns_descriptors$', ns_descriptor_views.ns_descriptors_rc, name='ns_descriptors_rc'),
@@ -64,10 +61,6 @@ urlpatterns = [
     url(r'^api/vnfpkgm/v1/subscriptions$', CreateQuerySubscriptionView.as_view(), name='subscriptions_create_query'),
     url(r'^api/vnfpkgm/v1/subscriptions/(?P<subscriptionId>[0-9a-zA-Z\-\_]+)$', QueryTerminateSubscriptionView.as_view(), name='subscriptions_query_terminate'),
     url(r'^api/vnfpkgm/v1/vnf_packages/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)/artifacts/(?P<artifactPath>[0-9a-zA-Z\-\_]+)$', FetchVnfPkgmArtifactsView.as_view(), name="fetch_vnf_artifacts"),
-    # url(r'^api/vnfpkgm/v1/subscriptions/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)$', vnf_package_subscription_views.vnf_package_subscriptions_rc, name='subscriptions_rc'),
-    # url(r'^api/vnfpkgm/v1/vnf_packages/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)/vnfd$', vnfd.as_view(), name='vnfd_r'),# url(r'^api/vnfpkgm/v1/vnf_packages/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)/artifacts/artifactPath$', artifacts.as_view(), name='artifacts_r'),
-
-    # url(r'^api/vnfpkgm/v1/subscriptions/(?P<subscriptionId>[0-9a-zA-Z\-\_]+)$', vnfpkg_subscription.as_view(), name='subscription_rd'),
 
     # health check
     url(r'^api/vnfpkgm/v1/health_check$', HealthCheckView.as_view()),

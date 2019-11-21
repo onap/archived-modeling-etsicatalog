@@ -15,9 +15,12 @@
 import logging
 import traceback
 
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+TAG_SAMPLE_INTERFACE = "Sample interface"
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +29,9 @@ class SampleList(APIView):
     """
     List all samples.
     """
+
+    @swagger_auto_schema(
+        tags=[TAG_SAMPLE_INTERFACE])
     def get(self, request, format=None):
         logger.debug("get")
         return Response({"status": "active"})
@@ -35,12 +41,17 @@ class CallbackSample(APIView):
     """
     Callback Sample.
     """
+
+    @swagger_auto_schema(
+        tags=[TAG_SAMPLE_INTERFACE])
     def get(self, request, format=None):
         logger.debug("Callback Sample")
         return Response(data={}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TablesList(APIView):
+    @swagger_auto_schema(
+        tags=[TAG_SAMPLE_INTERFACE])
     def delete(self, request, modelName):
         logger.debug("Start delete model %s", modelName)
         try:
@@ -54,6 +65,8 @@ class TablesList(APIView):
             return Response(data={"error": "failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={}, status=status.HTTP_204_NO_CONTENT)
 
+    @swagger_auto_schema(
+        tags=["Sample interface"])
     def get(self, request, modelName):
         logger.debug("Get model %s", modelName)
         count = 0

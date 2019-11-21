@@ -92,3 +92,16 @@ NSDM_NOTIFICATION_TYPES = [
     "PnfdOnBoardingFailureNotification",
     "PnfdDeletionNotification"
 ]
+
+# API swagger tag
+TAG_CATALOG_API = "Catalog interface"
+
+TAG_PARSER_API = "Parser interface"
+
+TAG_NSD_API = "NSD Management interface"
+
+TAG_PNFD_API = "NSD Management interface"
+
+TAG_VNF_PACKAGE_API = "VNF Package Management interface"
+
+TAG_HEALTH_CHECK = "Health Check interface"

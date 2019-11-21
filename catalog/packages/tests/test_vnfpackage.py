@@ -13,10 +13,12 @@
 # limitations under the License.
 
 import json
+
 import mock
-from rest_framework.test import APIClient
 from django.test import TestCase
 from rest_framework import status
+from rest_framework.test import APIClient
+
 from catalog.packages.biz.sdc_vnf_package import NfDistributeThread, NfPkgDeleteThread
 from catalog.pub.database.models import JobStatusModel, JobModel
 from catalog.pub.database.models import VnfPackageModel
@@ -240,7 +242,7 @@ class TestNfPackage(TestCase):
             "inputs": []
         }
         resp = self.client.post(
-            "/api/catalog/v1/parservnfd",
+            "/api/parser/v1/parservnfd",
             req_data,
             format='json'
         )
@@ -250,7 +252,7 @@ class TestNfPackage(TestCase):
     def test_vnfd_parse_when_csar_not_exist(self):
         req_data = {"csarId": "1", "inputs": []}
         resp = self.client.post(
-            "/api/catalog/v1/parservnfd",
+            "/api/parser/v1/parservnfd",
             req_data,
             format='json'
         )

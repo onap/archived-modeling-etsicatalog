@@ -20,14 +20,15 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from catalog.packages.serializers.upload_vnf_pkg_from_uri_req import UploadVnfPackageFromUriRequestSerializer
-from catalog.packages.serializers.create_vnf_pkg_info_req import CreateVnfPkgInfoRequestSerializer
-from catalog.packages.serializers.vnf_pkg_info import VnfPkgInfoSerializer
-from catalog.packages.serializers.vnf_pkg_infos import VnfPkgInfosSerializer
 from catalog.packages.biz.vnf_package import VnfPackage
 from catalog.packages.biz.vnf_package import VnfPkgUploadThread
-from catalog.packages.biz.vnf_package import parse_vnfd_and_save
 from catalog.packages.biz.vnf_package import handle_upload_failed
+from catalog.packages.biz.vnf_package import parse_vnfd_and_save
+from catalog.packages.const import TAG_VNF_PACKAGE_API
+from catalog.packages.serializers.create_vnf_pkg_info_req import CreateVnfPkgInfoRequestSerializer
+from catalog.packages.serializers.upload_vnf_pkg_from_uri_req import UploadVnfPackageFromUriRequestSerializer
+from catalog.packages.serializers.vnf_pkg_info import VnfPkgInfoSerializer
+from catalog.packages.serializers.vnf_pkg_infos import VnfPkgInfosSerializer
 from .common import validate_data
 from .common import view_safe_call_with_log
 
@@ -37,7 +38,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method="GET",
     operation_description="Query multiple VNF package resource",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfosSerializer(),
@@ -47,7 +48,7 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(
     method="POST",
     operation_description="Create an individual VNF package resource",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=CreateVnfPkgInfoRequestSerializer,
     responses={
         status.HTTP_201_CREATED: VnfPkgInfoSerializer(),
@@ -75,7 +76,7 @@ def vnf_packages_rc(request):
 @swagger_auto_schema(
     method="GET",
     operation_description="Read VNFD of an on-boarded VNF package",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfosSerializer(),
@@ -99,7 +100,7 @@ def vnfd_rd(request, **kwargs):
 @swagger_auto_schema(
     method='PUT',
     operation_description="Upload VNF package content",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
@@ -109,10 +110,10 @@ def vnfd_rd(request, **kwargs):
 @swagger_auto_schema(
     method="GET",
     operation_description="Fetch VNF package content",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
-        status.HTTP_200_OK: VnfPkgInfosSerializer(),
+        status.HTTP_200_OK: "Return csar file of VNF package",
         status.HTTP_404_NOT_FOUND: "VNF package does not exist",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
     }
@@ -141,7 +142,7 @@ def package_content_ru(request, **kwargs):
 @swagger_auto_schema(
     method='POST',
     operation_description="Upload VNF package content from uri",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=UploadVnfPackageFromUriRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
@@ -165,7 +166,7 @@ def upload_from_uri_c(request, **kwargs):
 @swagger_auto_schema(
     method='GET',
     operation_description="Query an individual VNF package resource",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfoSerializer(),
@@ -176,7 +177,7 @@ def upload_from_uri_c(request, **kwargs):
 @swagger_auto_schema(
     method='DELETE',
     operation_description="Delete an individual VNF package resource",
-    tags=["VNF Package API"],
+    tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",

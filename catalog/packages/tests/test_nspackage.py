@@ -13,14 +13,15 @@
 # limitations under the License.
 
 import json
-import mock
-from rest_framework import status
-from django.test import TestCase
-from django.test import Client
 
-from catalog.pub.utils import restcall, toscaparser
+import mock
+from django.test import Client
+from django.test import TestCase
+from rest_framework import status
+
 from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
 from catalog.pub.msapi import sdc
+from catalog.pub.utils import restcall, toscaparser
 from .const import nsd_data
 
 
@@ -228,7 +229,7 @@ class TestNsPackage(TestCase):
         mock_parse_nsd.return_value = json.JSONEncoder().encode({"a": "b"})
         req_data = {"csarId": "18", "inputs": []}
         resp = self.client.post(
-            "/api/catalog/v1/parsernsd",
+            "/api/parser/v1/parsernsd",
             req_data,
             format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
@@ -237,7 +238,7 @@ class TestNsPackage(TestCase):
     def test_nsd_parse_when_csar_not_exist(self):
         req_data = {"csarId": "1", "inputs": []}
         resp = self.client.post(
-            "/api/catalog/v1/parsernsd",
+            "/api/parser/v1/parsernsd",
             req_data,
             format='json')
         self.assertEqual(
