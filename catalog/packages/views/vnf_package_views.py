@@ -30,7 +30,7 @@ from catalog.packages.serializers.create_vnf_pkg_info_req import CreateVnfPkgInf
 from catalog.packages.serializers.upload_vnf_pkg_from_uri_req import UploadVnfPackageFromUriRequestSerializer
 from catalog.packages.serializers.vnf_pkg_info import VnfPkgInfoSerializer
 from catalog.packages.serializers.vnf_pkg_infos import VnfPkgInfosSerializer
-from .common import validate_data
+from .common import validate_data, validate_req_data
 from .common import view_safe_call_with_log
 
 logger = logging.getLogger(__name__)
@@ -43,7 +43,8 @@ logger = logging.getLogger(__name__)
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfosSerializer(),
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @swagger_auto_schema(
@@ -53,7 +54,9 @@ logger = logging.getLogger(__name__)
     request_body=CreateVnfPkgInfoRequestSerializer,
     responses={
         status.HTTP_201_CREATED: VnfPkgInfoSerializer(),
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_400_BAD_REQUEST: openapi.Response("Bad Request", schema=openapi.Schema(type=openapi.TYPE_STRING)),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @api_view(http_method_names=["GET", "POST"])
@@ -67,8 +70,7 @@ def vnf_packages_rc(request):
 
     if request.method == 'POST':
         logger.debug("Create VNF package> %s" % request.data)
-        create_vnf_pkg_info_request = validate_data(request.data,
-                                                    CreateVnfPkgInfoRequestSerializer)
+        create_vnf_pkg_info_request = validate_req_data(request.data, CreateVnfPkgInfoRequestSerializer)
         data = VnfPackage().create_vnf_pkg(create_vnf_pkg_info_request.data)
         validate_data(data, VnfPkgInfoSerializer)
         return Response(data=data, status=status.HTTP_201_CREATED)
@@ -83,8 +85,10 @@ def vnf_packages_rc(request):
         status.HTTP_200_OK: openapi.Response('VNFD of an on-boarded VNF package',
                                              schema=openapi.Schema(format=openapi.FORMAT_BINARY,
                                                                    type=openapi.TYPE_STRING)),
-        status.HTTP_404_NOT_FOUND: "VNF package does not exist",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_404_NOT_FOUND: openapi.Response("VNF package does not exist",
+                                                    schema=openapi.Schema(type=openapi.TYPE_STRING)),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     },
     produces='application/octet-stream',
     operation_id='VNFD of an on-boarded VNF package'
@@ -109,7 +113,8 @@ def vnfd_rd(request, **kwargs):
     request_body=no_body,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @swagger_auto_schema(
@@ -121,8 +126,10 @@ def vnfd_rd(request, **kwargs):
         status.HTTP_200_OK: openapi.Response('VNF package file',
                                              schema=openapi.Schema(format=openapi.FORMAT_BINARY,
                                                                    type=openapi.TYPE_STRING)),
-        status.HTTP_404_NOT_FOUND: "VNF package does not exist",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_404_NOT_FOUND: openapi.Response("VNF package does not exist",
+                                                    schema=openapi.Schema(type=openapi.TYPE_STRING)),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @api_view(http_method_names=["PUT", "GET"])
@@ -153,7 +160,9 @@ def package_content_ru(request, **kwargs):
     request_body=UploadVnfPackageFromUriRequestSerializer,
     responses={
         status.HTTP_202_ACCEPTED: "Successfully",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_400_BAD_REQUEST: openapi.Response("Bad Request", schema=openapi.Schema(type=openapi.TYPE_STRING)),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @api_view(http_method_names=['POST'])
@@ -161,8 +170,8 @@ def package_content_ru(request, **kwargs):
 def upload_from_uri_c(request, **kwargs):
     vnf_pkg_id = kwargs.get("vnfPkgId")
     try:
-        upload_vnf_from_uri_request = validate_data(request.data,
-                                                    UploadVnfPackageFromUriRequestSerializer)
+        upload_vnf_from_uri_request = validate_req_data(request.data,
+                                                        UploadVnfPackageFromUriRequestSerializer)
         VnfPkgUploadThread(upload_vnf_from_uri_request.data, vnf_pkg_id).start()
         return Response(None, status=status.HTTP_202_ACCEPTED)
     except Exception as e:
@@ -177,8 +186,10 @@ def upload_from_uri_c(request, **kwargs):
     request_body=no_body,
     responses={
         status.HTTP_200_OK: VnfPkgInfoSerializer(),
-        status.HTTP_404_NOT_FOUND: "VNF package does not exist",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_404_NOT_FOUND: openapi.Response("VNF package does not exist",
+                                                    schema=openapi.Schema(type=openapi.TYPE_STRING)),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @swagger_auto_schema(
@@ -188,7 +199,8 @@ def upload_from_uri_c(request, **kwargs):
     request_body=no_body,
     responses={
         status.HTTP_204_NO_CONTENT: "No content",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                schema=openapi.Schema(type=openapi.TYPE_STRING))
     }
 )
 @api_view(http_method_names=['GET', 'DELETE'])

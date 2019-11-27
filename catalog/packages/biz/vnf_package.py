@@ -15,7 +15,7 @@
 import json
 import logging
 import os
-import sys
+
 import threading
 import traceback
 import urllib
@@ -192,16 +192,21 @@ class VnfPkgUploadThread(threading.Thread):
         self.data = data
         self.upload_file_name = None
 
+    def vnf_pkg_upload_failed_handle(self, error_msg):
+        logger.error(error_msg)
+        logger.error(traceback.format_exc())
+        vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=self.vnf_pkg_id)
+        if vnf_pkg and vnf_pkg[0].onboardingState == const.PKG_STATUS.UPLOADING:
+            vnf_pkg.update(onboardingState=const.PKG_STATUS.CREATED)
+
     def run(self):
         try:
             self.upload_vnf_pkg_from_uri()
             parse_vnfd_and_save(self.vnf_pkg_id, self.upload_file_name)
         except CatalogException as e:
-            logger.error(e.args[0])
+            self.vnf_pkg_upload_failed_handle(e.args[0])
         except Exception as e:
-            logger.error(e.args[0])
-            logger.error(traceback.format_exc())
-            logger.error(str(sys.exc_info()))
+            self.vnf_pkg_upload_failed_handle(e.args[0])
 
     def upload_vnf_pkg_from_uri(self):
         logger.info("Start to upload VNF packge(%s) from URI..." % self.vnf_pkg_id)
