@@ -39,6 +39,14 @@ def validate_data(data, serializer):
     return serialized_data
 
 
+def validate_req_data(data, serializer):
+    serialized_data = serializer(data=data)
+    if not serialized_data.is_valid():
+        logger.error('Data validation failed.')
+        raise BadRequestException(serialized_data.errors)
+    return serialized_data
+
+
 def fmt_error_rsp(error_message, status):
     return {"errorMessage": error_message, "error": status}
 

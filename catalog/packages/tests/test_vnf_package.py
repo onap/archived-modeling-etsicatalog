@@ -87,10 +87,23 @@ class TestVnfPackage(TestCase):
         vnf_pkg1 = VnfPackageModel.objects.filter(vnfPackageId="222")
         self.assertEqual("zte-hss-1.0", vnf_pkg1[0].vnfdId)
 
-    def test_upload_from_uri_failed(self):
+    def test_upload_from_uri_bad_req(self):
         req_data = {"username": "123"}
         response = self.client.post("%s/111/package_content/upload_from_uri" % VNF_BASE_URL, data=req_data)
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @mock.patch.object(urllib.request, 'urlopen')
+    def test_upload_from_uri_failed(self,mock_urlopen):
+        vnf_pkg = VnfPackageModel.objects.create(
+            vnfPackageId="333",
+            onboardingState="CREATED"
+        )
+        req_data = {"addressInformation": "error"}
+        mock_urlopen.return_value = Exception('Boom!')
+        vnf_pkg_id = vnf_pkg.vnfPackageId
+        VnfPkgUploadThread(req_data, vnf_pkg_id).run()
+        vnf_pkg1 = VnfPackageModel.objects.filter(vnfPackageId="333")
+        self.assertEqual("CREATED", vnf_pkg1[0].onboardingState)
 
     def test_create_vnf_pkg(self):
         req_data = {

@@ -16,6 +16,7 @@ import logging
 
 from django.http import FileResponse
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework import status
 from rest_framework.views import APIView
 
@@ -40,9 +41,13 @@ class FetchVnfPkgmArtifactsView(APIView):
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
         responses={
-            status.HTTP_200_OK: "Return the artifact file",
-            status.HTTP_404_NOT_FOUND: "Artifact not found",
-            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+            status.HTTP_200_OK: openapi.Response("Return the artifact file",
+                                                 schema=openapi.Schema(format=openapi.FORMAT_BINARY,
+                                                                       type=openapi.TYPE_STRING)),
+            status.HTTP_404_NOT_FOUND: openapi.Response("Artifact not found",
+                                                        schema=openapi.Schema(type=openapi.TYPE_STRING)),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
+                                                                    schema=openapi.Schema(type=openapi.TYPE_STRING))
         }
     )
     @view_safe_call_with_log(logger=logger)
