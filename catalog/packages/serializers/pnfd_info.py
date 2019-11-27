@@ -14,20 +14,23 @@
 
 from rest_framework import serializers
 from .problem_details import ProblemDetailsSerializer
-from .link import LinkSerializer
+from .link import UriLinkSerializer
 
 
-class _LinkSerializer(serializers.Serializer):
-    self = LinkSerializer(
+class PnfdInfoLinksSerializer(serializers.Serializer):
+    self = UriLinkSerializer(
         help_text='URI of this resource.',
         required=True,
         allow_null=False
     )
-    pnfd_content = LinkSerializer(
+    pnfd_content = UriLinkSerializer(
         help_text='Link to the PNFD content resource.',
         required=True,
         allow_null=False
     )
+
+    class Meta:
+        ref_name = "PNFD_LinkSerializer"
 
 
 class PnfdInfoSerializer(serializers.Serializer):
@@ -100,7 +103,7 @@ class PnfdInfoSerializer(serializers.Serializer):
         required=False,
         allow_null=True
     )
-    _links = _LinkSerializer(
+    _links = PnfdInfoLinksSerializer(
         help_text='Links to resources related to this resource.',
         required=True,
         allow_null=True  # TODO: supposed to be False

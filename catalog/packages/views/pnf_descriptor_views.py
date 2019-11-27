@@ -19,6 +19,7 @@ from drf_yasg.utils import no_body, swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from drf_yasg import openapi
 
 from catalog.packages.biz.pnf_descriptor import PnfDescriptor
 from catalog.packages.const import TAG_PNFD_API, TAG_PARSER_API
@@ -125,10 +126,13 @@ def pnf_descriptors_rc(request):
     tags=[TAG_PNFD_API],
     request_body=no_body,
     responses={
-        status.HTTP_204_NO_CONTENT: 'PNFD file',
+        status.HTTP_200_OK: openapi.Response('PNFD file', schema=openapi.Schema(format=openapi.FORMAT_BINARY,
+                                                                                type=openapi.TYPE_STRING)),
         status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
         status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
-    }
+    },
+    produces='application/octet-stream',
+    operation_id='Fetch PNFD content'
 )
 @api_view(http_method_names=['PUT', 'GET'])
 @view_safe_call_with_log(logger=logger)

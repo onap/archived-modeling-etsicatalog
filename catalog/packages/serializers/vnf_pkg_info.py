@@ -16,21 +16,21 @@ from rest_framework import serializers
 from .checksum import ChecksumSerializer
 from .vnf_pkg_software_image_info import VnfPackageSoftwareImageInfoSerializer
 from .vnf_pkg_artifact_info import VnfPackageArtifactInfoSerializer
-from .link import LinkSerializer
+from .link import UriLinkSerializer
 
 
-class _LinkSerializer(serializers.Serializer):
-    self = LinkSerializer(
+class VnfPkgInfoLinkSerializer(serializers.Serializer):
+    self = UriLinkSerializer(
         help_text='URI of this resource.',
         required=True,
         allow_null=False
     )
-    vnfd = LinkSerializer(
+    vnfd = UriLinkSerializer(
         help_text='Link to the VNFD resource.',
         required=False,
         allow_null=False
     )
-    packageContent = LinkSerializer(
+    packageContent = UriLinkSerializer(
         help_text='Link to the "VNF package content resource.',
         required=True,
         allow_null=False
@@ -120,7 +120,7 @@ class VnfPkgInfoSerializer(serializers.Serializer):
         required=False,
         allow_null=True
     )
-    _links = _LinkSerializer(
+    _links = VnfPkgInfoLinkSerializer(
         help_text='Links to resources related to this resource.',
         required=True,
         allow_null=True  # TODO supposed to be False

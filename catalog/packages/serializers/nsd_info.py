@@ -14,16 +14,16 @@
 
 from rest_framework import serializers
 from .problem_details import ProblemDetailsSerializer
-from .link import LinkSerializer
+from .link import UriLinkSerializer
 
 
 class _LinkSerializer(serializers.Serializer):
-    self = LinkSerializer(
+    self = UriLinkSerializer(
         help_text="URI of this resource.",
         required=True,
         allow_null=False
     )
-    nsd_content = LinkSerializer(
+    nsd_content = UriLinkSerializer(
         help_text="Link to the NSD content resource.",
         required=True,
         allow_null=False

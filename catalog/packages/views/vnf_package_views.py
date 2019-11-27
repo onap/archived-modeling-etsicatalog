@@ -16,6 +16,7 @@ import logging
 
 from django.http import StreamingHttpResponse
 from drf_yasg.utils import swagger_auto_schema, no_body
+from drf_yasg import openapi
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -79,10 +80,14 @@ def vnf_packages_rc(request):
     tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
-        status.HTTP_200_OK: VnfPkgInfosSerializer(),
+        status.HTTP_200_OK: openapi.Response('VNFD of an on-boarded VNF package',
+                                             schema=openapi.Schema(format=openapi.FORMAT_BINARY,
+                                                                   type=openapi.TYPE_STRING)),
         status.HTTP_404_NOT_FOUND: "VNF package does not exist",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
-    }
+    },
+    produces='application/octet-stream',
+    operation_id='VNFD of an on-boarded VNF package'
 )
 @api_view(http_method_names=["GET"])
 @view_safe_call_with_log(logger=logger)
@@ -113,7 +118,9 @@ def vnfd_rd(request, **kwargs):
     tags=[TAG_VNF_PACKAGE_API],
     request_body=no_body,
     responses={
-        status.HTTP_200_OK: "Return csar file of VNF package",
+        status.HTTP_200_OK: openapi.Response('VNF package file',
+                                             schema=openapi.Schema(format=openapi.FORMAT_BINARY,
+                                                                   type=openapi.TYPE_STRING)),
         status.HTTP_404_NOT_FOUND: "VNF package does not exist",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
     }

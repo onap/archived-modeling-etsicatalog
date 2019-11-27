@@ -14,16 +14,19 @@
 
 from rest_framework import serializers
 
-from .link import LinkSerializer
+from .link import UriLinkSerializer
 from .subscription_auth_data import SubscriptionAuthenticationSerializer
 from .nsdm_filter_data import NsdmNotificationsFilter
 
 
 class NsdmSubscriptionLinkSerializer(serializers.Serializer):
-    self = LinkSerializer(
+    self = UriLinkSerializer(
         help_text="Links to resources related to this resource.",
         required=True
     )
+
+    class Meta:
+        ref_name = "NSDM_SUB_LinkSerializer"
 
 
 class NsdmSubscriptionSerializer(serializers.Serializer):
