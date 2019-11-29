@@ -59,7 +59,7 @@ class CreateQuerySubscriptionView(APIView):
         logger.debug("Create VNF package Subscription> %s" % request.data)
 
         vnf_pkg_subscription_request = validate_data(request.data, PkgmSubscriptionRequestSerializer)
-        data = CreateSubscription(vnf_pkg_subscription_request.data).do_biz()
+        data = CreateSubscription(request.data).do_biz()
         subscription_info = validate_data(data, PkgmSubscriptionSerializer)
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)
 

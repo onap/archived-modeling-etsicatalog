@@ -23,6 +23,7 @@ from rest_framework.views import APIView
 from catalog.packages.biz.vnf_pkg_artifacts import FetchVnfPkgArtifact
 from catalog.packages.const import TAG_VNF_PACKAGE_API
 from .common import view_safe_call_with_log
+from catalog.swagger.views import EtsiCatalogFileAutoSchema
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +40,7 @@ VALID_FILTERS = [
 class FetchVnfPkgmArtifactsView(APIView):
 
     @swagger_auto_schema(
+        auto_schema=EtsiCatalogFileAutoSchema,
         tags=[TAG_VNF_PACKAGE_API],
         responses={
             status.HTTP_200_OK: openapi.Response("Return the artifact file",

@@ -34,6 +34,7 @@ from catalog.packages.views.common import validate_data
 from catalog.pub.utils.syscomm import fun_name
 from catalog.pub.utils.values import ignore_case_get
 from .common import view_safe_call_with_log
+from catalog.swagger.views import EtsiCatalogFileAutoSchema
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +122,7 @@ def pnf_descriptors_rc(request):
     }
 )
 @swagger_auto_schema(
+    auto_schema=EtsiCatalogFileAutoSchema,
     method='GET',
     operation_description="Fetch PNFD content",
     tags=[TAG_PNFD_API],
@@ -131,7 +133,6 @@ def pnf_descriptors_rc(request):
         status.HTTP_404_NOT_FOUND: ProblemDetailsSerializer(),
         status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
     },
-    produces='application/octet-stream',
     operation_id='Fetch PNFD content'
 )
 @api_view(http_method_names=['PUT', 'GET'])
