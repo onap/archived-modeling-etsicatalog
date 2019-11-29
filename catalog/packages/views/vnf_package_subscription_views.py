@@ -27,7 +27,7 @@ from catalog.packages.serializers.response import ProblemDetailsSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionRequestSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionsSerializer
-from catalog.packages.views.common import validate_data
+from catalog.packages.views.common import validate_data, validate_req_data
 from catalog.pub.exceptions import BadRequestException
 from catalog.pub.exceptions import VnfPkgSubscriptionException
 from .common import view_safe_call_with_log
@@ -51,14 +51,15 @@ class CreateQuerySubscriptionView(APIView):
         request_body=PkgmSubscriptionRequestSerializer,
         responses={
             status.HTTP_201_CREATED: PkgmSubscriptionSerializer(),
-            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal error"
+            status.HTTP_400_BAD_REQUEST: ProblemDetailsSerializer(),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: ProblemDetailsSerializer()
         }
     )
     @view_safe_call_with_log(logger=logger)
     def post(self, request):
         logger.debug("Create VNF package Subscription> %s" % request.data)
 
-        vnf_pkg_subscription_request = validate_data(request.data, PkgmSubscriptionRequestSerializer)
+        vnf_pkg_subscription_request = validate_req_data(request.data, PkgmSubscriptionRequestSerializer)
         data = CreateSubscription(vnf_pkg_subscription_request.data).do_biz()
         subscription_info = validate_data(data, PkgmSubscriptionSerializer)
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)

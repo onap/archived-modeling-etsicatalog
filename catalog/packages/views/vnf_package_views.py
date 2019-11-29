@@ -32,6 +32,7 @@ from catalog.packages.serializers.vnf_pkg_info import VnfPkgInfoSerializer
 from catalog.packages.serializers.vnf_pkg_infos import VnfPkgInfosSerializer
 from .common import validate_data, validate_req_data
 from .common import view_safe_call_with_log
+from catalog.swagger.views import EtsiCatalogFileAutoSchema
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,7 @@ def vnf_packages_rc(request):
 
 
 @swagger_auto_schema(
+    auto_schema=EtsiCatalogFileAutoSchema,
     method="GET",
     operation_description="Read VNFD of an on-boarded VNF package",
     tags=[TAG_VNF_PACKAGE_API],
@@ -90,7 +92,6 @@ def vnf_packages_rc(request):
         status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal error",
                                                                 schema=openapi.Schema(type=openapi.TYPE_STRING))
     },
-    produces='application/octet-stream',
     operation_id='VNFD of an on-boarded VNF package'
 )
 @api_view(http_method_names=["GET"])
@@ -118,6 +119,7 @@ def vnfd_rd(request, **kwargs):
     }
 )
 @swagger_auto_schema(
+    auto_schema=EtsiCatalogFileAutoSchema,
     method="GET",
     operation_description="Fetch VNF package content",
     tags=[TAG_VNF_PACKAGE_API],

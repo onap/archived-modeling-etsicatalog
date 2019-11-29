@@ -17,6 +17,7 @@ import os
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_yasg.inspectors import SwaggerAutoSchema
 
 
 class SwaggerJsonView(APIView):
@@ -26,3 +27,9 @@ class SwaggerJsonView(APIView):
         json_data = json.JSONDecoder().decode(f.read())
         f.close()
         return Response(json_data)
+
+
+class EtsiCatalogFileAutoSchema(SwaggerAutoSchema):
+    def get_produces(self):
+        super(EtsiCatalogFileAutoSchema, self).get_produces()
+        return ["application/octet-stream", "application/json"]
