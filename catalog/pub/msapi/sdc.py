@@ -90,6 +90,8 @@ def get_asset(asset_type, uuid):
         logger.error("Status code is %s, detail is %s.", ret[2], ret[1])
         raise CatalogException("Failed to get asset(%s, %s) from sdc." % (asset_type, uuid))
     asset = json.JSONDecoder().decode(ret[1])
+    if len(asset) == 0:
+        raise CatalogException("Failed to get asset(%s, %s) from sdc." % (asset_type, uuid))
     if asset.get("distributionStatus", None) != DISTRIBUTED:
         raise CatalogException("The asset (%s,%s) is not distributed from sdc." % (asset_type, uuid))
     else:

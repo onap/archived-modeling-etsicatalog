@@ -19,7 +19,7 @@ import traceback
 
 from catalog.pub.config.config import CATALOG_ROOT_PATH, CATALOG_URL_PATH
 from catalog.pub.config.config import REG_TO_MSB_REG_PARAM
-from catalog.pub.database.models import NSPackageModel
+from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
 from catalog.pub.exceptions import CatalogException
 from catalog.pub.msapi import sdc
 from catalog.pub.utils import toscaparser
@@ -119,10 +119,20 @@ class NsPackage(object):
         if NSPackageModel.objects.filter(nsPackageId=csar_id):
             return [1, "NS CSAR(%s) already exists." % csar_id]
 
-        artifact = sdc.get_artifact(sdc.ASSETTYPE_SERVICES, csar_id)
+        ns = sdc.get_asset(sdc.ASSETTYPE_SERVICES, csar_id)
+        # check if the related resources exist
+        resources = ns.get('resources', None)
+        if resources:
+            for resource in resources:
+                if not VnfPackageModel.objects.filter(vnfPackageId=resource['resourceUUID']) and \
+                        not PnfPackageModel.objects.filter(pnfPackageId=resource['resourceUUID']):
+                    logger.error("Resource [%s] is not distributed.", resource['resourceUUID'])
+                    raise CatalogException("Resource (%s) is not distributed." % resource['resourceUUID'])
+
+        # download csar package
         local_path = os.path.join(CATALOG_ROOT_PATH, csar_id)
-        csar_name = "%s.csar" % artifact.get("name", csar_id)
-        local_file_name = sdc.download_artifacts(artifact["toscaModelURL"], local_path, csar_name)
+        csar_name = "%s.csar" % ns.get("name", csar_id)
+        local_file_name = sdc.download_artifacts(ns["toscaModelURL"], local_path, csar_name)
         if local_file_name.endswith(".csar") or local_file_name.endswith(".zip"):
             artifact_vnf_file = fileutil.unzip_file(local_file_name, local_path, "Artifacts/Deployment/OTHER/ns.csar")
             if os.path.exists(artifact_vnf_file):

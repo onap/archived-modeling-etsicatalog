@@ -47,13 +47,13 @@ class TestNsPackage(TestCase):
 
     @mock.patch.object(restcall, 'call_req')
     def test_ns_pkg_distribute_when_csar_not_exist(self, mock_call_req):
-        mock_call_req.return_value = [0, "[]", '200']
+        mock_call_req.return_value = [0, "{}", '200']
         resp = self.client.post(
             "/api/catalog/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
-            "Failed to query artifact(services,1) from sdc.",
+            "Failed to get asset(services, 1) from sdc.",
             resp.data["statusDescription"])
 
     @mock.patch.object(restcall, 'call_req')
@@ -63,11 +63,11 @@ class TestNsPackage(TestCase):
             self, mock_parse_nsd, mock_download_artifacts, mock_call_req):
         mock_parse_nsd.return_value = json.JSONEncoder().encode(self.nsd_data)
         mock_download_artifacts.return_value = "/home/vcpe.csar"
-        mock_call_req.return_value = [0, json.JSONEncoder().encode([{
+        mock_call_req.return_value = [0, json.JSONEncoder().encode({
             "uuid": "1",
             "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/vcpe.csar",
             "distributionStatus": "DISTRIBUTED"
-        }]), '200']
+        }), '200']
         NSPackageModel(nsPackageId="2", nsdId="VCPE_NS").save()
         resp = self.client.post(
             "/api/catalog/v1/nspackages", {"csarId": "1"}, format='json')
@@ -84,11 +84,11 @@ class TestNsPackage(TestCase):
             self, mock_parse_nsd, mock_download_artifacts, mock_call_req):
         mock_parse_nsd.return_value = json.JSONEncoder().encode(self.nsd_data)
         mock_download_artifacts.return_value = "/home/vcpe.csar"
-        mock_call_req.return_value = [0, json.JSONEncoder().encode([{
+        mock_call_req.return_value = [0, json.JSONEncoder().encode({
             "uuid": "1",
             "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/vcpe.csar",
             "distributionStatus": "DISTRIBUTED",
-        }]), '200']
+        }), '200']
         resp = self.client.post(
             "/api/catalog/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
@@ -104,11 +104,11 @@ class TestNsPackage(TestCase):
             self, mock_parse_nsd, mock_download_artifacts, mock_call_req):
         mock_parse_nsd.return_value = json.JSONEncoder().encode(self.nsd_data)
         mock_download_artifacts.return_value = "/home/vcpe.csar"
-        mock_call_req.return_value = [0, json.JSONEncoder().encode([{
+        mock_call_req.return_value = [0, json.JSONEncoder().encode({
             "uuid": "1",
             "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/vcpe.csar",
             "distributionStatus": "DISTRIBUTED"
-        }]), '200']
+        }), '200']
         VnfPackageModel(vnfPackageId="1", vnfdId="vcpe_vfw_zte_1_0").save()
         PnfPackageModel(pnfPackageId="1", pnfdId="m6000_s").save()
         resp = self.client.post(
@@ -119,27 +119,19 @@ class TestNsPackage(TestCase):
             "CSAR(1) distributed successfully.",
             resp.data["statusDescription"])
 
-    @mock.patch.object(sdc, 'get_artifacts')
-    def test_ns_when_not_distributed_by_sdc(self, mock_get_artifacts):
-        mock_get_artifacts.return_value = [{
+    @mock.patch.object(restcall, 'call_req')
+    def test_ns_when_not_distributed_by_sdc(self, mock_call_req):
+        mock_call_req.return_value = [0, json.JSONEncoder().encode({
             "uuid": "1",
-            "invariantUUID": "63eaec39-ffbe-411c-a838-448f2c73f7eb",
-            "name": "underlayvpn",
-            "version": "2.0",
-            "toscaModelURL": "/sdc/v1/catalog/resources/c94490a0-f7ef-48be-b3f8-8d8662a37236/toscaModel",
-            "category": "Volte",
-            "subCategory": "VolteVNF",
-            "resourceType": "VF",
-            "lifecycleState": "CERTIFIED",
-            "distributionStatus": "DISTRIBUTION_APPROVED",
-            "lastUpdaterUserId": "jh0003"
-        }]
+            "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/vcpe.csar",
+            "distributionStatus": "DISTRIBUTION_APPROVED"
+        }), '200']
         resp = self.client.post(
             "/api/catalog/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
-            "The artifact (services,1) is not distributed from sdc.",
+            "The asset (services,1) is not distributed from sdc.",
             resp.data["statusDescription"])
 
     ##########################################################################

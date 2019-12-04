@@ -23,6 +23,7 @@ from catalog.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, DB_POR
 from catalog.pub.config import config as pub_config
 from logging import config as log_config
 from onaplogging import monkey
+
 monkey.patch_all()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -161,11 +162,16 @@ if platform.system() == 'Windows' or 'test' in sys.argv:
                 'maxBytes': 1024 * 1024 * 50,
                 'backupCount': 5,
             },
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard'
+            },
         },
 
         'loggers': {
             'catalog': {
-                'handlers': ['catalog_handler'],
+                'handlers': ['catalog_handler', 'console'],
                 'level': 'DEBUG',
                 'propagate': False
             },
@@ -200,5 +206,6 @@ if 'test' in sys.argv:
 
     import mock
     from catalog.pub.utils import idutil
+
     idutil.get_auto_id = mock.Mock()
     idutil.get_auto_id.return_value = 1
