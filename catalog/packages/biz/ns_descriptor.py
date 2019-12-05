@@ -19,12 +19,13 @@ import os
 import uuid
 
 from catalog.packages.biz.common import parse_file_range, read, save
-from catalog.packages.const import PKG_STATUS
 from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import NSPackageModel, PnfPackageModel, VnfPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
 from catalog.pub.utils.values import ignore_case_get
+from catalog.packages.biz.notificationsutil import prepare_nsd_notification, NotificationsUtil
+from catalog.packages import const
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +42,9 @@ class NsDescriptor(object):
         user_defined_data = ignore_case_get(data, 'userDefinedData', {})
         data = {
             'id': id if id else str(uuid.uuid4()),
-            'nsdOnboardingState': PKG_STATUS.CREATED,
-            'nsdOperationalState': PKG_STATUS.DISABLED,
-            'nsdUsageState': PKG_STATUS.NOT_IN_USE,
+            'nsdOnboardingState': const.PKG_STATUS.CREATED,
+            'nsdOperationalState': const.PKG_STATUS.DISABLED,
+            'nsdUsageState': const.PKG_STATUS.NOT_IN_USE,
             'userDefinedData': user_defined_data,
             '_links': None  # TODO
         }
@@ -92,6 +93,7 @@ class NsDescriptor(object):
         ns_pkgs.delete()
         ns_pkg_path = os.path.join(CATALOG_ROOT_PATH, nsd_info_id)
         fileutil.delete_dirs(ns_pkg_path)
+        send_notification(const.NSD_NOTIFICATION_TYPE.NSD_DELETION, nsd_info_id)
         logger.info('NSD(%s) has been deleted.' % nsd_info_id)
 
     def upload(self, nsd_info_id, remote_file):
@@ -100,7 +102,7 @@ class NsDescriptor(object):
         if not ns_pkgs.exists():
             logger.error('NSD(%s) does not exist.' % nsd_info_id)
             raise CatalogException('NSD(%s) does not exist.' % nsd_info_id)
-        ns_pkgs.update(onboardingState=PKG_STATUS.UPLOADING)
+        ns_pkgs.update(onboardingState=const.PKG_STATUS.UPLOADING)
 
         local_file_name = save(remote_file, nsd_info_id)
         logger.info('NSD(%s) content has been uploaded.' % nsd_info_id)
@@ -112,7 +114,7 @@ class NsDescriptor(object):
         if not ns_pkgs.exists():
             logger.error('NSD(%s) does not exist.' % nsd_info_id)
             raise ResourceNotFoundException('NSD(%s) does not exist.' % nsd_info_id)
-        if ns_pkgs[0].onboardingState != PKG_STATUS.ONBOARDED:
+        if ns_pkgs[0].onboardingState != const.PKG_STATUS.ONBOARDED:
             logger.error('NSD(%s) is not ONBOARDED.' % nsd_info_id)
             raise CatalogException('NSD(%s) is not ONBOARDED.' % nsd_info_id)
 
@@ -124,7 +126,7 @@ class NsDescriptor(object):
     def parse_nsd_and_save(self, nsd_info_id, local_file_name):
         logger.info('Start to process NSD(%s)...' % nsd_info_id)
         ns_pkgs = NSPackageModel.objects.filter(nsPackageId=nsd_info_id)
-        ns_pkgs.update(onboardingState=PKG_STATUS.PROCESSING)
+        ns_pkgs.update(onboardingState=const.PKG_STATUS.PROCESSING)
 
         nsd_json = toscaparser.parse_nsd(local_file_name)
         logger.debug("%s", nsd_json)
@@ -140,6 +142,7 @@ class NsDescriptor(object):
         other_nspkg = NSPackageModel.objects.filter(nsdId=nsd_id)
         if other_nspkg and other_nspkg[0].nsPackageId != nsd_info_id:
             logger.warn("NSD(%s,%s) already exists.", nsd_id, other_nspkg[0].nsPackageId)
+            send_notification(const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE, nsd_info_id, nsd_id)
             raise CatalogException("NSD(%s) already exists." % nsd_id)
 
         for vnf in nsd["vnfs"]:
@@ -173,14 +176,15 @@ class NsDescriptor(object):
             nsdDescription=nsd.get("description", ""),
             nsdVersion=nsd_version,
             invariantId=invariant_id,
-            onboardingState=PKG_STATUS.ONBOARDED,
-            operationalState=PKG_STATUS.ENABLED,
-            usageState=PKG_STATUS.NOT_IN_USE,
+            onboardingState=const.PKG_STATUS.ONBOARDED,
+            operationalState=const.PKG_STATUS.ENABLED,
+            usageState=const.PKG_STATUS.NOT_IN_USE,
             nsPackageUri=local_file_name,
             sdcCsarId=nsd_info_id,
             localFilePath=local_file_name,
             nsdModel=nsd_json
         )
+        send_notification(const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING, nsd_info_id, nsd_id)
         logger.info('NSD(%s) has been processed.' % nsd_info_id)
 
     def fill_resp_data(self, ns_pkg):
@@ -236,4 +240,19 @@ class NsDescriptor(object):
 
     def handle_upload_failed(self, nsd_info_id):
         ns_pkg = NSPackageModel.objects.filter(nsPackageId=nsd_info_id)
-        ns_pkg.update(onboardingState=PKG_STATUS.CREATED)
+        ns_pkg.update(onboardingState=const.PKG_STATUS.CREATED)
+
+
+def send_notification(type, nsd_info_id, nsd_id=None, failure_details=None, operational_state=None):
+    data = prepare_nsd_notification(nsd_info_id=nsd_info_id,
+                                    nsd_id=nsd_id,
+                                    notification_type=type,
+                                    failure_details=failure_details,
+                                    operational_state=operational_state)
+    filters = {
+        'nsdInfoId': 'nsdInfoId',
+        'nsdId': 'nsdId',
+    }
+    logger.debug('Notify request data = %s' % data)
+    logger.debug('Notify request filters = %s' % filters)
+    NotificationsUtil().send_notification(data, filters, False)

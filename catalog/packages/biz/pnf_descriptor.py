@@ -25,6 +25,8 @@ from catalog.pub.database.models import NSPackageModel, PnfPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
 from catalog.pub.utils.values import ignore_case_get
+from catalog.packages.biz.notificationsutil import prepare_pnfd_notification, NotificationsUtil
+from catalog.packages import const
 
 logger = logging.getLogger(__name__)
 
@@ -76,8 +78,14 @@ class PnfDescriptor(object):
         logger.info('Start to upload PNFD(%s)...' % pnfd_info_id)
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         if not pnf_pkgs.exists():
-            logger.info('PNFD(%s) does not exist.' % pnfd_info_id)
-            raise CatalogException('PNFD (%s) does not exist.' % pnfd_info_id)
+            details = 'PNFD(%s) is not CREATED.' % pnfd_info_id
+            logger.info(details)
+            send_notification(
+                type=const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING_FAILURE,
+                pnfd_info_id=pnfd_info_id,
+                failure_details=details
+            )
+            raise CatalogException(details)
         pnf_pkgs.update(onboardingState=PKG_STATUS.UPLOADING)
 
         local_file_name = save(remote_file, pnfd_info_id)
@@ -110,6 +118,7 @@ class PnfDescriptor(object):
         pnf_pkgs.delete()
         pnf_pkg_path = os.path.join(CATALOG_ROOT_PATH, pnfd_info_id)
         fileutil.delete_dirs(pnf_pkg_path)
+        send_notification(const.NSD_NOTIFICATION_TYPE.PNFD_DELETION, pnfd_info_id, del_pnfd_id)
         logger.debug('PNFD(%s) has been deleted.' % pnfd_info_id)
 
     def download(self, pnfd_info_id):
@@ -185,6 +194,7 @@ class PnfDescriptor(object):
             localFilePath=local_file_name,
             pnfdModel=pnfd_json
         )
+        send_notification(const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING, pnfd_info_id, pnfd_id)
         logger.info('PNFD(%s) has been processed.' % pnfd_info_id)
 
     def fill_response_data(self, pnf_pkg):
@@ -224,3 +234,17 @@ class PnfDescriptor(object):
             logger.error(e.args[0])
             return [1, e.args[0]]
         return [0, ret]
+
+
+def send_notification(type, pnfd_info_id, pnfd_id=None, failure_details=None):
+    data = prepare_pnfd_notification(pnfd_info_id=pnfd_info_id,
+                                     pnfd_id=pnfd_id,
+                                     notification_type=type,
+                                     failure_details=failure_details)
+    filters = {
+        'pnfdId': 'pnfdId',
+        'pnfdInfoIds': 'pnfdInfoIds',
+    }
+    logger.debug('Notify request data = %s' % data)
+    logger.debug('Notify request filters = %s' % filters)
+    NotificationsUtil().send_notification(data, filters, False)

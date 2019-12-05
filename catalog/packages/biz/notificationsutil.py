@@ -23,6 +23,7 @@ import catalog.pub.utils.timeutil
 from catalog.pub.utils.values import remove_none_key
 from catalog.pub.config import config as pub_config
 import traceback
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -32,16 +33,20 @@ class NotificationsUtil(object):
         pass
 
     def send_notification(self, notification, filters, isvnfpkg):
-        logger.info("Send Notifications to the callbackUri")
         subscriptions_filter = {v + "__contains": notification[k] for k, v in filters.items()}
-        logger.debug('send_notification subscriptions_filter = %s' % subscriptions_filter)
         subscriptions_filter = remove_none_key(subscriptions_filter)
+        logger.debug('send_notification subscriptions_filter = %s' % subscriptions_filter)
+        q1 = Q()
+        q1.connector = 'OR'
+        for k, v in subscriptions_filter.items():
+            q1.children.append((k, v))
         if isvnfpkg:
-            subscriptions = VnfPkgSubscriptionModel.objects.filter(**subscriptions_filter)
+            subscriptions = VnfPkgSubscriptionModel.objects.filter(q1)
             subscription_root_uri = const.VNFPKG_SUBSCRIPTION_ROOT_URI
         else:
-            subscriptions = NsdmSubscriptionModel.objects.filter(**subscriptions_filter)
+            subscriptions = NsdmSubscriptionModel.objects.filter(q1)
             subscription_root_uri = const.NSDM_SUBSCRIPTION_ROOT_URI
+
         if not subscriptions.exists():
             logger.info("No subscriptions created for the filters %s" % notification)
             return
@@ -82,7 +87,7 @@ class NotificationsUtil(object):
         try:
             resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'})
             if resp.status_code != status.HTTP_204_NO_CONTENT:
-                logger.error("Sendingnotification to %s failed: %s" % (callbackuri, resp.text))
+                logger.error("Sending notification to %s failed: %s" % (callbackuri, resp.text))
             else:
                 logger.info("Sending notification to %s successfully.", callbackuri)
         except:

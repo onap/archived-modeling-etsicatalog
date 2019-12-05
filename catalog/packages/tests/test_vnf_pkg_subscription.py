@@ -14,16 +14,21 @@
 
 import uuid
 import mock
+import json
+import os
 
 from rest_framework.test import APIClient
 from django.test import TestCase
 
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
-from .const import vnf_subscription_data
+from .const import vnf_subscription_data, vnfd_data
 from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_vnfpkg_notification
 from catalog.packages import const
 from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
+from catalog.pub.utils import toscaparser
+from catalog.pub.config.config import CATALOG_ROOT_PATH
+from rest_framework import status
 
 
 class TestNfPackageSubscription(TestCase):
@@ -186,9 +191,78 @@ class TestNfPackageSubscription(TestCase):
         response = self.client.delete("/api/vnfpkgm/v1/subscriptions/%s" % dummy_uuid)
         self.assertEqual(404, response.status_code)
 
+    @mock.patch("requests.get")
+    @mock.patch.object(toscaparser, 'parse_vnfd')
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_vnfpkg_subscript_notify(self, mock_nowtime, mock_uuid, mock_requests_post, mock_parse_vnfd, mock_requests_get):
+        mock_nowtime.return_value = "nowtime()"
+        uuid_subscriptid = "99442b18-a5c7-11e8-998c-bf1755941f13"
+        uuid_vnfPackageId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        uuid_vnfdid = "00342b18-a5c7-11e8-998c-bf1755941f12"
+        mock_uuid.side_effect = [uuid_subscriptid, "1111"]
+        mock_requests_get.return_value.status_code = 204
+        mock_parse_vnfd.return_value = json.JSONEncoder().encode(vnfd_data)
+
+        response = self.client.post(
+            "/api/vnfpkgm/v1/subscriptions",
+            data=vnf_subscription_data,
+            format='json')
+        self.assertEqual(201, response.status_code)
+
+        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "empty.txt"), "rt")}
+        VnfPackageModel.objects.create(
+            vnfPackageId=uuid_vnfPackageId,
+            onboardingState="CREATED"
+        )
+
+        response = self.client.put("/api/vnfpkgm/v1/vnf_packages/%s/package_content" % uuid_vnfPackageId, data=data)
+        vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=uuid_vnfPackageId)
+        self.assertEqual(uuid_vnfdid, vnf_pkg[0].vnfdId)
+        self.assertEqual(const.PKG_STATUS.ONBOARDED, vnf_pkg[0].onboardingState)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.PKG_NOTIFICATION_TYPE.ONBOARDING,
+            'timeStamp': "nowtime()",
+            'vnfPkgId': uuid_vnfPackageId,
+            'vnfdId': uuid_vnfdid,
+            'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
+            'operationalState': None,
+            "subscriptionId": uuid_subscriptid,
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                   uuid_subscriptid)},
+                'vnfPackage': {
+                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                 pub_config.MSB_SERVICE_PORT,
+                                                                 const.PKG_URL_PREFIX,
+                                                                 uuid_vnfPackageId)
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_notification,
+                                              headers={'Connection': 'close'})
+
 
 class NotificationTest(TestCase):
     def setUp(self):
+        VnfPackageModel.objects.all().delete()
+        VnfPkgSubscriptionModel.objects.all().delete()
+
+    def tearDown(self):
+        VnfPackageModel.objects.all().delete()
+        VnfPkgSubscriptionModel.objects.all().delete()
+
+    @mock.patch("requests.post")
+    @mock.patch("uuid.uuid4")
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    def test_vnfpkg_manual_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
         VnfPackageModel(vnfPackageId="vnfpkgid1",
                         vnfdId="vnfdid1"
                         ).save()
@@ -199,15 +273,6 @@ class NotificationTest(TestCase):
                                 vnfd_id="vnfdid1",
                                 vnf_pkg_id="vnfpkgid1"
                                 ).save()
-
-    def tearDown(self):
-        VnfPackageModel.objects.all().delete()
-        VnfPkgSubscriptionModel.objects.all().delete()
-
-    @mock.patch("requests.post")
-    @mock.patch("uuid.uuid4")
-    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
-    def test_vnfpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
         mock_nowtime.return_value = "nowtime()"
         mock_uuid.return_value = "1111"
         notification_content = prepare_vnfpkg_notification("vnfpkgid1", const.PKG_NOTIFICATION_TYPE.CHANGE,
