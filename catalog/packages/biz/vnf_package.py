@@ -111,8 +111,6 @@ class VnfPackage(object):
         #     logger.error("VNF package(%s) is not CREATED" % vnf_pkg_id)
         #     raise CatalogException("VNF package(%s) is not CREATED" % vnf_pkg_id)
         vnf_pkg.update(onboardingState=const.PKG_STATUS.UPLOADING)
-        send_notification(vnf_pkg_id, const.PKG_NOTIFICATION_TYPE.ONBOARDING,
-                          const.PKG_CHANGE_TYPE.OP_STATE_CHANGE)
 
         local_file_name = save(remote_file, vnf_pkg_id)
         logger.info('VNF package(%s) has been uploaded.' % vnf_pkg_id)
@@ -282,6 +280,8 @@ def parse_vnfd_and_save(vnf_pkg_id, vnf_pkg_path):
             localFilePath=vnf_pkg_path,
             vnfPackageUri=os.path.split(vnf_pkg_path)[-1]
         )
+        send_notification(vnf_pkg_id, const.PKG_NOTIFICATION_TYPE.ONBOARDING,
+                          const.PKG_CHANGE_TYPE.OP_STATE_CHANGE)
     else:
         raise CatalogException("VNF propeties and metadata in VNF Package(id=%s) are empty." % vnf_pkg_id)
     logger.info('VNF package(%s) has been processed(done).' % vnf_pkg_id)

@@ -57,9 +57,12 @@ class CreateQuerySubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def post(self, request):
-        logger.debug("Create VNF package Subscription> %s" % request.data)
+        mydata = request.data
+        # if hasattr(request.data, "lists"):
+        #     mydata = dict(request.data.lists())
+        logger.debug("Create VNF package Subscription> %s" % mydata)
 
-        vnf_pkg_subscription_request = validate_req_data(request.data, PkgmSubscriptionRequestSerializer)
+        vnf_pkg_subscription_request = validate_req_data(mydata, PkgmSubscriptionRequestSerializer)
         data = CreateSubscription(vnf_pkg_subscription_request.data).do_biz()
         subscription_info = validate_data(data, PkgmSubscriptionSerializer)
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)

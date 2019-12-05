@@ -209,7 +209,7 @@ vnfd_data = {
         "vnfProvider": "zte",
         "vnfmInfo": "zte",
         "defaultLocalizationLanguage": "english",
-        "vnfdId": "zte-hss-1.0",
+        "vnfdId": "00342b18-a5c7-11e8-998c-bf1755941f12",
         "id": "zte-hss-1.0",
         "vnfProductInfoDescription": "hss",
         "vnfdVersion": "1.0.0",
@@ -217,7 +217,7 @@ vnfd_data = {
     },
     "vnf": {
         "properties": {
-            "descriptor_id": "zte-hss-1.0",
+            "descriptor_id": "00342b18-a5c7-11e8-998c-bf1755941f12",
             "descriptor_version": "1.0.0",
             "software_version": "1.0.0",
             "provider": "zte"
@@ -441,7 +441,8 @@ nsd_data = {"vnffgs": [{"vnffg_id": "vnffg1",
                          "description": "vcpe_ns"},
             "ns": {
                 "properties": {
-                    "descriptor_id": "VCPE_NS",
+                    # "descriptor_id": "VCPE_NS",
+                    "descriptor_id": "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
                     "version": 1,
                     "name": "VCPE_NS",
                     "desginer": "ZTE",
@@ -571,7 +572,7 @@ vnf_subscription_data = {
             }
         },
         "vnfdId": [
-            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "00342b18-a5c7-11e8-998c-bf1755941f12"
         ],
         "vnfPkgId": [
             "3fa85f64-5717-4562-b3fc-2c963f66afa6"

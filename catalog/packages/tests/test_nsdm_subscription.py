@@ -15,6 +15,7 @@
 import json
 import mock
 import uuid
+import os
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -25,6 +26,10 @@ from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_ns
 from catalog.packages import const
 from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
+from catalog.packages.tests.const import nsd_data
+from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
+from catalog.pub.config.config import CATALOG_ROOT_PATH
+from catalog.pub.utils import toscaparser
 
 
 class TestNsdmSubscription(TestCase):
@@ -523,6 +528,103 @@ class TestNsdmSubscription(TestCase):
                                       format='json')
         self.assertEqual(response.status_code,
                          status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @mock.patch("requests.post")
+    @mock.patch.object(toscaparser, 'parse_nsd')
+    @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
+    @mock.patch("requests.get")
+    @mock.patch.object(uuid, 'uuid4')
+    def test_nsdm_subscribe_trigger_notification(self, mock_uuid4, mock_requests, mock_nowtime, mock_parse_nsd,
+                                                 mock_requests_post):
+        mock_requests.return_value.status_code = 204
+        mock_requests.get.return_value.status_code = 204
+        mock_uuid4.return_value = "1111"
+        mock_nowtime.return_value = "nowtime()"
+
+        subscription_req = {
+            "callbackUri": "http://callbackuri.com",
+            "authentication": {
+                "authType": ["BASIC"],
+                "paramsBasic": {
+                    "userName": "username",
+                    "password": "password"
+                }
+            },
+            "filter": {
+                "nsdId": ["b632bddc-bccd-4180-bd8d-4e8a9578eff7"]
+            }
+        }
+        response = self.client.post("/api/nsd/v1/subscriptions",
+                                    data=subscription_req, format='json')
+        self.assertEqual(201, response.status_code)
+
+        self.user_defined_data = {
+            'key1': 'value1',
+            'key2': 'value2',
+            'key3': 'value3',
+        }
+        user_defined_data_json = json.JSONEncoder().encode(self.user_defined_data)
+        mock_parse_nsd.return_value = json.JSONEncoder().encode(nsd_data)
+        VnfPackageModel(
+            vnfPackageId="111",
+            vnfdId="vcpe_vfw_zte_1_0"
+        ).save()
+
+        PnfPackageModel(
+            pnfPackageId="112",
+            pnfdId="m6000_s"
+        ).save()
+
+        NSPackageModel(
+            nsPackageId='d0ea5ec3-0b98-438a-9bea-488230cff174',
+            operationalState='DISABLED',
+            usageState='NOT_IN_USE',
+            userDefinedData=user_defined_data_json,
+        ).save()
+
+        with open('nsd_content.txt', 'wt') as fp:
+            fp.write('test')
+        with open('nsd_content.txt', 'rt') as fp:
+            resp = self.client.put(
+                "/api/nsd/v1/ns_descriptors/d0ea5ec3-0b98-438a-9bea-488230cff174/nsd_content",
+                {'file': fp},
+            )
+        file_content = ''
+        with open(os.path.join(CATALOG_ROOT_PATH, 'd0ea5ec3-0b98-438a-9bea-488230cff174/nsd_content.txt')) as fp:
+            data = fp.read()
+            file_content = '%s%s' % (file_content, data)
+        ns_pkg = NSPackageModel.objects.filter(nsPackageId="d0ea5ec3-0b98-438a-9bea-488230cff174")
+        self.assertEqual("b632bddc-bccd-4180-bd8d-4e8a9578eff7", ns_pkg[0].nsdId)
+        self.assertEqual(const.PKG_STATUS.ONBOARDED, ns_pkg[0].onboardingState)
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(None, resp.data)
+        self.assertEqual(file_content, 'test')
+        os.remove('nsd_content.txt')
+        expect_callbackuri = "http://callbackuri.com"
+        expect_notification = {
+            'id': "1111",
+            'notificationType': const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING,
+            'timeStamp': "nowtime()",
+            'nsdInfoId': "d0ea5ec3-0b98-438a-9bea-488230cff174",
+            'nsdId': "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
+            'onboardingFailureDetails': None,
+            'nsdOperationalState': None,
+            "subscriptionId": "1111",
+            '_links': {
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1111")},
+                'nsdInfo': {
+                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
+                                                                   pub_config.MSB_SERVICE_PORT,
+                                                                   const.NSD_URL_PREFIX,
+                                                                   "d0ea5ec3-0b98-438a-9bea-488230cff174")
+                }
+            }
+        }
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
 
 
 class NotificationTest(TestCase):

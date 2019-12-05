@@ -68,13 +68,13 @@ class TestNsPackage(TestCase):
             "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/vcpe.csar",
             "distributionStatus": "DISTRIBUTED"
         }), '200']
-        NSPackageModel(nsPackageId="2", nsdId="VCPE_NS").save()
+        NSPackageModel(nsPackageId="2", nsdId="b632bddc-bccd-4180-bd8d-4e8a9578eff7").save()
         resp = self.client.post(
             "/api/catalog/v1/nspackages", {"csarId": "1"}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual("failed", resp.data["status"])
         self.assertEqual(
-            "NSD(VCPE_NS) already exists.",
+            "NSD(b632bddc-bccd-4180-bd8d-4e8a9578eff7) already exists.",
             resp.data["statusDescription"])
 
     @mock.patch.object(restcall, 'call_req')

@@ -83,14 +83,14 @@ class TestNfPackage(TestCase):
             "uuid": "1",
             "toscaModelURL": "https://127.0.0.1:1234/sdc/v1/hss.csar"
         }]), '200']
-        VnfPackageModel(vnfPackageId="2", vnfdId="zte-hss-1.0").save()
+        VnfPackageModel(vnfPackageId="2", vnfdId="00342b18-a5c7-11e8-998c-bf1755941f12").save()
         NfDistributeThread(
             csar_id="1",
             vim_ids=["1"],
             lab_vim_id="",
             job_id="2"
         ).run()
-        self.assert_job_result("2", 255, "VNF package(zte-hss-1.0) already exists.")
+        self.assert_job_result("2", 255, "VNF package(00342b18-a5c7-11e8-998c-bf1755941f12) already exists.")
 
     @mock.patch.object(restcall, 'call_req')
     @mock.patch.object(sdc, 'download_artifacts')
