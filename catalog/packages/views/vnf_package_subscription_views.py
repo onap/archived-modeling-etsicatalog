@@ -27,6 +27,7 @@ from catalog.packages.serializers.response import ProblemDetailsSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionRequestSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionsSerializer
+from catalog.packages.serializers.vnf_pkg_notifications import PkgNotificationSerializer
 from catalog.packages.views.common import validate_data, validate_req_data
 from catalog.pub.exceptions import BadRequestException
 from catalog.pub.exceptions import VnfPkgSubscriptionException
@@ -57,12 +58,8 @@ class CreateQuerySubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def post(self, request):
-        mydata = request.data
-        # if hasattr(request.data, "lists"):
-        #     mydata = dict(request.data.lists())
-        logger.debug("Create VNF package Subscription> %s" % mydata)
-
-        vnf_pkg_subscription_request = validate_req_data(mydata, PkgmSubscriptionRequestSerializer)
+        logger.debug("Create VNF package Subscription> %s" % request.data)
+        vnf_pkg_subscription_request = validate_req_data(request.data, PkgmSubscriptionRequestSerializer)
         data = CreateSubscription(vnf_pkg_subscription_request.data).do_biz()
         subscription_info = validate_data(data, PkgmSubscriptionSerializer)
         return Response(data=subscription_info.data, status=status.HTTP_201_CREATED)
@@ -127,3 +124,15 @@ class QueryTerminateSubscriptionView(APIView):
 
         TerminateSubscription().terminate(subscriptionId)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PkgnotifyView(APIView):
+    @swagger_auto_schema(
+        tags=[TAG_VNF_PACKAGE_API],
+        request_body=PkgNotificationSerializer,
+        responses={
+            status.HTTP_204_NO_CONTENT: ""
+        }
+    )
+    def post(self):
+        pass
