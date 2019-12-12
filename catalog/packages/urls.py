@@ -16,7 +16,7 @@ from django.conf.urls import url
 
 from catalog.packages.views import vnf_package_views
 from catalog.packages.views.vnf_package_subscription_views import CreateQuerySubscriptionView,\
-    QueryTerminateSubscriptionView, PkgnotifyView
+    QueryTerminateSubscriptionView, PkgChangeNotificationView, PkgOnboardingNotificationView
 from catalog.packages.views.vnf_package_artifact_views import FetchVnfPkgmArtifactsView
 from catalog.packages.views import catalog_views, ns_descriptor_views, pnf_descriptor_views, nsdm_subscription_views
 from catalog.packages.views.health_check_views import HealthCheckView
@@ -61,7 +61,8 @@ urlpatterns = [
     url(r'^api/vnfpkgm/v1/subscriptions$', CreateQuerySubscriptionView.as_view(), name='subscriptions_create_query'),
     url(r'^api/vnfpkgm/v1/subscriptions/(?P<subscriptionId>[0-9a-zA-Z\-\_]+)$', QueryTerminateSubscriptionView.as_view(), name='subscriptions_query_terminate'),
     url(r'^api/vnfpkgm/v1/vnf_packages/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)/artifacts/(?P<artifactPath>[0-9a-zA-Z\-\_]+)$', FetchVnfPkgmArtifactsView.as_view(), name="fetch_vnf_artifacts"),
-    url(r'^callbackUri$', PkgnotifyView.as_view()),
+    url(r'^URI-is-provided-by-the-client-when-creating-the-subscription-VnfPackageOnboardingNotification$', PkgOnboardingNotificationView.as_view()),
+    url(r'^URI-is-provided-by-the-client-when-creating-the-sbuscription-VnfPackageChangeNotification$', PkgChangeNotificationView.as_view()),
 
     # health check
     url(r'^api/vnfpkgm/v1/health_check$', HealthCheckView.as_view()),

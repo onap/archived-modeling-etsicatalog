@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import logging
-
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,7 +27,8 @@ from catalog.packages.serializers.response import ProblemDetailsSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionRequestSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionSerializer
 from catalog.packages.serializers.vnf_pkg_subscription import PkgmSubscriptionsSerializer
-from catalog.packages.serializers.vnf_pkg_notifications import PkgNotificationSerializer
+from catalog.packages.serializers.vnf_pkg_notifications import PkgOnboardingNotificationSerializer
+from catalog.packages.serializers.vnf_pkg_notifications import PkgChangeNotificationSerializer
 from catalog.packages.views.common import validate_data, validate_req_data
 from catalog.pub.exceptions import BadRequestException
 from catalog.pub.exceptions import VnfPkgSubscriptionException
@@ -126,13 +127,45 @@ class QueryTerminateSubscriptionView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PkgnotifyView(APIView):
+class PkgOnboardingNotificationView(APIView):
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
-        request_body=PkgNotificationSerializer,
+        request_body=PkgOnboardingNotificationSerializer,
         responses={
             status.HTTP_204_NO_CONTENT: ""
         }
     )
     def post(self):
+        pass
+
+    @swagger_auto_schema(
+        tags=[TAG_VNF_PACKAGE_API],
+        responses={
+            status.HTTP_204_NO_CONTENT: "",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response('error message',
+                                                                    openapi.Schema(type=openapi.TYPE_STRING))}
+    )
+    def get(self):
+        pass
+
+
+class PkgChangeNotificationView(APIView):
+    @swagger_auto_schema(
+        tags=[TAG_VNF_PACKAGE_API],
+        request_body=PkgChangeNotificationSerializer,
+        responses={
+            status.HTTP_204_NO_CONTENT: ""
+        }
+    )
+    def post(self):
+        pass
+
+    @swagger_auto_schema(
+        tags=[TAG_VNF_PACKAGE_API],
+        responses={
+            status.HTTP_204_NO_CONTENT: "",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response('error message',
+                                                                    openapi.Schema(type=openapi.TYPE_STRING))}
+    )
+    def get(self):
         pass

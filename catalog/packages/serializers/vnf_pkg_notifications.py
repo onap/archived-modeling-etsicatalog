@@ -142,20 +142,17 @@ class PkgmLinksSerializer(serializers.Serializer):
     )
 
 
-class PkgNotificationSerializer(serializers.Serializer):
+class PkgChangeNotificationSerializer(serializers.Serializer):
     id = serializers.CharField(
         help_text="Identifier of this notification.",
         required=True,
         allow_null=False
     )
-    notificationTypes = serializers.ListField(
-        child=serializers.ChoiceField(
-            required=True,
-            choices=NOTIFICATION_TYPES
-        ),
+    notificationTypes = serializers.ChoiceField(
         help_text="Discriminator for the different notification types.",
-        allow_null=True,
-        required=False
+        choices=["VnfPackageChangeNotification"],
+        required=True,
+        allow_null=False
     )
     subscriptionId = serializers.CharField(
         help_text="Identifier of the subscription that this notification relates to.",
@@ -176,7 +173,7 @@ class PkgNotificationSerializer(serializers.Serializer):
     changeType = serializers.ChoiceField(
         help_text="The type of change of the VNF package.",
         choices=PackageChangeType,
-        required=False,
+        required=True,
         allow_null=False
     )
     operationalState = serializers.ChoiceField(
@@ -186,6 +183,41 @@ class PkgNotificationSerializer(serializers.Serializer):
         allow_null=False
     )
     vnfdId = serializers.CharField(
+        help_text="This identifier, which is managed by the VNF provider, "
+                  "identifies the VNF package and the VNFD in a globally unique way.",
+        required=True,
+        allow_null=False
+    )
+    _links = PkgmLinksSerializer(
+        help_text="Links to resources related to this resource.",
+        required=True,
+        allow_null=False
+    )
+
+
+class PkgOnboardingNotificationSerializer(serializers.Serializer):
+    id = serializers.CharField(
+        help_text="Identifier of this notification.",
+        required=True,
+        allow_null=False
+    )
+    notificationTypes = serializers.ChoiceField(
+        help_text="Discriminator for the different notification types.",
+        choices=["VnfPackageOnboardingNotification"],
+        required=True,
+        allow_null=False
+    )
+    subscriptionId = serializers.CharField(
+        help_text="Identifier of the subscription that this notification relates to.",
+        required=True,
+        allow_null=False
+    )
+    vnfPkgId = serializers.UUIDField(
+        help_text="Identifier of the VNF package.",
+        required=True,
+        allow_null=False
+    )
+    vnfdId = serializers.UUIDField(
         help_text="This identifier, which is managed by the VNF provider, "
                   "identifies the VNF package and the VNFD in a globally unique way.",
         required=True,
