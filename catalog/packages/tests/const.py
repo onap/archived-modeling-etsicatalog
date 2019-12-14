@@ -559,7 +559,7 @@ vnf_subscription_data = {
         "notificationTypes": [
             "VnfPackageOnboardingNotification"
         ],
-        "vnfProductsFromProviders": {
+        "vnfProductsFromProviders": [{
             "vnfProvider": "string",
             "vnfProducts": {
                 "vnfProductName": "string",
@@ -570,7 +570,7 @@ vnf_subscription_data = {
                     ]
                 }
             }
-        },
+        }],
         "vnfdId": [
             "00342b18-a5c7-11e8-998c-bf1755941f12"
         ],

@@ -229,8 +229,6 @@ class TestNfPackageSubscription(TestCase):
             'timeStamp': "nowtime()",
             'vnfPkgId': uuid_vnfPackageId,
             'vnfdId': uuid_vnfdid,
-            'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
-            'operationalState': None,
             "subscriptionId": uuid_subscriptid,
             '_links': {
                 'subscription': {

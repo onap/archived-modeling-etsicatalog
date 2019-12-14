@@ -62,7 +62,7 @@ urlpatterns = [
     url(r'^api/vnfpkgm/v1/subscriptions/(?P<subscriptionId>[0-9a-zA-Z\-\_]+)$', QueryTerminateSubscriptionView.as_view(), name='subscriptions_query_terminate'),
     url(r'^api/vnfpkgm/v1/vnf_packages/(?P<vnfPkgId>[0-9a-zA-Z\-\_]+)/artifacts/(?P<artifactPath>[0-9a-zA-Z\-\_]+)$', FetchVnfPkgmArtifactsView.as_view(), name="fetch_vnf_artifacts"),
     url(r'^URI-is-provided-by-the-client-when-creating-the-subscription-VnfPackageOnboardingNotification$', PkgOnboardingNotificationView.as_view()),
-    url(r'^URI-is-provided-by-the-client-when-creating-the-sbuscription-VnfPackageChangeNotification$', PkgChangeNotificationView.as_view()),
+    url(r'^URI-is-provided-by-the-client-when-creating-the-subscription-VnfPackageChangeNotification$', PkgChangeNotificationView.as_view()),
 
     # health check
     url(r'^api/vnfpkgm/v1/health_check$', HealthCheckView.as_view()),

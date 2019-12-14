@@ -57,7 +57,7 @@ class CreateSubscription(object):
         self.vnfd_id = ignore_case_get(self.filter, "vnfdId", [])
         self.vnf_pkg_id = ignore_case_get(self.filter, "vnfPkgId", [])
         self.vnf_products_from_provider = \
-            ignore_case_get(self.filter, "vnfProductsFromProviders", {})
+            ignore_case_get(self.filter, "vnfProductsFromProviders", [])
 
     def check_callbackuri_connection(self):
         logger.debug("SubscribeNotification-post::> Sending GET request "

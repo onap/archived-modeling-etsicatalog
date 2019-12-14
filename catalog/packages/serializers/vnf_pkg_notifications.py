@@ -77,7 +77,8 @@ class PkgmNotificationsFilter(serializers.Serializer):
         allow_null=False,
         required=False
     )
-    vnfProductsFromProviders = vnfProductsProvidersSerializer(
+    vnfProductsFromProviders = serializers.ListField(
+        child=vnfProductsProvidersSerializer(),
         help_text="Match VNF packages that contain "
                   "VNF products from certain providers.",
         allow_null=False,

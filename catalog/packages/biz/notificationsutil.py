@@ -25,6 +25,7 @@ from catalog.pub.config import config as pub_config
 import traceback
 from django.db.models import Q
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -108,8 +109,6 @@ def prepare_vnfpkg_notification(vnf_pkg_id, notification_type, pkg_change_type, 
         'timeStamp': catalog.pub.utils.timeutil.now_time(),
         'vnfPkgId': vnf_pkg_id,
         'vnfdId': vnfd_id,
-        'changeType': pkg_change_type,
-        'operationalState': operational_state,
         '_links': {
             'vnfPackage': {
                 'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
@@ -119,6 +118,11 @@ def prepare_vnfpkg_notification(vnf_pkg_id, notification_type, pkg_change_type, 
             }
         }
     }
+
+    if notification_type == "VnfPackageChangeNotification":
+        notification_content['changeType'] = pkg_change_type
+        notification_content['operationalState'] = operational_state
+
     return notification_content
 
 
