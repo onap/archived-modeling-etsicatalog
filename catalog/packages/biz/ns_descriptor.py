@@ -24,7 +24,7 @@ from catalog.pub.database.models import NSPackageModel, PnfPackageModel, VnfPack
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
 from catalog.pub.utils.values import ignore_case_get
-from catalog.packages.biz.notificationsutil import prepare_nsd_notification, NotificationsUtil
+from catalog.packages.biz.notificationsutil import NsdNotifications
 from catalog.packages import const
 
 logger = logging.getLogger(__name__)
@@ -141,8 +141,10 @@ class NsDescriptor(object):
             raise CatalogException("nsd_id(%s) does not exist in metadata." % nsd_id)
         other_nspkg = NSPackageModel.objects.filter(nsdId=nsd_id)
         if other_nspkg and other_nspkg[0].nsPackageId != nsd_info_id:
-            logger.warn("NSD(%s,%s) already exists.", nsd_id, other_nspkg[0].nsPackageId)
-            send_notification(const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE, nsd_info_id, nsd_id)
+            failure_details = "NSD(%s,%s) already exists.", nsd_id, other_nspkg[0].nsPackageId
+            logger.warn(failure_details)
+            send_notification(const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE, nsd_info_id, nsd_id,
+                              failure_details=failure_details)
             raise CatalogException("NSD(%s) already exists." % nsd_id)
 
         for vnf in nsd["vnfs"]:
@@ -244,15 +246,7 @@ class NsDescriptor(object):
 
 
 def send_notification(type, nsd_info_id, nsd_id=None, failure_details=None, operational_state=None):
-    data = prepare_nsd_notification(nsd_info_id=nsd_info_id,
-                                    nsd_id=nsd_id,
-                                    notification_type=type,
-                                    failure_details=failure_details,
-                                    operational_state=operational_state)
-    filters = {
-        'nsdInfoId': 'nsdInfoId',
-        'nsdId': 'nsdId',
-    }
-    logger.debug('Notify request data = %s' % data)
-    logger.debug('Notify request filters = %s' % filters)
-    NotificationsUtil().send_notification(data, filters, False)
+    notify = NsdNotifications(type, nsd_info_id, nsd_id,
+                              failure_details=failure_details,
+                              operational_state=operational_state)
+    notify.send_notification()

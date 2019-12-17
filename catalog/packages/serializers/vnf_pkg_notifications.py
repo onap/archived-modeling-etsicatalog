@@ -149,9 +149,15 @@ class PkgChangeNotificationSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    notificationTypes = serializers.ChoiceField(
+    notificationType = serializers.ChoiceField(
         help_text="Discriminator for the different notification types.",
         choices=["VnfPackageChangeNotification"],
+        required=True,
+        allow_null=False
+    )
+    timeStamp = serializers.DateTimeField(
+        help_text="Date-time of the generation of the notification.",
+        format="%Y-%m-%d %H:%M:%S",
         required=True,
         allow_null=False
     )
@@ -202,7 +208,7 @@ class PkgOnboardingNotificationSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    notificationTypes = serializers.ChoiceField(
+    notificationType = serializers.ChoiceField(
         help_text="Discriminator for the different notification types.",
         choices=["VnfPackageOnboardingNotification"],
         required=True,
@@ -210,6 +216,12 @@ class PkgOnboardingNotificationSerializer(serializers.Serializer):
     )
     subscriptionId = serializers.CharField(
         help_text="Identifier of the subscription that this notification relates to.",
+        required=True,
+        allow_null=False
+    )
+    timeStamp = serializers.DateTimeField(
+        help_text="Date-time of the generation of the notification.",
+        format="%Y-%m-%d %H:%M:%S",
         required=True,
         allow_null=False
     )
