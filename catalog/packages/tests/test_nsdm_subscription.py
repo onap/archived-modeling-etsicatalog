@@ -22,7 +22,7 @@ from rest_framework import status
 
 from catalog.packages.biz.nsdm_subscription import NsdmSubscription
 from catalog.pub.database.models import NsdmSubscriptionModel
-from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_nsd_notification, prepare_pnfd_notification
+from catalog.packages.biz.notificationsutil import NsdNotifications, PnfNotifications
 from catalog.packages import const
 from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
@@ -607,8 +607,6 @@ class TestNsdmSubscription(TestCase):
             'timeStamp': "nowtime()",
             'nsdInfoId': "d0ea5ec3-0b98-438a-9bea-488230cff174",
             'nsdId': "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
-            'onboardingFailureDetails': None,
-            'nsdOperationalState': None,
             "subscriptionId": "1111",
             '_links': {
                 'subscription': {
@@ -647,14 +645,11 @@ class NotificationTest(TestCase):
     def test_nsdpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
         mock_nowtime.return_value = "nowtime()"
         mock_uuid.return_value = "1111"
-        notification_content = prepare_nsd_notification("nsdinfoid1", "nsdid1",
-                                                        const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
-                                                        "NSD(nsdid1) already exists.", operational_state=None)
-        filters = {
-            'nsdInfoId': 'nsdInfoId',
-            'nsdId': 'nsdId',
-        }
-        NotificationsUtil().send_notification(notification_content, filters, False)
+        notify = NsdNotifications(const.NSD_NOTIFICATION_TYPE.NSD_ONBOARDING_FAILURE,
+                                  nsd_info_id="nsdinfoid1",
+                                  nsd_id="nsdid1",
+                                  failure_details="NSD(nsdid1) already exists.", operational_state=None)
+        notify.send_notification()
         expect_callbackuri = "http://127.0.0.1/self"
         expect_notification = {
             'id': "1111",
@@ -663,7 +658,6 @@ class NotificationTest(TestCase):
             'nsdInfoId': "nsdinfoid1",
             'nsdId': "nsdid1",
             'onboardingFailureDetails': "NSD(nsdid1) already exists.",
-            'nsdOperationalState': None,
             "subscriptionId": "1",
             '_links': {
                 'subscription': {
@@ -687,13 +681,11 @@ class NotificationTest(TestCase):
     def test_pnfpkg_notify(self, mock_nowtime, mock_uuid, mock_requests_post):
         mock_nowtime.return_value = "nowtime()"
         mock_uuid.return_value = "1111"
-        notification_content = prepare_pnfd_notification("pnfdInfoIds1", 'pnfdId1',
-                                                         const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING)
-        filters = {
-            'pnfdId': 'pnfdId',
-            'pnfdInfoIds': 'pnfdInfoIds',
-        }
-        NotificationsUtil().send_notification(notification_content, filters, False)
+        notify = PnfNotifications(const.NSD_NOTIFICATION_TYPE.PNFD_ONBOARDING,
+                                  pnfd_info_id="pnfdInfoIds1",
+                                  pnfd_id='pnfdId1',
+                                  failure_details=None)
+        notify.send_notification()
         expect_callbackuri = "http://127.0.0.1/self"
         expect_notification = {
             'id': "1111",
@@ -701,7 +693,6 @@ class NotificationTest(TestCase):
             'timeStamp': "nowtime()",
             'pnfdInfoIds': "pnfdInfoIds1",
             'pnfdId': "pnfdId1",
-            'onboardingFailureDetails': None,
             "subscriptionId": "1",
             '_links': {
                 'subscription': {
