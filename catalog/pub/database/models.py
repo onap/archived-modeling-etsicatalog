@@ -198,6 +198,9 @@ class NsdmSubscriptionModel(models.Model):
         import json
         return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.name for f in self._meta.fields]]))
 
+    def get_subscription_id(self):
+        return self.subscriptionid
+
 
 class VnfPkgSubscriptionModel(models.Model):
     subscription_id = models.CharField(max_length=255, primary_key=True, db_column='SUBSCRIPTION_ID')
@@ -232,3 +235,6 @@ class VnfPkgSubscriptionModel(models.Model):
         }
         subscription_obj["filter"] = filter_obj
         return subscription_obj
+
+    def get_subscription_id(self):
+        return self.subscription_id
