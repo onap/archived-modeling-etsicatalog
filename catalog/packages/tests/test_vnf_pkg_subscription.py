@@ -22,7 +22,7 @@ from django.test import TestCase
 
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
 from .const import vnf_subscription_data, vnfd_data
-from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_vnfpkg_notification
+from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.packages import const
 from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
@@ -271,20 +271,17 @@ class NotificationTest(TestCase):
                                 vnfd_id="vnfdid1",
                                 vnf_pkg_id="vnfpkgid1"
                                 ).save()
-        mock_nowtime.return_value = "nowtime()"
+        mock_nowtime.return_value = "2019-12-16 14:41:16"
         mock_uuid.return_value = "1111"
-        notification_content = prepare_vnfpkg_notification("vnfpkgid1", const.PKG_NOTIFICATION_TYPE.CHANGE,
-                                                           const.PKG_CHANGE_TYPE.OP_STATE_CHANGE, operational_state=None)
-        filters = {
-            'vnfdId': 'vnfd_id',
-            'vnfPkgId': 'vnf_pkg_id'
-        }
-        NotificationsUtil().send_notification(notification_content, filters, True)
+        notify = PkgNotifications(const.PKG_NOTIFICATION_TYPE.CHANGE, "vnfpkgid1",
+                                  const.PKG_CHANGE_TYPE.OP_STATE_CHANGE, operational_state=None)
+
+        notify.send_notification()
         expect_callbackuri = "http://127.0.0.1/self"
         expect_notification = {
             'id': "1111",
             'notificationType': const.PKG_NOTIFICATION_TYPE.CHANGE,
-            'timeStamp': "nowtime()",
+            'timeStamp': "2019-12-16 14:41:16",
             'vnfPkgId': "vnfpkgid1",
             'vnfdId': "vnfdid1",
             'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
