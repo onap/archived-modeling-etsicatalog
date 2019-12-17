@@ -22,7 +22,7 @@ from django.test import TestCase
 
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
 from .const import vnf_subscription_data, vnfd_data
-from catalog.packages.biz.notificationsutil import NotificationsUtil, prepare_vnfpkg_notification
+from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.packages import const
 from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
@@ -197,7 +197,7 @@ class TestNfPackageSubscription(TestCase):
     @mock.patch("uuid.uuid4")
     @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
     def test_vnfpkg_subscript_notify(self, mock_nowtime, mock_uuid, mock_requests_post, mock_parse_vnfd, mock_requests_get):
-        mock_nowtime.return_value = "nowtime()"
+        mock_nowtime.return_value = "2019-02-16 14:41:16"
         uuid_subscriptid = "99442b18-a5c7-11e8-998c-bf1755941f13"
         uuid_vnfPackageId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         uuid_vnfdid = "00342b18-a5c7-11e8-998c-bf1755941f12"
@@ -226,7 +226,7 @@ class TestNfPackageSubscription(TestCase):
         expect_notification = {
             'id': "1111",
             'notificationType': const.PKG_NOTIFICATION_TYPE.ONBOARDING,
-            'timeStamp': "nowtime()",
+            'timeStamp': "2019-02-16 14:41:16",
             'vnfPkgId': uuid_vnfPackageId,
             'vnfdId': uuid_vnfdid,
             "subscriptionId": uuid_subscriptid,
@@ -271,20 +271,17 @@ class NotificationTest(TestCase):
                                 vnfd_id="vnfdid1",
                                 vnf_pkg_id="vnfpkgid1"
                                 ).save()
-        mock_nowtime.return_value = "nowtime()"
+        mock_nowtime.return_value = "2019-12-16 14:41:16"
         mock_uuid.return_value = "1111"
-        notification_content = prepare_vnfpkg_notification("vnfpkgid1", const.PKG_NOTIFICATION_TYPE.CHANGE,
-                                                           const.PKG_CHANGE_TYPE.OP_STATE_CHANGE, operational_state=None)
-        filters = {
-            'vnfdId': 'vnfd_id',
-            'vnfPkgId': 'vnf_pkg_id'
-        }
-        NotificationsUtil().send_notification(notification_content, filters, True)
+        notify = PkgNotifications(const.PKG_NOTIFICATION_TYPE.CHANGE, "vnfpkgid1",
+                                  const.PKG_CHANGE_TYPE.OP_STATE_CHANGE, operational_state=None)
+
+        notify.send_notification()
         expect_callbackuri = "http://127.0.0.1/self"
         expect_notification = {
             'id': "1111",
             'notificationType': const.PKG_NOTIFICATION_TYPE.CHANGE,
-            'timeStamp': "nowtime()",
+            'timeStamp': "2019-12-16 14:41:16",
             'vnfPkgId': "vnfpkgid1",
             'vnfdId': "vnfdid1",
             'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,

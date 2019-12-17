@@ -25,7 +25,7 @@ from catalog.pub.database.models import NSPackageModel, PnfPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
 from catalog.pub.utils.values import ignore_case_get
-from catalog.packages.biz.notificationsutil import prepare_pnfd_notification, NotificationsUtil
+from catalog.packages.biz.notificationsutil import PnfNotifications
 from catalog.packages import const
 
 logger = logging.getLogger(__name__)
@@ -237,14 +237,5 @@ class PnfDescriptor(object):
 
 
 def send_notification(type, pnfd_info_id, pnfd_id=None, failure_details=None):
-    data = prepare_pnfd_notification(pnfd_info_id=pnfd_info_id,
-                                     pnfd_id=pnfd_id,
-                                     notification_type=type,
-                                     failure_details=failure_details)
-    filters = {
-        'pnfdId': 'pnfdId',
-        'pnfdInfoIds': 'pnfdInfoIds',
-    }
-    logger.debug('Notify request data = %s' % data)
-    logger.debug('Notify request filters = %s' % filters)
-    NotificationsUtil().send_notification(data, filters, False)
+    notify = PnfNotifications(type, pnfd_info_id, pnfd_id, failure_details=failure_details)
+    notify.send_notification()

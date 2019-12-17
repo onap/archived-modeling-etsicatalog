@@ -24,7 +24,7 @@ import zipfile
 
 from catalog.packages import const
 from catalog.packages.biz.common import parse_file_range, read, save
-from catalog.packages.biz.notificationsutil import prepare_vnfpkg_notification, NotificationsUtil
+from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import VnfPackageModel, NSPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
@@ -293,14 +293,6 @@ def handle_upload_failed(vnf_pkg_id):
 
 
 def send_notification(pkg_id, type, pkg_change_type, operational_state=None):
-    data = prepare_vnfpkg_notification(vnf_pkg_id=pkg_id,
-                                       notification_type=type,
-                                       pkg_change_type=pkg_change_type,
-                                       operational_state=operational_state)
-    filters = {
-        'vnfdId': 'vnfd_id',
-        'vnfPkgId': 'vnf_pkg_id'
-    }
-    logger.debug('Notify request data = %s' % data)
-    logger.debug('Notify request filters = %s' % filters)
-    NotificationsUtil().send_notification(data, filters, True)
+    notify = PkgNotifications(type, pkg_id, change_type=pkg_change_type,
+                              operational_state=operational_state)
+    notify.send_notification()
