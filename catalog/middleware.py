@@ -11,12 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import uuid
+
+from django.utils.deprecation import MiddlewareMixin
 from onaplogging.mdcContext import MDC
 
 from catalog.pub.config.config import FORWARDED_FOR_FIELDS, SERVICE_NAME
 
 
-class LogContextMiddleware(object):
+class LogContextMiddleware(MiddlewareMixin):
     #  the last IP behind multiple proxies,  if no exist proxies
     #  get local host ip.
     def _getLastIp(self, request):
