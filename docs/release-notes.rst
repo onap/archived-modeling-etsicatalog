@@ -3,8 +3,8 @@
 .. http://creativecommons.org/licenses/by/4.0
 
 
-etsicatalog Release Notes
-=========================
+Release Notes
+==============
 
 etsicatalog provides package management service and parser service as Micro
 Service.
@@ -34,7 +34,7 @@ None
 
 **Security Issues**
 
-- ` El Alto Vulnerability Report <https://wiki.onap.org/pages/viewpage.action?pageId=68541425>`_
+- `El Alto Vulnerability Report <https://wiki.onap.org/pages/viewpage.action?pageId=68541425>`_
 
 **Upgrade Notes**
 

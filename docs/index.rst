@@ -1,9 +1,15 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 
-ETSI Catalog Project
-------------------------------------------------
+Etsicatalog Project
+-------------------
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    introduction
-   release-notes.rst
+   architecture
+   installation
+   offeredapis
+   consumedapis
+   administration
+   humaninterfaces
+   release-notes
