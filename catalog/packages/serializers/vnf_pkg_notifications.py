@@ -43,7 +43,8 @@ class vnfProductsSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    versions = VersionSerializer(
+    versions = serializers.ListField(
+        child=VersionSerializer(),
         help_text="match VNF packages that contain "
                   "VNF products with certain versions",
         required=False,
@@ -58,7 +59,8 @@ class vnfProductsProvidersSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    vnfProducts = vnfProductsSerializer(
+    vnfProducts = serializers.ListField(
+        child=vnfProductsSerializer(),
         help_text="match VNF packages that contain "
                   "VNF products with certain product names, "
                   "from one particular provider",

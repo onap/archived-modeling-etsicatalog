@@ -561,15 +561,15 @@ vnf_subscription_data = {
         ],
         "vnfProductsFromProviders": [{
             "vnfProvider": "string",
-            "vnfProducts": {
+            "vnfProducts": [{
                 "vnfProductName": "string",
-                "versions": {
+                "versions": [{
                     "vnfSoftwareVersion": "string",
                     "vnfdVersions": [
                         "string"
                     ]
-                }
-            }
+                }]
+            }]
         }],
         "vnfdId": [
             "00342b18-a5c7-11e8-998c-bf1755941f12"
