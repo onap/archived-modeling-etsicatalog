@@ -58,7 +58,7 @@ class NsdmSubscriptionsSerializer(serializers.ListSerializer):
 
 
 class NsdmSubscriptionIdSerializer(serializers.Serializer):
-    subscription_id = serializers.UUIDField(
+    subscription_id = serializers.CharField(
         help_text="Identifier of this subscription resource.",
         required=True,
         allow_null=False

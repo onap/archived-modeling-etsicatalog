@@ -62,7 +62,7 @@ class PkgmSubscriptionRequestSerializer(serializers.Serializer):
 
 
 class PkgmSubscriptionSerializer(serializers.Serializer):
-    id = serializers.UUIDField(
+    id = serializers.CharField(
         help_text="Identifier of this subscription resource.",
         required=True,
         allow_null=False

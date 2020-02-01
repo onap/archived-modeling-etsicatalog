@@ -476,7 +476,7 @@ class TestNsdmSubscription(TestCase):
     def test_nsdm_get_subscription_failure_bad_request(self):
         response = self.client.get("/api/nsd/v1/subscriptions/123",
                                    format='json')
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     @mock.patch.object(NsdmSubscription, 'query_single_subscription')
     def test_nsdmsubscription_getsingle_when_catch_exception(
@@ -518,7 +518,7 @@ class TestNsdmSubscription(TestCase):
     def test_nsdm_delete_subscription_failure_bad_request(self):
         response = self.client.delete("/api/nsd/v1/subscriptions/123",
                                       format='json')
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     @mock.patch.object(NsdmSubscription, 'delete_single_subscription')
     def test_nsdmsubscription_delete_when_catch_exception(self, mock_create):

@@ -87,14 +87,14 @@ class PkgmNotificationsFilter(serializers.Serializer):
         required=False
     )
     vnfdId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match VNF packages with a VNFD identifier"
                   "listed in the attribute",
         required=False,
         allow_null=False
     )
     vnfPkgId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match VNF packages with a VNFD identifier"
                   "listed in the attribute",
         required=False,
@@ -168,12 +168,12 @@ class PkgChangeNotificationSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    vnfPkgId = serializers.UUIDField(
+    vnfPkgId = serializers.CharField(
         help_text="Identifier of the VNF package.",
         required=True,
         allow_null=False
     )
-    vnfdId = serializers.UUIDField(
+    vnfdId = serializers.CharField(
         help_text="This identifier, which is managed by the VNF provider, "
                   "identifies the VNF package and the VNFD in a globally unique way.",
         required=True,
@@ -227,12 +227,12 @@ class PkgOnboardingNotificationSerializer(serializers.Serializer):
         required=True,
         allow_null=False
     )
-    vnfPkgId = serializers.UUIDField(
+    vnfPkgId = serializers.CharField(
         help_text="Identifier of the VNF package.",
         required=True,
         allow_null=False
     )
-    vnfdId = serializers.UUIDField(
+    vnfdId = serializers.CharField(
         help_text="This identifier, which is managed by the VNF provider, "
                   "identifies the VNF package and the VNFD in a globally unique way.",
         required=True,

@@ -28,13 +28,13 @@ class NsdmNotificationsFilter(serializers.Serializer):
         required=False
     )
     nsdInfoId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match NS packages with particular nsdInfoIds",
         allow_null=False,
         required=False
     )
     nsdId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match NS Packages with particular nsdIds",
         allow_null=False,
         required=False
@@ -58,19 +58,19 @@ class NsdmNotificationsFilter(serializers.Serializer):
         allow_null=False
     )
     nsdInvariantId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match NS Packages with particular nsdInvariantIds",
         allow_null=False,
         required=False
     )
     vnfPkgIds = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match NS Packages that has VNF PackageIds",
         allow_null=False,
         required=False
     )
     nestedNsdInfoIds = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match NS Packages with particular nsdInvariantIds",
         allow_null=False,
         required=False
@@ -108,13 +108,13 @@ class NsdmNotificationsFilter(serializers.Serializer):
         required=False
     )
     pnfdInfoIds = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match PF packages with particular pnfdInfoIds",
         allow_null=False,
         required=False
     )
     pnfdId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match PF packages with particular pnfdInfoIds",
         allow_null=False,
         required=False
@@ -147,7 +147,7 @@ class NsdmNotificationsFilter(serializers.Serializer):
         required=False
     )
     pnfdInvariantId = serializers.ListField(
-        child=serializers.UUIDField(),
+        child=serializers.CharField(),
         help_text="Match PF Packages with particular pnfdInvariantIds",
         allow_null=False,
         required=False
