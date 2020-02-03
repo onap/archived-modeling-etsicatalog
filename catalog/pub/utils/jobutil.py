@@ -18,7 +18,6 @@ import traceback
 from functools import reduce
 
 from catalog.pub.database.models import JobStatusModel, JobModel
-from catalog.pub.utils import idutil
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +95,12 @@ class JobUtil(object):
         try:
             int_progress = int(progress)
             job_status = JobStatusModel()
-            job_status.indexid = int(idutil.get_auto_id(job_id))
+            jobstatuslist = JobStatusModel.objects.filter(jobid=job_id)
+            indexid = 0
+            for jobstatus in jobstatuslist:
+                if jobstatus.indexid > indexid:
+                    indexid = jobstatus.indexid
+            job_status.indexid = indexid + 1
             job_status.jobid = job_id
             job_status.status = "processing"
             job_status.progress = int_progress

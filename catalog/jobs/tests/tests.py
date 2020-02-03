@@ -13,6 +13,7 @@
 # limitations under the License.
 from django.test import TestCase, Client
 from rest_framework import status
+from catalog.pub.utils.jobutil import JobUtil
 
 from catalog.pub.database.models import JobModel, JobStatusModel
 
@@ -38,3 +39,23 @@ class JobsViewTest(TestCase):
         response = self.client.get("/api/catalog/v1/jobs/%s" % job_id)
         self.assertIn('jobId', response.data)
         self.assertNotIn('responseDescriptor', response.data)
+
+    def test_job_normal_multijobstatus(self):
+        JobUtil.create_job(
+            inst_type='test_new_job_id',
+            jobaction='test_jobaction',
+            inst_id="test_jobinstid",
+            job_id=self.job_id)
+        response = self.client.post("/api/catalog/v1/jobs/%s" % self.job_id, {"progress": "10", "desc": "10%", "errcode": "true"},
+                                    format='json')
+        print(response)
+        self.assertEqual(status.HTTP_202_ACCEPTED, response.status_code)
+        response = self.client.post("/api/catalog/v1/jobs/%s" % self.job_id, {"progress": "50", "desc": "50%", "errcode": "true"},
+                                    format='json')
+        self.assertEqual(status.HTTP_202_ACCEPTED, response.status_code)
+        response = self.client.post("/api/catalog/v1/jobs/%s" % self.job_id, {"progress": "100", "desc": "100%", "errcode": "true"},
+                                    format='json')
+        self.assertEqual(status.HTTP_202_ACCEPTED, response.status_code)
+        response = self.client.get("/api/catalog/v1/jobs/%s" % self.job_id)
+        print(response)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)

@@ -82,7 +82,7 @@ class JobView(APIView):
 
         request_serializer = PostJobRequestSerializer(data=request.data)
         validataion_error = self.handleValidatonError(request_serializer, True)
-        if not validataion_error:
+        if validataion_error:
             return validataion_error
 
         requestData = request_serializer.data

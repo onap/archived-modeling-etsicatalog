@@ -43,4 +43,5 @@ class GetJobInfoService(object):
                         "statusDescription": job.descp,
                         "errorCode": job.errcode,
                         "responseId": job.indexid} for job in jobs[1:]]}}
+        logger.debug(ret)
         return ret

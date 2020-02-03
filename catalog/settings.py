@@ -16,9 +16,9 @@ import os
 import sys
 import platform
 
-import catalog.pub.redisco
+# import catalog.pub.redisco
 
-from catalog.pub.config.config import REDIS_HOST, REDIS_PORT, REDIS_PASSWD
+# from catalog.pub.config.config import REDIS_HOST, REDIS_PORT, REDIS_PASSWD
 from catalog.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, DB_PORT
 from catalog.pub.config import config as pub_config
 from logging import config as log_config
@@ -124,7 +124,7 @@ DATABASES = {
 #     'NAME': ':memory:',
 # }
 
-catalog.pub.redisco.connection_setup(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWD, db=0)
+# catalog.pub.redisco.connection_setup(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWD, db=0)
 # CACHE_BACKEND = 'redis_cache.cache://%s@%s:%s' % (REDIS_PASSWD, REDIS_HOST, REDIS_PORT)
 
 TIME_ZONE = 'UTC'
@@ -203,9 +203,3 @@ if 'test' in sys.argv:
         TEST_OUTPUT_VERBOSE = True
         TEST_OUTPUT_DESCRIPTIONS = True
         TEST_OUTPUT_DIR = 'test-reports'
-
-    import mock
-    from catalog.pub.utils import idutil
-
-    idutil.get_auto_id = mock.Mock()
-    idutil.get_auto_id.return_value = 1
