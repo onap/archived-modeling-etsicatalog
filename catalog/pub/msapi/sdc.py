@@ -30,7 +30,7 @@ DISTRIBUTED = "DISTRIBUTED"
 
 def call_sdc(resource, method, content=''):
     additional_headers = {
-        'X-ECOMP-InstanceID': 'VFC',
+        'X-ECOMP-InstanceID': 'Modeling',
     }
     return restcall.call_req(base_url=SDC_BASE_URL,
                              user=SDC_USER,

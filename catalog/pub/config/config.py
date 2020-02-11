@@ -91,7 +91,7 @@ CATALOG_ROOT_PATH = None
 CATALOG_URL_PATH = None
 
 # [sdc config]
-SDC_BASE_URL = "http://msb-iag/api"
+SDC_BASE_URL = "https://msb-iag/api"
 SDC_USER = "aai"
 SDC_PASSWD = "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
 
