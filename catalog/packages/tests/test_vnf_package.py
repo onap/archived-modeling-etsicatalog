@@ -456,6 +456,16 @@ class TestVnfPackage(TestCase):
             "onboardingState": "ONBOARDED",
             "operationalState": "ENABLED",
             "usageState": "NOT_IN_USE",
-            "_links": None
+            "_links": {
+                "self": {
+                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222"
+                },
+                "vnfd": {
+                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/vnfd"
+                },
+                "packageContent": {
+                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/package_content"
+                }
+            }
         }
         self.assertEqual(response.data, expact_response_data)

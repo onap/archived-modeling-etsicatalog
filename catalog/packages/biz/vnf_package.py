@@ -25,7 +25,7 @@ import zipfile
 from catalog.packages import const
 from catalog.packages.biz.common import parse_file_range, read, save
 from catalog.packages.biz.notificationsutil import PkgNotifications
-from catalog.pub.config.config import CATALOG_ROOT_PATH
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT
 from catalog.pub.database.models import VnfPackageModel, NSPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
@@ -279,6 +279,21 @@ def fill_artifacts_data(vnf_pkg_id):
             } for artifact in artifacts]
 
 
+def fill_links(pkg_id, is_onboarded=False):
+    self_href = "http://%s:%s/api/vnfpkgm/v1/vnf_packages/%s" % (
+        MSB_SERVICE_IP,
+        MSB_SERVICE_PORT,
+        pkg_id)
+    links = {
+        "self": {"href": self_href},
+        "vnfd": {"href": "%s/%s" % (self_href, "vnfd")},
+        "packageContent": {"href": "%s/%s" % (self_href, "package_content")}
+    }
+    if not is_onboarded:
+        links.pop("vnfd")
+    return links
+
+
 def fill_response_data(nf_pkg):
     pkg_info = {}
     pkg_info["id"] = nf_pkg.vnfPackageId
@@ -295,7 +310,7 @@ def fill_response_data(nf_pkg):
     pkg_info["usageState"] = nf_pkg.usageState
     if nf_pkg.userDefinedData:
         pkg_info["userDefinedData"] = json.JSONDecoder().decode(nf_pkg.userDefinedData)
-    pkg_info["_links"] = None  # TODO
+    pkg_info["_links"] = fill_links(nf_pkg.vnfPackageId, True)
     return pkg_info
 
 
