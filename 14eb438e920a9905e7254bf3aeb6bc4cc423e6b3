@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c2cfce7_53818da4",
+        "filename": "catalog/packages/biz/notificationsutil.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 5494
+      },
+      "writtenOn": "2020-02-18T07:49:10Z",
+      "side": 0,
+      "message": "这个地方应该不需要修改",
+      "revId": "14eb438e920a9905e7254bf3aeb6bc4cc423e6b3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa186174_32de3010",
+        "filename": "catalog/packages/biz/nsdm_subscription.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 5494
+      },
+      "writtenOn": "2020-02-18T07:49:10Z",
+      "side": 0,
+      "message": "这个地方应该不需要修改",
+      "revId": "14eb438e920a9905e7254bf3aeb6bc4cc423e6b3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
