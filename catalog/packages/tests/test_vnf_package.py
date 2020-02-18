@@ -423,3 +423,39 @@ class TestVnfPackage(TestCase):
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         response = self.client.get(VNF_BASE_URL + "/222/artifacts/image1")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_upload_vnf_pkg_with_artifacts(self):
+        data = {'file': open(os.path.join(CATALOG_ROOT_PATH, "vgw.csar"), "rb")}
+        VnfPackageModel.objects.create(
+            vnfPackageId="222",
+            onboardingState="CREATED"
+        )
+        response = self.client.put("%s/222/package_content" % VNF_BASE_URL, data=data)
+        vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId="222")
+        self.assertEqual(PKG_STATUS.ONBOARDED, vnf_pkg[0].onboardingState)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        response = self.client.get("%s/222" % VNF_BASE_URL)
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        expact_response_data = {
+            "id": "222",
+            "vnfdId": "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
+            "vnfProductName": "vcpe_vgw",
+            "vnfSoftwareVersion": "1.0",
+            "vnfdVersion": "1.0",
+            "softwareImages": None,
+            "additionalArtifacts": [
+                {
+                    "artifactPath": "MainServiceTemplate.yaml",
+                    "checksum": {
+                        "algorithm": "Null",
+                        "hash": "Null"
+                    }
+                }
+            ],
+            "onboardingState": "ONBOARDED",
+            "operationalState": "ENABLED",
+            "usageState": "NOT_IN_USE",
+            "_links": None
+        }
+        self.assertEqual(response.data, expact_response_data)

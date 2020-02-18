@@ -229,6 +229,56 @@ class VnfPkgUploadThread(threading.Thread):
         logger.info('VNF packge(%s) has been uploaded.' % self.vnf_pkg_id)
 
 
+def get_mfile_data(path):
+    logger.debug('get_mfile_data path %s' % path)
+    files = fileutil.filter_files(path, '.mf')
+    if files:
+        src_file = os.path.join(path, files[0])
+        src_dict_list = []
+        with open(src_file, 'r') as f:
+            data = f.readlines()
+            for line in data:
+                if line.strip() == "":
+                    continue
+                src_dict = {}
+                k, v = line.split(':', maxsplit=1)
+                if k.strip() in ["Source", "Algorithm", "Hash"]:
+                    if k.strip() == "Source" and src_dict:
+                        src_dict_list.extend(src_dict)
+                        src_dict = {}
+                    src_dict[k.strip()] = v.strip()
+                    print("src_dict:%s" % src_dict)
+        if src_dict:
+            src_dict_list.append(src_dict)
+
+        logger.debug('get_mfile_data: %s' % src_dict_list)
+        return src_dict_list
+
+
+def fill_artifacts_data(vnf_pkg_id):
+    vnf_pkg_path = os.path.join(CATALOG_ROOT_PATH, vnf_pkg_id)
+    if os.path.exists(vnf_pkg_path) is False:
+        return None
+    files = fileutil.filter_files(vnf_pkg_path, '.csar')
+    for filename in files:
+        logger.info('fill_artifacts_data filename (%s)...' % filename)
+        dst_file_path = os.path.join(vnf_pkg_path, "tmp")
+        src_file = os.path.join(vnf_pkg_path, filename)
+        dst_file = os.path.join(dst_file_path, filename)
+        fileutil.recreate_dir(dst_file_path)
+        fileutil.copy(src_file, vnf_pkg_path, dst_file)
+        artifact_vnf_file = fileutil.unzip_file(dst_file, dst_file_path, "")
+        artifacts = get_mfile_data(artifact_vnf_file)
+        if artifacts:
+            return [{
+                "artifactPath": artifact.get("Source", ""),
+                "checksum": {
+                    "algorithm": artifact.get("Hash", "Null"),
+                    "hash": artifact.get("Algorithm", "Null")
+                }
+            } for artifact in artifacts]
+
+
 def fill_response_data(nf_pkg):
     pkg_info = {}
     pkg_info["id"] = nf_pkg.vnfPackageId
@@ -239,7 +289,7 @@ def fill_response_data(nf_pkg):
     if nf_pkg.checksum:
         pkg_info["checksum"] = json.JSONDecoder().decode(nf_pkg.checksum)
     pkg_info["softwareImages"] = None  # TODO
-    pkg_info["additionalArtifacts"] = None  # TODO
+    pkg_info["additionalArtifacts"] = fill_artifacts_data(nf_pkg.vnfPackageId)
     pkg_info["onboardingState"] = nf_pkg.onboardingState
     pkg_info["operationalState"] = nf_pkg.operationalState
     pkg_info["usageState"] = nf_pkg.usageState

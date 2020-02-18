@@ -54,7 +54,9 @@ def download_file_from_http(url, local_dir, file_name):
 
 
 def unzip_file(zip_src, dst_dir, csar_path):
+    logger.debug("unzip_file %s to %s.", zip_src, dst_dir)
     if os.path.exists(zip_src):
+        logger.debug("unzip_file %s.", zip_src)
         fz = zipfile.ZipFile(zip_src, 'r')
         for file in fz.namelist():
             fz.extract(file, dst_dir)
@@ -86,3 +88,36 @@ def get_artifact_path(vnf_path, artifact_file):
         if artifact_file in files:
             return os.path.join(root, artifact_file)
     return None
+
+
+def end_with(_s_in, *suffix):
+    array = map(_s_in.endswith, suffix)
+    if True in array:
+        return True
+    return False
+
+
+def filter_files(search_path, suffix):
+    f_find = []
+    file_list = os.listdir(search_path)
+    for file_item in file_list:
+        if end_with(file_item, suffix):
+            f_find.append(file_item)
+    return f_find
+
+
+def recreate_dir(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.makedirs(path, mode=0o777)
+
+
+def copy(src_file, dest_dir, new_file_name=None):
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+    if new_file_name is None:
+        dst = os.path.join(dest_dir, os.path.basename(src_file))
+    else:
+        dst = os.path.join(dest_dir, new_file_name)
+    shutil.copyfile(src_file, dst)
+    shutil.copymode(src_file, dst)
