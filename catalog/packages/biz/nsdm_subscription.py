@@ -76,7 +76,7 @@ class NsdmSubscription:
         for query, value in list(self.params.items()):
             if query in const.NSDM_NOTIFICATION_FILTERS and value:
                 query_data[query + '__icontains'] = json.dumps(list(set(value)))
-        # Query the database with filters if the request
+        # Query the database with filter if the request
         # has fields in request params, else fetch all records
         if query_data:
             subscriptions = NsdmSubscriptionModel.objects.filter(**query_data)

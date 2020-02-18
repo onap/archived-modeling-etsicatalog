@@ -39,7 +39,7 @@ class LinkSelfSerializer(serializers.Serializer):
 
 
 class PkgmSubscriptionRequestSerializer(serializers.Serializer):
-    filters = vnf_pkg_notifications.PkgmNotificationsFilter(
+    filter = vnf_pkg_notifications.PkgmNotificationsFilter(
         help_text="Filter settings for this subscription, "
                   "to define the subset of all notifications"
                   " this subscription relates to",
