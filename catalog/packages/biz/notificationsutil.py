@@ -41,7 +41,7 @@ class NotificationsUtil(object):
     def send_notification(self):
         notification = self.prepare_notification()
 
-        subscriptions_filter = {v + "__contains": notification[k] for k, v in self.filters.items()}
+        subscriptions_filter = {v + "__contains": notification[k] for k, v in self.filter.items()}
         subscriptions_filter = remove_none_key(subscriptions_filter)
         logger.debug('send_notification subscriptions_filter = %s' % subscriptions_filter)
         q1 = Q()
@@ -51,7 +51,7 @@ class NotificationsUtil(object):
 
         subscriptions = self.SubscriptionModel.objects.filter(q1)
         if not subscriptions.exists():
-            logger.info("No subscriptions created for the filters %s" % notification)
+            logger.info("No subscriptions created for the filter %s" % notification)
             return
         logger.info("Start sending notifications")
         for sub in subscriptions:
@@ -102,7 +102,7 @@ class NotificationsUtil(object):
 class PkgNotifications(NotificationsUtil):
     def __init__(self, notification_type, vnf_pkg_id, change_type=None, operational_state=None):
         super(PkgNotifications, self).__init__(notification_type)
-        self.filters = {
+        self.filter = {
             'vnfdId': 'vnfd_id',
             'vnfPkgId': 'vnf_pkg_id'
         }
@@ -150,7 +150,7 @@ class PkgNotifications(NotificationsUtil):
 class NsdNotifications(NotificationsUtil):
     def __init__(self, notification_type, nsd_info_id, nsd_id, failure_details=None, operational_state=None):
         super(NsdNotifications, self).__init__(notification_type)
-        self.filters = {
+        self.filter = {
             'nsdInfoId': 'nsdInfoId',
             'nsdId': 'nsdId',
         }
@@ -195,7 +195,7 @@ class NsdNotifications(NotificationsUtil):
 class PnfNotifications(NotificationsUtil):
     def __init__(self, notification_type, pnfd_info_id, pnfd_id, failure_details=None):
         super(PnfNotifications, self).__init__(notification_type)
-        self.filters = {
+        self.filter = {
             'pnfdId': 'pnfdId',
             'pnfdInfoIds': 'pnfdInfoIds',
         }

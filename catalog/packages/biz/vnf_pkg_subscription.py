@@ -48,7 +48,7 @@ class CreateSubscription(object):
 
     def __init__(self, data):
         self.data = data
-        self.filter = ignore_case_get(self.data, "filters", {})
+        self.filter = ignore_case_get(self.data, "filter", {})
         self.callback_uri = ignore_case_get(self.data, "callbackUri")
         self.authentication = ignore_case_get(self.data, "authentication", {})
         self.notification_types = ignore_case_get(self.filter, "notificationTypes", [])
@@ -104,7 +104,7 @@ class CreateSubscription(object):
             if not is_filter_type_equal(getattr(self, filter_type),
                                         ast.literal_eval(getattr(sub, filter_type))):
                 return False
-        # If all the above types are same then check id filters
+        # If all the above types are same then check id filter
         for id_filter in ["vnfd_id", "vnf_pkg_id"]:
             if not is_filter_type_equal(getattr(self, id_filter),
                                         ast.literal_eval(getattr(sub, id_filter))):
@@ -151,11 +151,11 @@ class QuerySubscription(object):
     def query_multi_subscriptions(self, params):
         query_data = {}
         logger.debug("QuerySubscription--get--multi--subscriptions--biz::> Check "
-                     "for filters in query params %s" % params)
+                     "for filter in query params %s" % params)
         for query, value in list(params.items()):
             if query in ROOT_FILTERS:
                 query_data[ROOT_FILTERS[query] + '__icontains'] = value
-        # Query the database with filters if the request has fields in request params, else fetch all records
+        # Query the database with filter if the request has fields in request params, else fetch all records
         if query_data:
             subscriptions = VnfPkgSubscriptionModel.objects.filter(**query_data)
         else:
