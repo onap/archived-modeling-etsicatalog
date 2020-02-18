@@ -555,7 +555,7 @@ sd_data = {
 }
 
 vnf_subscription_data = {
-    "filters": {
+    "filter": {
         "notificationTypes": [
             "VnfPackageOnboardingNotification"
         ],
