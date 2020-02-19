@@ -24,10 +24,9 @@ from rest_framework import status
 
 from catalog.packages import const
 from catalog.pub.database.models import VnfPkgSubscriptionModel
-from catalog.pub.exceptions import VnfPkgSubscriptionException,\
+from catalog.pub.exceptions import VnfPkgSubscriptionException, \
     VnfPkgDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
-
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +171,7 @@ class QuerySubscription(object):
             subscription_id=subscription_id)
         if not subscription.exists():
             raise SubscriptionDoesNotExistsException("Subscription with ID: %s "
-                                                     "does not exists" % subscription_id)
+                                                     "does not exist" % subscription_id)
         return subscription[0].toDict()
 
 
@@ -186,5 +185,5 @@ class TerminateSubscription(object):
             subscription_id=subscription_id)
         if not subscription.exists():
             raise SubscriptionDoesNotExistsException("Subscription with ID: %s "
-                                                     "does not exists" % subscription_id)
+                                                     "does not exist" % subscription_id)
         subscription[0].delete()

@@ -158,7 +158,7 @@ class TestNsdmSubscription(TestCase):
                          response.data["callbackUri"])
         expected_data = {
             'status': 303,
-            'detail': 'Already Subscription exists with'
+            'detail': 'Subscription has already existed with'
                       ' the same callbackUri and filter'
         }
         response = self.client.post("/api/nsd/v1/subscriptions",
@@ -465,7 +465,7 @@ class TestNsdmSubscription(TestCase):
         expected_data = {
             "status": 404,
             "detail": "Subscription(" + self.subscription_id + ") "
-            "doesn't exists"
+            "doesn't exist"
         }
         response = self.client.get('/api/nsd/v1/'
                                    'subscriptions/' + self.subscription_id,

@@ -12,23 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import uuid
-import mock
 import json
 import os
+import uuid
 
-from rest_framework.test import APIClient
+import mock
 from django.test import TestCase
-
-from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
-from .const import vnf_subscription_data, vnfd_data
-from catalog.packages.biz.notificationsutil import PkgNotifications
-from catalog.packages import const
-from catalog.pub.config import config as pub_config
-import catalog.pub.utils.timeutil
-from catalog.pub.utils import toscaparser
-from catalog.pub.config.config import CATALOG_ROOT_PATH
 from rest_framework import status
+from rest_framework.test import APIClient
+
+import catalog.pub.utils.timeutil
+from catalog.packages import const
+from catalog.packages.biz.notificationsutil import PkgNotifications
+from catalog.packages.biz.vnf_pkg_subscription import QuerySubscription, TerminateSubscription
+from catalog.pub.config import config as pub_config
+from catalog.pub.config.config import CATALOG_ROOT_PATH
+from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
+from catalog.pub.exceptions import SubscriptionDoesNotExistsException
+from catalog.pub.utils import toscaparser
+from .const import vnf_subscription_data, vnfd_data
 
 
 class TestNfPackageSubscription(TestCase):
@@ -196,7 +198,8 @@ class TestNfPackageSubscription(TestCase):
     @mock.patch("requests.post")
     @mock.patch("uuid.uuid4")
     @mock.patch.object(catalog.pub.utils.timeutil, "now_time")
-    def test_vnfpkg_subscript_notify(self, mock_nowtime, mock_uuid, mock_requests_post, mock_parse_vnfd, mock_requests_get):
+    def test_vnfpkg_subscript_notify(self, mock_nowtime, mock_uuid, mock_requests_post, mock_parse_vnfd,
+                                     mock_requests_get):
         mock_nowtime.return_value = "2019-02-16 14:41:16"
         uuid_subscriptid = "99442b18-a5c7-11e8-998c-bf1755941f13"
         uuid_vnfPackageId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
@@ -246,6 +249,20 @@ class TestNfPackageSubscription(TestCase):
         }
         mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_notification,
                                               headers={'Connection': 'close'})
+
+    def test_service_query_single_subscription_not_found(self):
+        try:
+            subscription_id = "test_not_found"
+            QuerySubscription().query_single_subscription(subscription_id)
+        except SubscriptionDoesNotExistsException as e:
+            self.assertEqual("Subscription with ID: %s does not exist" % subscription_id, e.args[0])
+
+    def test_service_delete_single_subscription_not_found(self):
+        try:
+            subscription_id = "test_not_found"
+            TerminateSubscription().terminate(subscription_id)
+        except SubscriptionDoesNotExistsException as e:
+            self.assertEqual("Subscription with ID: %s does not exist" % subscription_id, e.args[0])
 
 
 class NotificationTest(TestCase):
@@ -301,4 +318,5 @@ class NotificationTest(TestCase):
                 }
             }
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+                                              headers={'Connection': 'close'})
