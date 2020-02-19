@@ -18,7 +18,7 @@ import logging
 from rest_framework import status
 from rest_framework.response import Response
 
-from catalog.pub.exceptions import CatalogException
+from catalog.pub.exceptions import CatalogException, SubscriptionDoesNotExistsException
 from catalog.pub.exceptions import BadRequestException
 from catalog.pub.exceptions import NsdmBadRequestException
 from catalog.pub.exceptions import PackageNotFoundException
@@ -108,6 +108,12 @@ def view_safe_call_with_log(logger):
                     detail=e.args[0],
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            except SubscriptionDoesNotExistsException as e:
+                logger.error(e.args[0])
+                return make_error_resp(
+                    detail=e.args[0],
+                    status=status.HTTP_404_NOT_FOUND
+                )
             except VnfPkgSubscriptionException as e:
                 logger.error(e.args[0])
                 return make_error_resp(
@@ -127,5 +133,7 @@ def view_safe_call_with_log(logger):
                     detail='Unexpected exception',
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
+
         return wrapper
+
     return view_safe_call

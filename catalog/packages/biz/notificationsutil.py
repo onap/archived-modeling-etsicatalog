@@ -26,7 +26,6 @@ from django.db.models import Q
 from catalog.packages.serializers.vnf_pkg_notifications import PkgChangeNotificationSerializer, \
     PkgOnboardingNotificationSerializer
 
-
 logger = logging.getLogger(__name__)
 
 
