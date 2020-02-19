@@ -15,7 +15,9 @@
 import logging
 import uuid
 import requests
+import json
 from rest_framework import status
+from requests.auth import HTTPBasicAuth
 from catalog.packages import const
 from catalog.pub.database.models import VnfPackageModel, VnfPkgSubscriptionModel, NsdmSubscriptionModel
 import catalog.pub.utils.timeutil
@@ -72,23 +74,29 @@ class NotificationsUtil(object):
                 serialized_data = self.notifyserializer(data=notification)
                 if not serialized_data.is_valid():
                     logger.error('Notification Data is invalid:%s.' % serialized_data.errors)
-            self.post_notification(callbackuri, notification)
 
-    def post_notification(self, callbackuri, notification):
-        """
-        params = auth_info.get("paramsBasic", {})
-        username, password = params.get("userName"), params.get("password")
-        logger.info("Sending notification to %s, %s", callbackuri, params)
-        resp = None
-        if username:
-            resp = requests.post(callbackuri,
-                                 data=notification,
-                                 auth=HTTPBasicAuth(username, password))
-        else:
-        """
+            if sub.auth_info:
+                self.post_notification(callbackuri, notification, auth_info=json.loads(sub.auth_info))
+            else:
+                self.post_notification(callbackuri, notification)
 
+    def post_notification(self, callbackuri, notification, auth_info=None):
         try:
-            resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'})
+            if auth_info:
+                if const.BASIC in auth_info.get("authType", ''):
+                    params = auth_info.get("paramsBasic", {})
+                    username = params.get("userName")
+                    password = params.get("password")
+                    resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'},
+                                         auth=HTTPBasicAuth(username, password))
+                elif const.OAUTH2_CLIENT_CREDENTIALS in auth_info.get("authType", ''):
+                    # todo
+                    pass
+                else:
+                    # todo
+                    pass
+            else:
+                resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'})
             if resp.status_code != status.HTTP_204_NO_CONTENT:
                 logger.error("Sending notification to %s failed: %s" % (callbackuri, resp.text))
             else:

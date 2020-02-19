@@ -205,7 +205,7 @@ class NsdmSubscription:
         subscription_save_db = {
             "subscriptionid": self.subscription_id,
             "callback_uri": self.callback_uri,
-            "auth_info": self.authentication,
+            "auth_info": json.dumps(self.authentication),
             "links": json.dumps(links)
         }
         for filter_type in const.NSDM_NOTIFICATION_FILTERS:

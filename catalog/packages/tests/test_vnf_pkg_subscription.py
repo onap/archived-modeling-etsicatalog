@@ -20,6 +20,7 @@ import mock
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+from requests.auth import HTTPBasicAuth
 
 import catalog.pub.utils.timeutil
 from catalog.packages import const
@@ -248,7 +249,7 @@ class TestNfPackageSubscription(TestCase):
             }
         }
         mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_notification,
-                                              headers={'Connection': 'close'})
+                                              headers={'Connection': 'close'}, auth=HTTPBasicAuth("admin", "pwd1234"))
 
     def test_service_query_single_subscription_not_found(self):
         try:

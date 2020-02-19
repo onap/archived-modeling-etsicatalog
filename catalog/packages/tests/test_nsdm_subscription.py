@@ -19,6 +19,7 @@ import os
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
+from requests.auth import HTTPBasicAuth
 
 from catalog.packages.biz.nsdm_subscription import NsdmSubscription
 from catalog.pub.database.models import NsdmSubscriptionModel
@@ -622,7 +623,9 @@ class TestNsdmSubscription(TestCase):
                 }
             }
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+                                              auth=HTTPBasicAuth("username", "password"),
+                                              headers={'Connection': 'close'})
 
 
 class NotificationTest(TestCase):
