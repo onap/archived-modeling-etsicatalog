@@ -15,18 +15,16 @@
 import ast
 import json
 import logging
-import requests
 import uuid
-
 from collections import Counter
 
+import requests
 from rest_framework import status
 
 from catalog.packages import const
 from catalog.pub.database.models import NsdmSubscriptionModel
 from catalog.pub.exceptions import CatalogException, \
-    ResourceNotFoundException, \
-    NsdmBadRequestException, NsdmDuplicateSubscriptionException
+    NsdmBadRequestException, NsdmDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
 
 logger = logging.getLogger(__name__)
@@ -52,8 +50,8 @@ class NsdmSubscription:
             NsdmSubscriptionModel.objects.filter(
                 subscriptionid=subscription_id)
         if not subscription.exists():
-            raise ResourceNotFoundException(
-                "Subscription(%s) doesn't exists" % subscription_id)
+            raise SubscriptionDoesNotExistsException(
+                "Subscription(%s) doesn't exist" % subscription_id)
         logger.debug("Subscription found... ")
         return self.fill_resp_data(subscription[0])
 
@@ -63,8 +61,8 @@ class NsdmSubscription:
             NsdmSubscriptionModel.objects.filter(
                 subscriptionid=subscription_id)
         if not subscription.exists():
-            raise ResourceNotFoundException(
-                "Subscription(%s) doesn't exists" % subscription_id)
+            raise SubscriptionDoesNotExistsException(
+                "Subscription(%s) doesn't exist" % subscription_id)
         subscription.delete()
         logger.debug("Deleted Subscription... ")
 
@@ -83,7 +81,7 @@ class NsdmSubscription:
         else:
             subscriptions = NsdmSubscriptionModel.objects.all()
         if not subscriptions.exists():
-            raise ResourceNotFoundException("Subscriptions doesn't exist")
+            raise SubscriptionDoesNotExistsException("Subscriptions doesn't exist")
         return [self.fill_resp_data(subscription)
                 for subscription in subscriptions]
 
@@ -183,7 +181,7 @@ class NsdmSubscription:
 
     def check_valid(self):
         logger.debug("Create Subscription --> Checking DB if "
-                     "same subscription exists already exists... ")
+                     "same subscription has already existed... ")
         subscriptions = \
             NsdmSubscriptionModel.objects.filter(
                 callback_uri=self.callback_uri)
@@ -192,7 +190,7 @@ class NsdmSubscription:
         for subscription in subscriptions:
             if self.check_filter_exists(subscription):
                 raise NsdmDuplicateSubscriptionException(
-                    "Already Subscription exists with the "
+                    "Subscription has already existed with the "
                     "same callbackUri and filter")
 
     def save_db(self):
@@ -201,7 +199,7 @@ class NsdmSubscription:
         links = {
             "self": {
                 "href":
-                const.NSDM_SUBSCRIPTION_ROOT_URI + self.subscription_id
+                    const.NSDM_SUBSCRIPTION_ROOT_URI + self.subscription_id
             }
         }
         subscription_save_db = {
