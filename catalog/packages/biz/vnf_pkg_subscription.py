@@ -21,7 +21,7 @@ import uuid
 
 from collections import Counter
 from rest_framework import status
-
+from requests.auth import HTTPBasicAuth
 from catalog.packages import const
 from catalog.pub.database.models import VnfPkgSubscriptionModel
 from catalog.pub.exceptions import VnfPkgSubscriptionException, \
@@ -62,7 +62,20 @@ class CreateSubscription(object):
         logger.debug("SubscribeNotification-post::> Sending GET request "
                      "to %s" % self.callback_uri)
         try:
-            response = requests.get(self.callback_uri, timeout=2)
+            if self.authentication:
+                if const.BASIC in self.authentication.get("authType", ''):
+                    params = self.authentication.get("paramsBasic", {})
+                    username = params.get("userName")
+                    password = params.get("password")
+                    response = requests.get(self.callback_uri, auth=HTTPBasicAuth(username, password), timeout=2)
+                elif const.OAUTH2_CLIENT_CREDENTIALS in self.authentication.get("authType", ''):
+                    # todo
+                    pass
+                else:
+                    # todo
+                    pass
+            else:
+                response = requests.get(self.callback_uri, timeout=2)
             if response.status_code != status.HTTP_204_NO_CONTENT:
                 raise VnfPkgSubscriptionException(
                     "callbackUri %s returns %s status code." % (

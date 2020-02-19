@@ -590,8 +590,8 @@ vnf_subscription_data = {
             "BASIC"
         ],
         "paramsBasic": {
-            "userName": "string",
-            "password": "string"
+            "userName": "admin",
+            "password": "pwd1234"
         }
     }
 }
