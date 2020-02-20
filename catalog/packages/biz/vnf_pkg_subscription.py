@@ -67,7 +67,8 @@ class CreateSubscription(object):
                     params = self.authentication.get("paramsBasic", {})
                     username = params.get("userName")
                     password = params.get("password")
-                    response = requests.get(self.callback_uri, auth=HTTPBasicAuth(username, password), timeout=2)
+                    response = requests.get(self.callback_uri, auth=HTTPBasicAuth(username, password), timeout=2,
+                                            verify=False)
                 elif const.OAUTH2_CLIENT_CREDENTIALS in self.authentication.get("authType", ''):
                     # todo
                     pass
@@ -75,7 +76,7 @@ class CreateSubscription(object):
                     # todo
                     pass
             else:
-                response = requests.get(self.callback_uri, timeout=2)
+                response = requests.get(self.callback_uri, timeout=2, verify=False)
             if response.status_code != status.HTTP_204_NO_CONTENT:
                 raise VnfPkgSubscriptionException(
                     "callbackUri %s returns %s status code." % (

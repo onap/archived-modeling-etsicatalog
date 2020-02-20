@@ -243,7 +243,11 @@ class TestNfPackageSubscription(TestCase):
             }
         }
         mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_notification,
-                                              headers={'Connection': 'close'}, auth=HTTPBasicAuth("admin", "pwd1234"))
+                                              headers={'Connection': 'close',
+                                                       'content-type': 'application/json',
+                                                       'accept': 'application/json'},
+                                              auth=HTTPBasicAuth("admin", "pwd1234"),
+                                              verify=False)
 
     def test_service_query_single_subscription_not_found(self):
         try:
@@ -314,4 +318,7 @@ class NotificationTest(TestCase):
             }
         }
         mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
-                                              headers={'Connection': 'close'})
+                                              headers={'Connection': 'close',
+                                                       'content-type': 'application/json',
+                                                       'accept': 'application/json'},
+                                              verify=False)
