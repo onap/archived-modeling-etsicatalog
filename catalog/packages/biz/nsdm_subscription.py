@@ -89,7 +89,7 @@ class NsdmSubscription:
         logger.debug("Create Subscription --> Test Callback URI --"
                      "Sending GET request to %s" % self.callback_uri)
         try:
-            response = requests.get(self.callback_uri, timeout=2)
+            response = requests.get(self.callback_uri, timeout=2, verify=False)
             if response.status_code != status.HTTP_204_NO_CONTENT:
                 raise CatalogException("callbackUri %s returns %s status "
                                        "code." % (self.callback_uri,

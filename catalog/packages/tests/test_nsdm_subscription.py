@@ -34,7 +34,6 @@ from catalog.pub.utils import toscaparser
 
 
 class TestNsdmSubscription(TestCase):
-
     def setUp(self):
         self.client = APIClient()
         NsdmSubscriptionModel.objects.all().delete()
@@ -466,7 +465,7 @@ class TestNsdmSubscription(TestCase):
         expected_data = {
             "status": 404,
             "detail": "Subscription(" + self.subscription_id + ") "
-            "doesn't exist"
+                                                               "doesn't exist"
         }
         response = self.client.get('/api/nsd/v1/'
                                    'subscriptions/' + self.subscription_id,
@@ -625,7 +624,10 @@ class TestNsdmSubscription(TestCase):
         }
         mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
                                               auth=HTTPBasicAuth("username", "password"),
-                                              headers={'Connection': 'close'})
+                                              headers={'Connection': 'close',
+                                                       'content-type': 'application/json',
+                                                       'accept': 'application/json'},
+                                              verify=False)
 
 
 class NotificationTest(TestCase):
@@ -676,7 +678,13 @@ class NotificationTest(TestCase):
                 }
             }
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification, headers={'Connection': 'close'})
+        mock_requests_post.assert_called_with(expect_callbackuri,
+                                              data=expect_notification,
+                                              headers={'Connection': 'close',
+                                                       'content-type': 'application/json',
+                                                       'accept': 'application/json'},
+                                              verify=False
+                                              )
 
     @mock.patch("requests.post")
     @mock.patch("uuid.uuid4")
@@ -712,4 +720,7 @@ class NotificationTest(TestCase):
             }
         }
         mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
-                                              headers={'Connection': 'close'})
+                                              headers={'Connection': 'close',
+                                                       'content-type': 'application/json',
+                                                       'accept': 'application/json'},
+                                              verify=False)

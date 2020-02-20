@@ -87,8 +87,13 @@ class NotificationsUtil(object):
                     params = auth_info.get("paramsBasic", {})
                     username = params.get("userName")
                     password = params.get("password")
-                    resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'},
-                                         auth=HTTPBasicAuth(username, password))
+                    resp = requests.post(callbackuri,
+                                         data=notification,
+                                         headers={'Connection': 'close',
+                                                  'content-type': 'application/json',
+                                                  'accept': 'application/json'},
+                                         auth=HTTPBasicAuth(username, password),
+                                         verify=False)
                 elif const.OAUTH2_CLIENT_CREDENTIALS in auth_info.get("authType", ''):
                     # todo
                     pass
@@ -96,9 +101,15 @@ class NotificationsUtil(object):
                     # todo
                     pass
             else:
-                resp = requests.post(callbackuri, data=notification, headers={'Connection': 'close'})
-            if resp.status_code != status.HTTP_204_NO_CONTENT:
-                logger.error("Sending notification to %s failed: %s" % (callbackuri, resp.text))
+                resp = requests.post(callbackuri,
+                                     data=notification,
+                                     headers={'Connection': 'close',
+                                              'content-type': 'application/json',
+                                              'accept': 'application/json'},
+                                     verify=False)
+
+            if resp.status_code == status.HTTP_204_NO_CONTENT:
+                logger.error("Sending notification to %s failed: %s" % (callbackuri, resp))
             else:
                 logger.info("Sending notification to %s successfully.", callbackuri)
         except:
