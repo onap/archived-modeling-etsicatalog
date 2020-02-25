@@ -13,8 +13,8 @@
 # limitations under the License.
 import datetime
 import logging
-import uuid
 import traceback
+import uuid
 from functools import reduce
 
 from catalog.pub.database.models import JobStatusModel, JobModel
@@ -29,8 +29,10 @@ def enum(**enums):
 JOB_STATUS = enum(PROCESSING=0, FINISH=1)
 JOB_MODEL_STATUS = enum(STARTED='started', PROCESSING='processing', FINISHED='finished', ERROR='error',
                         TIMEOUT='timeout')
-JOB_TYPE = enum(CREATE_VNF="create vnf", TERMINATE_VNF="terminate vnf", GRANT_VNF="grant vnf", MANUAL_SCALE_VNF="manual scale vnf",
+JOB_TYPE = enum(CREATE_VNF="create vnf", TERMINATE_VNF="terminate vnf", GRANT_VNF="grant vnf",
+                MANUAL_SCALE_VNF="manual scale vnf",
                 HEAL_VNF="heal vnf")
+JOB_ERROR_CODE = enum(NORMAL=0, PACKAGE_EXIST=1, CATALOG_EXCEPTION=2, SYSTEM_ERROR=3)
 
 
 class JobUtil(object):

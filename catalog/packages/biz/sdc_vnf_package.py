@@ -25,11 +25,11 @@ from catalog.packages.const import PKG_STATUS
 from catalog.pub.config.config import CATALOG_ROOT_PATH, CATALOG_URL_PATH
 from catalog.pub.config.config import REG_TO_MSB_REG_PARAM
 from catalog.pub.database.models import VnfPackageModel
-from catalog.pub.exceptions import CatalogException
+from catalog.pub.exceptions import CatalogException, PackageHasExistsException
 from catalog.pub.msapi import sdc
 from catalog.pub.utils import fileutil
 from catalog.pub.utils import toscaparser
-from catalog.pub.utils.jobutil import JobUtil
+from catalog.pub.utils.jobutil import JobUtil, JOB_ERROR_CODE
 
 logger = logging.getLogger(__name__)
 
@@ -96,15 +96,19 @@ class NfDistributeThread(threading.Thread):
     def run(self):
         try:
             self.on_distribute()
+        except PackageHasExistsException as e:
+            self.rollback_distribute()
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.args[0], error_code=JOB_ERROR_CODE.PACKAGE_EXIST)
         except CatalogException as e:
             self.rollback_distribute()
-            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.args[0])
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, e.args[0], error_code=JOB_ERROR_CODE.CATALOG_EXCEPTION)
         except Exception as e:
             logger.error(e.args[0])
             logger.error(traceback.format_exc())
             logger.error(str(sys.exc_info()))
             self.rollback_distribute()
-            JobUtil.add_job_status(self.job_id, JOB_ERROR, "Failed to distribute CSAR(%s)" % self.csar_id)
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, "Failed to distribute CSAR(%s)" % self.csar_id,
+                                   error_code=JOB_ERROR_CODE.SYSTEM_ERROR)
 
     def on_distribute(self):
         JobUtil.create_job(
@@ -116,7 +120,7 @@ class NfDistributeThread(threading.Thread):
 
         if VnfPackageModel.objects.filter(vnfPackageId=self.csar_id):
             err_msg = "NF CSAR(%s) already exists." % self.csar_id
-            JobUtil.add_job_status(self.job_id, JOB_ERROR, err_msg)
+            JobUtil.add_job_status(self.job_id, JOB_ERROR, err_msg, error_code=JOB_ERROR_CODE.PACKAGE_EXIST)
             return
 
         artifact = sdc.get_artifact(sdc.ASSETTYPE_RESOURCES, self.csar_id)
@@ -156,7 +160,7 @@ class NfDistributeThread(threading.Thread):
         vnfd_id = vnfd["vnf"]["properties"].get("descriptor_id", "")
         if VnfPackageModel.objects.filter(vnfdId=vnfd_id):
             logger.error("VNF package(%s) already exists.", vnfd_id)
-            raise CatalogException("VNF package(%s) already exists." % vnfd_id)
+            raise PackageHasExistsException("VNF package(%s) already exists." % vnfd_id)
         JobUtil.add_job_status(self.job_id, 30, "Save CSAR(%s) to database." % self.csar_id)
         vnfd_ver = vnfd["vnf"]["properties"].get("descriptor_version", "")
         vnf_provider = vnfd["vnf"]["properties"].get("provider", "")
