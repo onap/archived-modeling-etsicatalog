@@ -9,6 +9,46 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
+Version: 1.0.5
+--------------
+
+:Release Date: 2020-03-03
+
+**New Features**
+
+- VNF subscription and notification support
+- Support ONBOARDING_PACKAGE directory to get original vendor package
+- Unify API endpoint
+- Add API to read VNFD
+
+Released components:
+ - etsicatalog 1.0.5
+
+**Bug Fixes**
+
+None
+
+**Known Issues**
+
+By now etsicatalog has not supported HTTPS directly. But all of APIs have registered to MSB and client can call etsicatalog APIs through MSB HTTPS request, such as: curl -X GET 'https://msb_ip:msb_port/api/vnfpkgm/v1/subscriptions'.
+
+**Security Issues**
+
+None
+
+**Upgrade Notes**
+
+Update API endpoint:
+
+- Chang "api/parser/v1/service_packages" -> "api/catalog/v1/service_packages"
+- Unify parser API as "api/parser/V1/..."
+
+**Deprecation Notes**
+
+None
+
+**Other**
+
 Version: 1.0.4
 --------------
 
