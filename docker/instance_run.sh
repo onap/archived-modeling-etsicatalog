@@ -4,7 +4,7 @@ cd /service/modeling/etsicatalog
 
 ./run.sh
 
-while [ ! -f logs/runtime_etsicatalog.log ]; do
+while [ ! -f logs/runtime_catalog.log ]; do
     sleep 1
 done
-tail -F logs/runtime_etsicatalog.log
+tail -F logs/runtime_catalog.log
