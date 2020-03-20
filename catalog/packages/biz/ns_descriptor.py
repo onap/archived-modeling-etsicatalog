@@ -19,6 +19,7 @@ import os
 import uuid
 
 from catalog.packages.biz.common import parse_file_range, read, save
+from catalog.packages.const import PKG_STATUS
 from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import NSPackageModel, PnfPackageModel, VnfPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
@@ -57,6 +58,10 @@ class NsDescriptor(object):
         )
         logger.info('A NSD(%s) has been created.' % data['id'])
         return data
+
+    def update(self, data, nsd_info_id):
+        usageState = PKG_STATUS.IN_USE if data["usageState"] else PKG_STATUS.NOT_IN_USE
+        NSPackageModel.objects.filter(nsPackageId=nsd_info_id).update(usageState=usageState)
 
     def query_multiple(self, nsdId=None):
         if nsdId:
