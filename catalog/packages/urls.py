@@ -64,6 +64,10 @@ urlpatterns = [
     url(r'^URI-is-provided-by-the-client-when-creating-the-subscription-VnfPackageOnboardingNotification$', PkgOnboardingNotificationView.as_view()),
     url(r'^URI-is-provided-by-the-client-when-creating-the-subscription-VnfPackageChangeNotification$', PkgChangeNotificationView.as_view()),
 
+    # catalog and lcm interaction APIS
+    url( r'^api/catalog/v1/ns_descriptors/(?P<nsdInfoId>[0-9a-zA-Z\-\_]+)$',
+         ns_descriptor_views.ns_descriptors_u, name='ns_descriptors_u' ),
+
     # health check
     url(r'^api/vnfpkgm/v1/health_check$', HealthCheckView.as_view()),
     url(r'^api/nsd/v1/health_check$', HealthCheckView.as_view()),
