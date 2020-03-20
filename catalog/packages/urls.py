@@ -37,6 +37,9 @@ urlpatterns = [
     url(r'^api/parser/v1/parsernsd$', catalog_views.ns_model_parser, name='nsmodelparser_rc'),
     url(r'^api/parser/v1/parservnfd$', catalog_views.vnf_model_parser, name='vnfmodelparser_rc'),
     url(r'^api/parser/v1/parserpnfd$', pnf_descriptor_views.pnf_model_parser, name='pnfmodelparser_rc'),
+    url(r'^api/catalog/v1/parsernsd$', catalog_views.ns_model_parser, name='nsmodelparser_rc'),
+    url(r'^api/catalog/v1/parservnfd$', catalog_views.vnf_model_parser, name='vnfmodelparser_rc'),
+    url(r'^api/catalog/v1/parserpnfd$', pnf_descriptor_views.pnf_model_parser, name='pnfmodelparser_rc'),
 
     # ETSI SOL005 NSD API
     url(r'^api/nsd/v1/ns_descriptors$', ns_descriptor_views.ns_descriptors_rc, name='ns_descriptors_rc'),
