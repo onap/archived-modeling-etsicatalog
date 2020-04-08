@@ -68,16 +68,14 @@ def view_safe_call_with_log(logger):
                 return func(*args, **kwargs)
             except NsdmDuplicateSubscriptionException as e:
                 logger.error(e.args[0])
-                return make_error_resp(
-                    detail=e.args[0],
-                    status=status.HTTP_303_SEE_OTHER
-                )
+                resp = Response(status=status.HTTP_303_SEE_OTHER, headers={'Location': e.args[0]})
+                # resp["Location"] = e.args[0]
+                return resp
             except VnfPkgDuplicateSubscriptionException as e:
                 logger.error(e.args[0])
-                return make_error_resp(
-                    detail=e.args[0],
-                    status=status.HTTP_303_SEE_OTHER
-                )
+                resp = Response(status=status.HTTP_303_SEE_OTHER, headers={'Location': e.args[0]})
+                # resp["Location"] = e.args[0]
+                return resp
             except PackageNotFoundException as e:
                 logger.error(e.args[0])
                 return make_error_resp(

@@ -27,11 +27,12 @@ from catalog.packages import const
 from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.packages.biz.vnf_pkg_subscription import QuerySubscription, TerminateSubscription
 from catalog.pub.config import config as pub_config
-from catalog.pub.config.config import CATALOG_ROOT_PATH
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
 from catalog.pub.exceptions import SubscriptionDoesNotExistsException
+from .const import vnf_subscription_data
 from catalog.pub.utils import toscaparser
-from .const import vnf_subscription_data, vnfd_data
+from catalog.packages.tests.const import vnfd_data
 
 
 class TestNfPackageSubscription(TestCase):
@@ -81,16 +82,46 @@ class TestNfPackageSubscription(TestCase):
             response.data["callbackUri"]
         )
         self.assertEqual(temp_uuid, response.data["id"])
-        temp_uuid = "00442b18-a5c7-11e8-998c-bf1755941f12"
+        temp2_uuid = "00442b18-a5c7-11e8-998c-bf1755941f12"
         mock_requests.return_value.status_code = 204
         mock_requests.get.status_code = 204
-        mock_uuid4.return_value = temp_uuid
+        mock_uuid4.return_value = temp2_uuid
         response = self.client.post(
             "/api/vnfpkgm/v1/subscriptions",
             data=self.vnf_subscription_data,
             format='json'
         )
         self.assertEqual(303, response.status_code)
+        redirect_addr = "http://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT,
+                                             os.path.join(const.VNFPKG_SUBSCRIPTION_ROOT_URI, temp_uuid))
+        self.assertEqual(redirect_addr, response["Location"])
+
+    @mock.patch("requests.get")
+    def test_callbackuri_same_subscriptions(self, mock_requests):
+        mock_requests.return_value.status_code = 204
+        mock_requests.get.status_code = 204
+        response = self.client.post(
+            "/api/vnfpkgm/v1/subscriptions",
+            data=self.vnf_subscription_data,
+            format='json'
+        )
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(
+            self.vnf_subscription_data["callbackUri"],
+            response.data["callbackUri"]
+        )
+        newsubs = self.vnf_subscription_data
+        newsubs["filter"]["vnfdId"] = ["ssss"]
+        response = self.client.post(
+            "/api/vnfpkgm/v1/subscriptions",
+            data=self.vnf_subscription_data,
+            format='json'
+        )
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(
+            newsubs["callbackUri"],
+            response.data["callbackUri"]
+        )
 
     @mock.patch("requests.get")
     @mock.patch.object(uuid, 'uuid4')
