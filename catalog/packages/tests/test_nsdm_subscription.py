@@ -29,7 +29,7 @@ from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
 from catalog.packages.tests.const import nsd_data
 from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
-from catalog.pub.config.config import CATALOG_ROOT_PATH
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT
 from catalog.pub.utils import toscaparser
 
 
@@ -148,7 +148,7 @@ class TestNsdmSubscription(TestCase):
                          response.data["callbackUri"])
 
     @mock.patch("requests.get")
-    def test_nsdm_duplicate_subscription(self, mock_requests):
+    def test_nsdm_duplicate_filter_or_callbackuri_subscription(self, mock_requests):
         mock_requests.return_value.status_code = 204
         mock_requests.get.return_value.status_code = 204
         response = self.client.post("/api/nsd/v1/subscriptions",
@@ -156,15 +156,33 @@ class TestNsdmSubscription(TestCase):
         self.assertEqual(201, response.status_code)
         self.assertEqual(self.subscription["callbackUri"],
                          response.data["callbackUri"])
-        expected_data = {
-            'status': 303,
-            'detail': 'Subscription has already existed with'
-                      ' the same callbackUri and filter'
-        }
+        newsub1 = self.subscription
+        newsub1["callbackUri"] = "http://newcallbackuri.com"
+        response = self.client.post("/api/nsd/v1/subscriptions",
+                                    data=newsub1, format='json')
+        self.assertEqual(201, response.status_code)
+        newsub2 = self.subscription
+        newsub2["filter"]["nsdName"] = ["aaa"]
+        response = self.client.post("/api/nsd/v1/subscriptions",
+                                    data=newsub2, format='json')
+        self.assertEqual(201, response.status_code)
+
+    @mock.patch("requests.get")
+    def test_nsdm_duplicate_callbackuri_filter_subscription(self, mock_requests):
+        mock_requests.return_value.status_code = 204
+        mock_requests.get.return_value.status_code = 204
+        response = self.client.post("/api/nsd/v1/subscriptions",
+                                    data=self.subscription, format='json')
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(self.subscription["callbackUri"],
+                         response.data["callbackUri"])
+        subscriptionid = response.data["id"]
         response = self.client.post("/api/nsd/v1/subscriptions",
                                     data=self.subscription, format='json')
         self.assertEqual(303, response.status_code)
-        self.assertEqual(expected_data, response.data)
+        redirect_addr = "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT,
+                                             os.path.join(const.NSDM_SUBSCRIPTION_ROOT_URI, subscriptionid))
+        self.assertEqual(redirect_addr, response["Location"])
 
     @mock.patch("requests.get")
     def test_nsdm_bad_request(self, mock_requests):
