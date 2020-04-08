@@ -21,7 +21,8 @@ import traceback
 import zipfile
 
 from catalog.packages.biz.vnf_package import VnfPackage
-from catalog.packages.const import PKG_STATUS
+# from catalog.packages.const import PKG_STATUS
+from catalog.packages import const
 from catalog.pub.config.config import CATALOG_ROOT_PATH, CATALOG_URL_PATH
 from catalog.pub.config.config import REG_TO_MSB_REG_PARAM
 from catalog.pub.database.models import VnfPackageModel
@@ -30,6 +31,7 @@ from catalog.pub.msapi import sdc
 from catalog.pub.utils import fileutil
 from catalog.pub.utils import toscaparser
 from catalog.pub.utils.jobutil import JobUtil, JOB_ERROR_CODE
+from catalog.packages.biz.notificationsutil import PkgNotifications
 
 logger = logging.getLogger(__name__)
 
@@ -176,11 +178,13 @@ class NfDistributeThread(threading.Thread):
             vnfdModel=vnfd_json,
             localFilePath=local_file_name,
             vnfPackageUri=csar_name,
-            onboardingState=PKG_STATUS.ONBOARDED,
-            operationalState=PKG_STATUS.ENABLED,
-            usageState=PKG_STATUS.NOT_IN_USE
+            onboardingState=const.PKG_STATUS.ONBOARDED,
+            operationalState=const.PKG_STATUS.ENABLED,
+            usageState=const.PKG_STATUS.NOT_IN_USE
         ).save()
         JobUtil.add_job_status(self.job_id, 100, "CSAR(%s) distribute successfully." % self.csar_id)
+        send_notification(self.csar_id, const.PKG_NOTIFICATION_TYPE.ONBOARDING,
+                          const.PKG_CHANGE_TYPE.OP_STATE_CHANGE)
 
     def create_vnfd_zip(self, csar_id, vendor_vnf_file):
         """
@@ -255,6 +259,7 @@ class NfPkgDeleteThread(threading.Thread):
         fileutil.delete_dirs(csar_save_path)
 
         JobUtil.add_job_status(self.job_id, 100, "Delete CSAR(%s) successfully." % self.csar_id)
+        send_notification(self.csar_id, const.PKG_NOTIFICATION_TYPE.CHANGE, const.PKG_CHANGE_TYPE.PKG_DELETE)
 
 
 class NfPackage(object):
@@ -303,3 +308,9 @@ class NfPackage(object):
             "imageInfo": []
         }
         return [0, csar_info]
+
+
+def send_notification(pkg_id, type, pkg_change_type, operational_state=None):
+    notify = PkgNotifications(type, pkg_id, change_type=pkg_change_type,
+                              operational_state=operational_state)
+    notify.send_notification()

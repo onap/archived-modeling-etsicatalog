@@ -26,6 +26,7 @@ from catalog.pub.database.models import NsdmSubscriptionModel
 from catalog.pub.exceptions import CatalogException, \
     NsdmBadRequestException, NsdmDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
+from catalog.pub.config.config import MSB_SERVICE_IP, MSB_SERVICE_PORT
 
 logger = logging.getLogger(__name__)
 
@@ -185,13 +186,15 @@ class NsdmSubscription:
         subscriptions = \
             NsdmSubscriptionModel.objects.filter(
                 callback_uri=self.callback_uri)
-        if not subscriptions.exists():
-            return
+
         for subscription in subscriptions:
             if self.check_filter_exists(subscription):
-                raise NsdmDuplicateSubscriptionException(
+                links = json.loads(subscription.links)
+                logger.error(
                     "Subscription has already existed with the "
-                    "same callbackUri and filter")
+                    "same callbackUri and filter:%s" % links)
+                raise NsdmDuplicateSubscriptionException(
+                    "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT, links["self"]["href"]))
 
     def save_db(self):
         logger.debug("Create Subscription --> Saving the subscription "
