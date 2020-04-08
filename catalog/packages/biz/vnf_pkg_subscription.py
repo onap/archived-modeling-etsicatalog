@@ -27,6 +27,7 @@ from catalog.pub.database.models import VnfPkgSubscriptionModel
 from catalog.pub.exceptions import VnfPkgSubscriptionException, \
     VnfPkgDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
+from catalog.pub.config.config import MSB_SERVICE_IP, MSB_SERVICE_PORT
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,6 @@ def is_filter_type_equal(new_filter, existing_filter):
 
 
 class CreateSubscription(object):
-
     def __init__(self, data):
         self.data = data
         self.filter = ignore_case_get(self.data, "filter", {})
@@ -105,10 +105,10 @@ class CreateSubscription(object):
         logger.debug("SubscribeNotification--post::> Validating Auth "
                      "details if provided")
         if self.authentication.get("paramsBasic", {}) and \
-                const.BASIC not in self.authentication.get("authType"):
+                        const.BASIC not in self.authentication.get("authType"):
             raise VnfPkgSubscriptionException('Auth type should be ' + const.BASIC)
         if self.authentication.get("paramsOauth2ClientCredentials", {}) and \
-                const.OAUTH2_CLIENT_CREDENTIALS not in self.authentication.get("authType"):
+                        const.OAUTH2_CLIENT_CREDENTIALS not in self.authentication.get("authType"):
             raise VnfPkgSubscriptionException('Auth type should be ' + const.OAUTH2_CLIENT_CREDENTIALS)
 
     def check_filter_exists(self, sub):
@@ -125,16 +125,17 @@ class CreateSubscription(object):
         return True
 
     def check_valid(self):
+        links = ""
         logger.debug("SubscribeNotification--post::> Checking DB if "
                      "callbackUri already exists")
         subscriptions = VnfPkgSubscriptionModel.objects.filter(callback_uri=self.callback_uri)
-        if not subscriptions.exists():
-            return True
         for subscription in subscriptions:
             if self.check_filter_exists(subscription):
+                links = json.loads(subscription.links)
+                logger.error("Already Subscriptions exists with the same callbackUri and filter:%s" % links)
                 raise VnfPkgDuplicateSubscriptionException(
-                    "Already Subscription (%s) exists with the "
-                    "same callbackUri and filter" % subscription.subscription_id)
+                    "http://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT, links["self"]["href"]))
+
         return True
 
     def save_db(self):
@@ -160,7 +161,6 @@ class CreateSubscription(object):
 
 
 class QuerySubscription(object):
-
     def query_multi_subscriptions(self, params):
         query_data = {}
         logger.debug("QuerySubscription--get--multi--subscriptions--biz::> Check "
@@ -190,7 +190,6 @@ class QuerySubscription(object):
 
 
 class TerminateSubscription(object):
-
     def terminate(self, subscription_id):
         logger.debug("TerminateSubscriptions--delete--biz::> "
                      "ID: %s" % subscription_id)
