@@ -91,8 +91,8 @@ class CreateSubscription(object):
 
     def do_biz(self):
         self.subscription_id = str(uuid.uuid4())
-        self.check_callbackuri_connection()
         self.check_valid_auth_info()
+        self.check_callbackuri_connection()
         self.check_valid()
         self.save_db()
         subscription = VnfPkgSubscriptionModel.objects.get(
