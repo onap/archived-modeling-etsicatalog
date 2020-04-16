@@ -17,14 +17,14 @@ import os
 import sys
 import traceback
 
+from catalog.packages.biz.ns_descriptor import NsDescriptor
 from catalog.pub.config.config import CATALOG_ROOT_PATH, CATALOG_URL_PATH
 from catalog.pub.config.config import REG_TO_MSB_REG_PARAM
-from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
+from catalog.pub.database.models import NSPackageModel, VnfPackageModel
 from catalog.pub.exceptions import CatalogException
 from catalog.pub.msapi import sdc
-from catalog.pub.utils import toscaparser
-from catalog.packages.biz.ns_descriptor import NsDescriptor
 from catalog.pub.utils import fileutil
+from catalog.pub.utils import toscaparser
 
 logger = logging.getLogger(__name__)
 
@@ -124,10 +124,14 @@ class NsPackage(object):
         resources = ns.get('resources', None)
         if resources:
             for resource in resources:
-                if not VnfPackageModel.objects.filter(vnfPackageId=resource['resourceUUID']) and \
-                        not PnfPackageModel.objects.filter(pnfPackageId=resource['resourceUUID']):
-                    logger.error("Resource [%s] is not distributed.", resource['resourceUUID'])
-                    raise CatalogException("Resource (%s) is not distributed." % resource['resourceUUID'])
+                if resource['resoucreType'].upper == 'VF' and not VnfPackageModel.objects.filter(
+                        vnfPackageId=resource['resourceUUID']):
+                    logger.error("VF [%s] is not distributed.", resource['resourceUUID'])
+                    raise CatalogException("VF (%s) is not distributed." % resource['resourceUUID'])
+                # if resource['resoucreType'] == 'PNF' and not PnfPackageModel.objects.filter(
+                #         pnfPackageId=resource['resourceUUID']):
+                #     logger.error("PNF [%s] is not distributed.", resource['resourceUUID'])
+                #     raise CatalogException("PNF (%s) is not distributed." % resource['resourceUUID'])
 
         # download csar package
         local_path = os.path.join(CATALOG_ROOT_PATH, csar_id)
