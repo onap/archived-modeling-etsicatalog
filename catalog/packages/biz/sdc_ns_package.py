@@ -124,10 +124,14 @@ class NsPackage(object):
         resources = ns.get('resources', None)
         if resources:
             for resource in resources:
-                if not VnfPackageModel.objects.filter(vnfPackageId=resource['resourceUUID']) and \
-                        not PnfPackageModel.objects.filter(pnfPackageId=resource['resourceUUID']):
-                    logger.error("Resource [%s] is not distributed.", resource['resourceUUID'])
-                    raise CatalogException("Resource (%s) is not distributed." % resource['resourceUUID'])
+                if resource['resoucreType'].upper == 'VF' and not VnfPackageModel.objects.filter(
+                        vnfPackageId=resource['resourceUUID']):
+                    logger.error("VF [%s] is not distributed.", resource['resourceUUID'])
+                    raise CatalogException("VF (%s) is not distributed." % resource['resourceUUID'])
+                # if resource['resoucreType'] == 'PNF' and not PnfPackageModel.objects.filter(
+                #         pnfPackageId=resource['resourceUUID']):
+                #     logger.error("PNF [%s] is not distributed.", resource['resourceUUID'])
+                #     raise CatalogException("PNF (%s) is not distributed." % resource['resourceUUID'])
 
         # download csar package
         local_path = os.path.join(CATALOG_ROOT_PATH, csar_id)
