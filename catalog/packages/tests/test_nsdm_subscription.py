@@ -625,22 +625,22 @@ class TestNsdmSubscription(TestCase):
             'timeStamp': "nowtime()",
             'nsdInfoId': "d0ea5ec3-0b98-438a-9bea-488230cff174",
             'nsdId': "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
-            "subscriptionId": "1111",
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
-                                                   "1111")},
                 'nsdInfo': {
                     'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
                                                                    pub_config.MSB_SERVICE_PORT,
                                                                    const.NSD_URL_PREFIX,
-                                                                   "d0ea5ec3-0b98-438a-9bea-488230cff174")
-                }
-            }
+                                                                   "d0ea5ec3-0b98-438a-9bea-488230cff174")},
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1111")}
+
+            },
+            "subscriptionId": "1111"
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+        mock_requests_post.assert_called_with(expect_callbackuri, data=json.dumps(expect_notification),
                                               auth=HTTPBasicAuth("username", "password"),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
@@ -680,24 +680,24 @@ class NotificationTest(TestCase):
             'timeStamp': "nowtime()",
             'nsdInfoId': "nsdinfoid1",
             'nsdId': "nsdid1",
-            'onboardingFailureDetails': "NSD(nsdid1) already exists.",
-            "subscriptionId": "1",
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
-                                                   "1")},
                 'nsdInfo': {
                     'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
                                                                    pub_config.MSB_SERVICE_PORT,
                                                                    const.NSD_URL_PREFIX,
                                                                    "nsdinfoid1")
-                }
-            }
+                },
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")}
+            },
+            'onboardingFailureDetails': "NSD(nsdid1) already exists.",
+            "subscriptionId": "1"
         }
         mock_requests_post.assert_called_with(expect_callbackuri,
-                                              data=expect_notification,
+                                              data=json.dumps(expect_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},
@@ -722,22 +722,22 @@ class NotificationTest(TestCase):
             'timeStamp': "nowtime()",
             'pnfdInfoIds': "pnfdInfoIds1",
             'pnfdId': "pnfdId1",
-            "subscriptionId": "1",
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
-                                                   "1")},
                 'pnfdInfo': {
                     'href': 'http://%s:%s/%s/pnf_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
                                                                     pub_config.MSB_SERVICE_PORT,
                                                                     const.NSD_URL_PREFIX,
                                                                     "pnfdInfoIds1")
-                }
-            }
+                },
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.NSDM_SUBSCRIPTION_ROOT_URI,
+                                                   "1")},
+            },
+            "subscriptionId": "1",
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+        mock_requests_post.assert_called_with(expect_callbackuri, data=json.dumps(expect_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},

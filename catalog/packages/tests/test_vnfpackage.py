@@ -284,9 +284,7 @@ class TestNfPackage(TestCase):
                     "VnfPackageOnboardingNotification",
                     "VnfPackageChangeNotification"
                 ],
-                "vnfdId": [
-                    "b1bb0ce7-2222-4fa7-95ed-4840d70a1177"
-                ],
+                "vnfPkgId": [uuid_csarid],
                 "operationalState": ["ENABLED", "DISABLED"]
             },
             "callbackUri": "https://so-vnfm-simulator.onap:9093/vnfpkgm/v1/notification",
@@ -332,17 +330,18 @@ class TestNfPackage(TestCase):
                                                                  pub_config.MSB_SERVICE_PORT,
                                                                  const.PKG_URL_PREFIX,
                                                                  uuid_csarid)},
-                    'subscription': {
-                        'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                       pub_config.MSB_SERVICE_PORT,
-                                                       const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                       uuid_subscriptid)}
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                   uuid_subscriptid)}
 
             },
             "subscriptionId": uuid_subscriptid
         }
         mock_requests_post.return_value.status_code = 204
-        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_onboarding_notification,
+        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"],
+                                              data=json.dumps(expect_onboarding_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},
@@ -355,25 +354,26 @@ class TestNfPackage(TestCase):
             'timeStamp': "2019-02-16 14:41:16",
             'vnfPkgId': "1234",
             'vnfdId': "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
-            'changeType': const.PKG_CHANGE_TYPE.PKG_DELETE,
-            'operationalState': None,
-            "subscriptionId": uuid_subscriptid,
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                   uuid_subscriptid)},
                 'vnfPackage': {
                     'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
                                                                  pub_config.MSB_SERVICE_PORT,
                                                                  const.PKG_URL_PREFIX,
-                                                                 uuid_csarid)
-                }
-            }
+                                                                 uuid_csarid)},
+                    'subscription': {
+                        'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                       pub_config.MSB_SERVICE_PORT,
+                                                       const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                       uuid_subscriptid)}
+
+            },
+            'changeType': const.PKG_CHANGE_TYPE.PKG_DELETE,
+            'operationalState': None,
+            "subscriptionId": uuid_subscriptid
         }
         NfPkgDeleteThread(csar_id=uuid_csarid, job_id="5").delete_csar()
-        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_deleted_notification,
+        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"],
+                                              data=json.dumps(expect_deleted_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},
