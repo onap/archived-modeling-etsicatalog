@@ -12,21 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-import uuid
-import requests
 import json
-from rest_framework import status
-from requests.auth import HTTPBasicAuth
-from catalog.packages import const
-from catalog.pub.database.models import VnfPackageModel, VnfPkgSubscriptionModel, NsdmSubscriptionModel
-import catalog.pub.utils.timeutil
-from catalog.pub.utils.values import remove_none_key
-from catalog.pub.config import config as pub_config
+import logging
 import traceback
+import uuid
+
+import requests
 from django.db.models import Q
+from requests.auth import HTTPBasicAuth
+from rest_framework import status
+
+import catalog.pub.utils.timeutil
+from catalog.packages import const
 from catalog.packages.serializers.vnf_pkg_notifications import PkgChangeNotificationSerializer, \
     PkgOnboardingNotificationSerializer
+from catalog.pub.config import config as pub_config
+from catalog.pub.database.models import VnfPackageModel, VnfPkgSubscriptionModel, NsdmSubscriptionModel
+from catalog.pub.utils.values import remove_none_key
 
 logger = logging.getLogger(__name__)
 
@@ -109,9 +111,9 @@ class NotificationsUtil(object):
                                      verify=False)
 
             if resp.status_code == status.HTTP_204_NO_CONTENT:
-                logger.error("Sending notification to %s failed: %s" % (callbackuri, resp))
-            else:
                 logger.info("Sending notification to %s successfully.", callbackuri)
+            else:
+                logger.error("Sending notification to %s failed: %s" % (callbackuri, resp))
         except:
             logger.error("Post notification failed.")
             logger.error(traceback.format_exc())

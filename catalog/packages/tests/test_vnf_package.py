@@ -26,6 +26,7 @@ from rest_framework.test import APIClient
 from catalog.packages.biz.vnf_package import VnfPackage, VnfPkgUploadThread
 from catalog.packages.const import PKG_STATUS
 from catalog.packages.tests.const import vnfd_data
+from catalog.pub.config import config
 from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import VnfPackageModel
 from catalog.pub.utils import toscaparser
@@ -150,9 +151,11 @@ class TestVnfPackage(TestCase):
             "operationalState": "DISABLED",
             "usageState": "NOT_IN_USE",
             "userDefinedData": {"a": "A"},
-            "_links": {'self': {'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222'},
-                       'vnfd': {'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/vnfd'},
-                       'packageContent': {'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/package_content'}
+            "_links": {'self': {'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222'},
+                       'vnfd': {
+                           'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222/vnfd'},
+                       'packageContent': {
+                           'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222/package_content'}
                        }
         }
         self.assertEqual(response.data, expect_data)
@@ -206,13 +209,13 @@ class TestVnfPackage(TestCase):
                 "userDefinedData": {"a": "A"},
                 "_links": {
                     "self": {
-                        "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/111"
+                        "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/111"
                     },
                     "vnfd": {
-                        "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/111/vnfd"
+                        "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/111/vnfd"
                     },
                     "packageContent": {
-                        "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/111/package_content"
+                        "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/111/package_content"
                     }
                 }
             },
@@ -229,10 +232,10 @@ class TestVnfPackage(TestCase):
                 "operationalState": "DISABLED",
                 "usageState": "NOT_IN_USE",
                 "userDefinedData": {"a": "A"},
-                "_links": {'self': {'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222'},
-                           'vnfd': {'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/vnfd'},
+                "_links": {'self': {'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222'},
+                           'vnfd': {'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222/vnfd'},
                            'packageContent': {
-                               'href': 'http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/package_content'}}
+                               'href': config.MSB_BASE_URL + '/api/vnfpkgm/v1/vnf_packages/222/package_content'}}
             }
         ]
         self.assertEqual(response.data, expect_data)
@@ -474,13 +477,13 @@ class TestVnfPackage(TestCase):
             "usageState": "NOT_IN_USE",
             "_links": {
                 "self": {
-                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222"
+                    "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/222"
                 },
                 "vnfd": {
-                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/vnfd"
+                    "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/222/vnfd"
                 },
                 "packageContent": {
-                    "href": "http://127.0.0.1:80/api/vnfpkgm/v1/vnf_packages/222/package_content"
+                    "href": config.MSB_BASE_URL + "/api/vnfpkgm/v1/vnf_packages/222/package_content"
                 }
             }
         }
