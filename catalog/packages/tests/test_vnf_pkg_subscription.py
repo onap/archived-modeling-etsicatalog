@@ -258,22 +258,22 @@ class TestNfPackageSubscription(TestCase):
             'timeStamp': "2019-02-16 14:41:16",
             'vnfPkgId': uuid_vnfPackageId,
             'vnfdId': uuid_vnfdid,
-            "subscriptionId": uuid_subscriptid,
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                   uuid_subscriptid)},
                 'vnfPackage': {
                     'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
                                                                  pub_config.MSB_SERVICE_PORT,
                                                                  const.PKG_URL_PREFIX,
                                                                  uuid_vnfPackageId)
-                }
-            }
+                },
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                   uuid_subscriptid)}
+            },
+            "subscriptionId": uuid_subscriptid
         }
-        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=expect_notification,
+        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=json.dumps(expect_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},
@@ -331,24 +331,24 @@ class NotificationTest(TestCase):
             'timeStamp': "2019-12-16 14:41:16",
             'vnfPkgId': "vnfpkgid1",
             'vnfdId': "vnfdid1",
-            'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
-            'operationalState': None,
-            "subscriptionId": "1",
             '_links': {
-                'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                   "1")},
                 'vnfPackage': {
                     'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
                                                                  pub_config.MSB_SERVICE_PORT,
                                                                  const.PKG_URL_PREFIX,
                                                                  "vnfpkgid1")
-                }
-            }
+                },
+                'subscription': {
+                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
+                                                   pub_config.MSB_SERVICE_PORT,
+                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                                   "1")}
+            },
+            'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
+            'operationalState': None,
+            "subscriptionId": "1"
         }
-        mock_requests_post.assert_called_with(expect_callbackuri, data=expect_notification,
+        mock_requests_post.assert_called_with(expect_callbackuri, data=json.dumps(expect_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},

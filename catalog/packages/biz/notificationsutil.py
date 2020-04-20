@@ -88,7 +88,7 @@ class NotificationsUtil(object):
                     username = params.get("userName")
                     password = params.get("password")
                     resp = requests.post(callbackuri,
-                                         data=notification,
+                                         data=json.dumps(notification),
                                          headers={'Connection': 'close',
                                                   'content-type': 'application/json',
                                                   'accept': 'application/json'},
@@ -102,7 +102,7 @@ class NotificationsUtil(object):
                     pass
             else:
                 resp = requests.post(callbackuri,
-                                     data=notification,
+                                     data=json.dumps(notification),
                                      headers={'Connection': 'close',
                                               'content-type': 'application/json',
                                               'accept': 'application/json'},
