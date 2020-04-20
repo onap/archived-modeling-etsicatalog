@@ -11,12 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import uuid
+
 from onaplogging.mdcContext import MDC
 
 from catalog.pub.config.config import FORWARDED_FOR_FIELDS, SERVICE_NAME
 
 
 class LogContextMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     #  the last IP behind multiple proxies,  if no exist proxies
     #  get local host ip.
     def _getLastIp(self, request):
@@ -57,4 +61,10 @@ class LogContextMiddleware(object):
 
     def process_response(self, request, response):
         MDC.clear()
+        return response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        self.process_response(request, response)
         return response
