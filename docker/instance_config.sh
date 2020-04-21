@@ -5,11 +5,11 @@ MSB_PORT=`echo $MSB_ADDR | cut -d: -f 2`
 # modeling/etsicatalog
 
 if [ $MSB_IP ]; then
-    sed -i "s|MSB_SERVICE_IP.*|MSB_SERVICE_IP = '$MSB_IP'|"  modeling/etsicatalog/catalog/pub/config/config.py
+    sed -i "s|MSB_SERVICE_IP = .*|MSB_SERVICE_IP = '$MSB_IP'|"  modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 if [ $MSB_PORT ]; then
-    sed -i "s|MSB_SERVICE_PORT.*|MSB_SERVICE_PORT = '$MSB_PORT'|" modeling/etsicatalog/catalog/pub/config/config.py
+    sed -i "s|MSB_SERVICE_PORT = .*|MSB_SERVICE_PORT = '$MSB_PORT'|" modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 if [ $SERVICE_IP ]; then
