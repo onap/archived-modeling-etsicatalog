@@ -36,3 +36,5 @@ onappylog==1.0.9
 
 # uwsgi for parallel processing
 # uwsgi
+
+apscheduler==2.1.2
