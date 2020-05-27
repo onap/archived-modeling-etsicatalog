@@ -1,14 +1,16 @@
-# Copyright (c) 2019, CMCC Technologies Co., Ltd.
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Copyright (c) 2019, CMCC Technologies. Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 import base64
 import datetime
@@ -21,14 +23,15 @@ from hashlib import sha1
 import requests
 from apscheduler.scheduler import Scheduler
 
-from ..pub.exceptions import DmaapClientException
+from catalog.pub.Dmaap_lib.pub.exceptions import DmaapClientException
 
 logger = logging.getLogger(__name__)
 
 
 class BatchPublisherClient:
-    def __init__(self, host, topic, partition="", contenttype="text/plain", max_batch_size=100, max_batch_age_ms=1000):
-        self.host = host
+    def __init__(self, base_url, topic, partition="", contenttype="text/plain", max_batch_size=100,
+                 max_batch_age_ms=1000):
+        self.base_url = base_url
         self.topic = topic
         self.partition = partition
         self.contenttype = contenttype
@@ -38,12 +41,11 @@ class BatchPublisherClient:
         self.closed = False
         self.dont_send_until_ms = 0
         self.scheduler = Scheduler(standalone=False)
-        self.api_key = '',
-        self.api_secret = ''
 
         @self.scheduler.interval_schedule(second=1)
         def crawl_job():
             self.send_message(False)
+
         self.scheduler.start()
 
     def set_api_credentials(self, api_key, api_secret):
@@ -136,7 +138,7 @@ class BatchPublisherClient:
         return headers
 
     def create_url(self):
-        url = "http://%s/events/%s" % (self.host, self.topic)
+        url = self.base_url + "/events/%s" % self.topic
         if self.partition:
             url = url + "?partitionKey=" + self.partition
         return url
