@@ -129,3 +129,41 @@ def download_artifacts(download_url, local_path, file_name):
     local_file.write(ret[1])
     local_file.close()
     return local_file_name
+
+
+def create_consumer(name, salt, password):
+    req_data = {
+        'consumerName': name,
+        'consumerSalt': salt,
+        'consumerPassword': password
+    }
+    req_data = json.JSONEncoder().encode(req_data)
+    resource = '/sdc2/rest/v1/consumers'
+    headers = {'USER_ID': 'jh0003'}
+    ret = restcall.call_req(base_url=SDC_BASE_URL,
+                            user="",
+                            passwd="",
+                            auth_type=restcall.rest_no_auth,
+                            resource=resource,
+                            method="POST",
+                            content=req_data,
+                            additional_headers=headers)
+    if ret[0] != 0:
+        logger.error("Status code is %s, detail is %s.", ret[2], ret[1])
+        raise CatalogException("Failed to create consumer from sdc.")
+
+
+def register_for_topics(key):
+    req_data = {
+        'apiPublicKey': key,
+        'distrEnvName': 'AUTO',
+        'isConsumerToSdcDistrStatusTopic': False,
+        'distEnvEndPoints': []
+    }
+    req_data = json.JSONEncoder().encode(req_data)
+    url = '/sdc/v1/registerForDistribution'
+    ret = call_sdc(url, 'POST', req_data)
+    if ret[0] != 0:
+        logger.error("Status code is %s, detail is %s.", ret[2], ret[1])
+        raise CatalogException("Failed to register from sdc.")
+    return json.JSONDecoder().decode(ret[1])

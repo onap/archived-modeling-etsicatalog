@@ -18,11 +18,6 @@ MSB_SERVICE_IP = '127.0.0.1'
 MSB_SERVICE_PORT = '80'
 MSB_BASE_URL = "%s://%s:%s" % (MSB_SERVICE_PROTOCOL, MSB_SERVICE_IP, MSB_SERVICE_PORT)
 
-# [REDIS]
-# REDIS_HOST = '127.0.0.1'
-# REDIS_PORT = '6379'
-# REDIS_PASSWD = ''
-
 # [mysql]
 DB_IP = "127.0.0.1"
 DB_PORT = 3306
@@ -96,5 +91,12 @@ CATALOG_URL_PATH = None
 SDC_BASE_URL = "https://msb-iag/api"
 SDC_USER = "modeling"
 SDC_PASSWD = "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
+
+# [dmaap config]
+DMAAP_MR_IP = '127.0.0.1'
+DMAAP_MR_PORT = '3904'
+CONSUMER_GROUP = "consumerGroup"
+CONSUMER_ID = "consumerId"
+POLLING_INTERVAL = 15
 
 VNFD_SCHEMA_VERSION_DEFAULT = "base"
