@@ -23,6 +23,7 @@ import requests
 
 from catalog.pub.Dmaap_lib.pub.exceptions import DmaapClientException
 
+requests.packages.urllib3.disable_warnings()
 logger = logging.getLogger(__name__)
 
 
@@ -75,7 +76,7 @@ class ConsumerClient:
             url = self.create_url()
             if self.api_key:
                 headers = self.create_headers()
-                ret = requests.get(url=url, headers=headers)
+                ret = requests.get(url=url, headers=headers, verify=False)
             else:
                 ret = requests.get(url)
             logger.info("Status code is %s, detail is %s.", ret.status_code, ret.json())
