@@ -88,13 +88,13 @@ CATALOG_ROOT_PATH = None
 CATALOG_URL_PATH = None
 
 # [sdc config]
-SDC_BASE_URL = "https://msb-iag/api"
+SDC_BASE_URL = MSB_BASE_URL + "/api"
 SDC_USER = "modeling"
 SDC_PASSWD = "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
 
 # [dmaap config]
-DMAAP_MR_IP = '127.0.0.1'
-DMAAP_MR_PORT = '3904'
+DMAAP_MR_IP = MSB_SERVICE_IP
+DMAAP_MR_PORT = '30226'
 CONSUMER_GROUP = "consumerGroup"
 CONSUMER_ID = "consumerId"
 POLLING_INTERVAL = 15

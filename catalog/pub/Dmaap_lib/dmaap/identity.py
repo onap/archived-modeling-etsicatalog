@@ -19,6 +19,7 @@ import requests
 
 from catalog.pub.Dmaap_lib.pub.exceptions import DmaapClientException
 
+requests.packages.urllib3.disable_warnings()
 logger = logging.getLogger(__name__)
 
 
@@ -35,7 +36,8 @@ class IdentityClient:
             }
             data = json.JSONEncoder().encode(data)
             url = self.base_url + "/apiKeys/create"
-            ret = requests.post(url=url, data=data, headers=headers)
+            print(url)
+            ret = requests.post(url=url, data=data, headers=headers, verify=False)
             logger.info('create apiKey, response status_code: %s, body: %s', ret.status_code, ret.json())
             if ret.status_code != 200:
                 raise DmaapClientException(ret.json())

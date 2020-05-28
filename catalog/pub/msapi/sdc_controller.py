@@ -18,7 +18,7 @@ from catalog.pub.msapi import sdc
 
 logger = logging.getLogger(__name__)
 
-DMAAP_MR_BASE_URL = "http://%s:%s" % (DMAAP_MR_IP, DMAAP_MR_PORT)
+DMAAP_MR_BASE_URL = "https://%s:%s" % (DMAAP_MR_IP, DMAAP_MR_PORT)
 ARTIFACT_TYPES_LIST = ["TOSCA_TEMPLATE", "TOSCA_CSAR"]
 
 
@@ -213,3 +213,7 @@ def process_notification(msg):
             jobid = uuid.uuid4()
             # NsPackageParser(data, jobid).start()
             logger.debug(data, jobid)
+
+
+if __name__ == '__main__':
+    SDCController().start()
