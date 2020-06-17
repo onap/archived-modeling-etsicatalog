@@ -4,13 +4,14 @@ install_sf(){
 
     apk --no-cache update
     apk --no-cache add bash curl gcc wget mysql-client openssl-dev
-    apk --no-cache add python36-dev libffi-dev musl-dev py3-virtualenv
+    apk --no-cache add python3-dev libffi-dev musl-dev py3-virtualenv
 
     # get binary zip from nexus - modeling-etsicatalog
 
     wget -q -O modeling-etsicatalog.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.modeling.etsicatalog&a=modeling-etsicatalog&e=zip&v=${pkg_version}-SNAPSHOT&e=zip" && \
     unzip modeling-etsicatalog.zip && \
     rm -rf modeling-etsicatalog.zip && \
+    wait
     pip install --upgrade setuptools pip  && \
     pip install --no-cache-dir --pre -r  /service/modeling/etsicatalog/requirements.txt
     find  /service -name '*.sh'|xargs chmod a+x
