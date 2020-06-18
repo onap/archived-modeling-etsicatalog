@@ -4,7 +4,7 @@ install_sf(){
 
     apk --no-cache update
     apk --no-cache add bash curl gcc wget mysql-client openssl-dev
-    apk --no-cache add python36-dev libffi-dev musl-dev py3-virtualenv
+    apk --no-cache add python3-dev libffi-dev musl-dev py3-virtualenv
 
     # get binary zip from nexus - modeling-etsicatalog
 
