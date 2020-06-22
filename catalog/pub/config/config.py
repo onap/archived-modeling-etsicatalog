@@ -32,10 +32,16 @@ FORWARDED_FOR_FIELDS = ["HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_HOST",
 
 # [register]
 REG_TO_MSB_WHEN_START = True
+SSL_ENABLED = “true"
 REG_TO_MSB_REG_URL = "/api/microservices/v1/services"
+if SSL_ENABLED == "true":
+    enable_ssl = "true"
+else:
+    enable_ssl = "false"
 REG_TO_MSB_REG_PARAM = [{
     "serviceName": "catalog",
     "version": "v1",
+    "enable_ssl": enable_ssl,
     "url": "/api/catalog/v1",
     "protocol": "REST",
     "visualRange": "1",
@@ -47,6 +53,7 @@ REG_TO_MSB_REG_PARAM = [{
 }, {
     "serviceName": "nsd",
     "version": "v1",
+    "enable_ssl": enable_ssl,
     "url": "/api/nsd/v1",
     "protocol": "REST",
     "visualRange": "1",
@@ -58,6 +65,7 @@ REG_TO_MSB_REG_PARAM = [{
 }, {
     "serviceName": "vnfpkgm",
     "version": "v1",
+    "enable_ssl": enable_ssl,
     "url": "/api/vnfpkgm/v1",
     "protocol": "REST",
     "visualRange": "1",
@@ -69,6 +77,7 @@ REG_TO_MSB_REG_PARAM = [{
 }, {
     "serviceName": "parser",
     "version": "v1",
+    "enable_ssl": enable_ssl,
     "url": "/api/parser/v1",
     "protocol": "REST",
     "visualRange": "1",
