@@ -32,10 +32,16 @@ FORWARDED_FOR_FIELDS = ["HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_HOST",
 
 # [register]
 REG_TO_MSB_WHEN_START = True
+SSL_ENABLE = "true"
 REG_TO_MSB_REG_URL = "/api/microservices/v1/services"
+if SSL_ENABLE:
+    enable_ssl = "true"
+else:
+    enable_ssl = "false"
 REG_TO_MSB_REG_PARAM = [{
     "serviceName": "catalog",
     "version": "v1",
+    "enable_ssl": enable_ssl,
     "url": "/api/catalog/v1",
     "protocol": "REST",
     "visualRange": "1",
