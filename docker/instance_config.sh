@@ -23,7 +23,7 @@ fi
 
 
 if [ $SSL_ENABLED ]; then
-    sed -i "s|SSL_ENABLED.*|SSL_ENABLED = '$SSL_ENABLED'|"  modeling/etsicatalog/catalog/pub/config/config.py
+    sed -i "s|SSL_ENABLED = .*|SSL_ENABLED = '$SSL_ENABLED'|"  modeling/etsicatalog/catalog/pub/config/config.py
 fi
 
 MYSQL_IP=`echo $MYSQL_ADDR | cut -d: -f 1`
