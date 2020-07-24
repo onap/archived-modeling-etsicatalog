@@ -31,8 +31,8 @@ for i in {1..5}; do
     sleep $i
 done
 
-# Configure service based on docker environment variables
-modeling/etsicatalog/docker/instance_config.sh
+# Configure config file based on  environment variables
+python modeling/etsicatalog/catalog/pub/config/config.py
 
 # microservice-specific one-time initialization
 modeling/etsicatalog/docker/instance_init.sh
