@@ -11,33 +11,40 @@ if [ -z "$MSB_ADDR" ]; then
 fi
 echo "MSB_ADDR=$MSB_ADDR"
 
-if [ -z "$MYSQL_ADDR" ]; then
-    echo "Missing required variable MYSQL_ADDR: <ip>:<port>"
-    exit 1
-fi
-echo "MYSQL_ADDR=$MYSQL_ADDR"
+# Configure config file based on  environment variables
 
-# Wait for MSB initialization
-echo "Wait for MSB initialization"
-for i in {1..5}; do
-    curl -sS -m 1 $MSB_ADDR > /dev/null && break
-    sleep $i
-done
-
-# Wait for DB initialization
-echo "Wait for DB initialization"
-for i in {1..5}; do
-    curl -sS -m 1 $MYSQL_ADDR > /dev/null && break
-    sleep $i
-done
-
-# Configure service based on docker environment variables
-modeling/etsicatalog/docker/instance_config.sh
+python modeling/etsicatalog/catalog/pub/config/config.py
+cat modeling/etsicatalog/catalog/pub/config/config.py
 
 # microservice-specific one-time initialization
-modeling/etsicatalog/docker/instance_init.sh
 
-date > init.log
+MYSQL_IP=`echo $MYSQL_ADDR | cut -d: -f 1`
+MYSQL_PORT=`echo $MYSQL_ADDR | cut -d: -f 2`
+
+if [ $MYSQL_ROOT_USER ] && [ $MYSQL_ROOT_PASSWORD ]; then
+    MYSQL_ROOT_USER=$MYSQL_ROOT_USER
+    MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+else
+    MYSQL_ROOT_USER="root"
+    MYSQL_ROOT_PASSWORD="root"
+fi
+
+function create_database {
+
+    cd /service/modeling/etsicatalog/resources/bin
+    bash initDB.sh $MYSQL_ROOT_USER $MYSQL_ROOT_PASSWORD $MYSQL_PORT $MYSQL_IP
+
+ }
+
+function migrate_database {
+    cd /service/modeling/etsicatalog
+    python manage.py migrate
+}
+
+create_database
+migrate_database
+
+date > /service/init.log
 
 # Start the microservice
-modeling/etsicatalog/docker/instance_run.sh
+/service/modeling/etsicatalog/docker/instance_run.sh

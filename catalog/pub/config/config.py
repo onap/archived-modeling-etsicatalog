@@ -12,15 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+env_dict = os.environ
+
 # [MSB]
-MSB_SERVICE_PROTOCOL = 'http'
-MSB_SERVICE_IP = '127.0.0.1'
-MSB_SERVICE_PORT = '80'
+MSB_SERVICE_PROTOCOL = env_dict.get("MSB_PROTO", "http")
+MSB_SERVICE_IP = env_dict.get("MSB_ADDR", "127.0.0.1:80").split(':')[0]
+MSB_SERVICE_PORT = env_dict.get("MSB_ADDR", "127.0.0.1:80").split(':')[1]
 MSB_BASE_URL = "%s://%s:%s" % (MSB_SERVICE_PROTOCOL, MSB_SERVICE_IP, MSB_SERVICE_PORT)
 
 # [mysql]
-DB_IP = "127.0.0.1"
-DB_PORT = 3306
+DB_IP = env_dict.get("MYSQL_ADDR", "127.0.0.1:3306").split(':')[0]
+DB_PORT = env_dict.get("MYSQL_ADDR", "127.0.0.1:3306").split(':')[1]
 DB_NAME = "etsicatalog"
 DB_USER = "etsicatalog"
 DB_PASSWD = "etsicatalog"
@@ -32,12 +35,13 @@ FORWARDED_FOR_FIELDS = ["HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_HOST",
 
 # [register]
 REG_TO_MSB_WHEN_START = True
-SSL_ENABLED = "true"
 REG_TO_MSB_REG_URL = "/api/microservices/v1/services"
+SSL_ENABLED = env_dict.get("SSL_ENABLED", "true")
 if SSL_ENABLED == "true":
     enable_ssl = "true"
 else:
     enable_ssl = "false"
+svc_ip = env_dict.get("SERVICE_IP", "127.0.0.1")
 REG_TO_MSB_REG_PARAM = [{
     "serviceName": "catalog",
     "version": "v1",
@@ -46,7 +50,7 @@ REG_TO_MSB_REG_PARAM = [{
     "protocol": "REST",
     "visualRange": "1",
     "nodes": [{
-        "ip": "127.0.0.1",
+        "ip": svc_ip,
         "port": "8806",
         "ttl": 0
     }]
@@ -58,7 +62,7 @@ REG_TO_MSB_REG_PARAM = [{
     "protocol": "REST",
     "visualRange": "1",
     "nodes": [{
-        "ip": "127.0.0.1",
+        "ip": svc_ip,
         "port": "8806",
         "ttl": 0
     }]
@@ -70,7 +74,7 @@ REG_TO_MSB_REG_PARAM = [{
     "protocol": "REST",
     "visualRange": "1",
     "nodes": [{
-        "ip": "127.0.0.1",
+        "ip": svc_ip,
         "port": "8806",
         "ttl": 0
     }]
@@ -82,7 +86,7 @@ REG_TO_MSB_REG_PARAM = [{
     "protocol": "REST",
     "visualRange": "1",
     "nodes": [{
-        "ip": "127.0.0.1",
+        "ip": svc_ip,
         "port": "8806",
         "ttl": 0
     }]
