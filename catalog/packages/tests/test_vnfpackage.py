@@ -326,15 +326,9 @@ class TestNfPackage(TestCase):
             'vnfdId': "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
             '_links': {
                 'vnfPackage': {
-                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                 pub_config.MSB_SERVICE_PORT,
-                                                                 const.PKG_URL_PREFIX,
-                                                                 uuid_csarid)},
+                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, uuid_csarid)},
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
-                                                   const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                   uuid_subscriptid)}
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI, uuid_subscriptid)}
 
             },
             "subscriptionId": uuid_subscriptid
@@ -356,15 +350,11 @@ class TestNfPackage(TestCase):
             'vnfdId': "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
             '_links': {
                 'vnfPackage': {
-                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                 pub_config.MSB_SERVICE_PORT,
-                                                                 const.PKG_URL_PREFIX,
-                                                                 uuid_csarid)},
+                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX,
+                                                       uuid_csarid)},
                     'subscription': {
-                        'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                       pub_config.MSB_SERVICE_PORT,
-                                                       const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                                       uuid_subscriptid)}
+                        'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                             uuid_subscriptid)}
 
             },
             'changeType': const.PKG_CHANGE_TYPE.PKG_DELETE,
