@@ -29,7 +29,7 @@ from catalog.pub.config import config as pub_config
 import catalog.pub.utils.timeutil
 from catalog.packages.tests.const import nsd_data
 from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
-from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_BASE_URL
 from catalog.pub.utils import toscaparser
 
 
@@ -180,7 +180,7 @@ class TestNsdmSubscription(TestCase):
         response = self.client.post("/api/nsd/v1/subscriptions",
                                     data=self.subscription, format='json')
         self.assertEqual(303, response.status_code)
-        redirect_addr = "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT,
+        redirect_addr = "%s/%s" % (MSB_BASE_URL,
                                               os.path.join(const.NSDM_SUBSCRIPTION_ROOT_URI, subscriptionid))
         self.assertEqual(redirect_addr, response["Location"])
 
@@ -627,13 +627,11 @@ class TestNsdmSubscription(TestCase):
             'nsdId': "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
             '_links': {
                 'nsdInfo': {
-                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL,
                                                                    const.NSD_URL_PREFIX,
                                                                    "d0ea5ec3-0b98-438a-9bea-488230cff174")},
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL,
                                                    const.NSDM_SUBSCRIPTION_ROOT_URI,
                                                    "1111")}
 
@@ -682,14 +680,12 @@ class NotificationTest(TestCase):
             'nsdId': "nsdid1",
             '_links': {
                 'nsdInfo': {
-                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL,
                                                                    const.NSD_URL_PREFIX,
                                                                    "nsdinfoid1")
                 },
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL,
                                                    const.NSDM_SUBSCRIPTION_ROOT_URI,
                                                    "1")}
             },
@@ -724,14 +720,12 @@ class NotificationTest(TestCase):
             'pnfdId': "pnfdId1",
             '_links': {
                 'pnfdInfo': {
-                    'href': 'http://%s:%s/%s/pnf_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                    pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s/pnf_descriptors/%s' % (pub_config.MSB_BASE_URL,
                                                                     const.NSD_URL_PREFIX,
                                                                     "pnfdInfoIds1")
                 },
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL,
                                                    const.NSDM_SUBSCRIPTION_ROOT_URI,
                                                    "1")},
             },

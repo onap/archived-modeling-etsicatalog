@@ -27,7 +27,7 @@ from catalog.packages import const
 from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.packages.biz.vnf_pkg_subscription import QuerySubscription, TerminateSubscription
 from catalog.pub.config import config as pub_config
-from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_BASE_URL
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
 from catalog.pub.exceptions import SubscriptionDoesNotExistsException
 from .const import vnf_subscription_data
@@ -92,7 +92,7 @@ class TestNfPackageSubscription(TestCase):
             format='json'
         )
         self.assertEqual(303, response.status_code)
-        redirect_addr = "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT,
+        redirect_addr = "%s/%s" % (MSB_BASE_URL,
                                               os.path.join(const.VNFPKG_SUBSCRIPTION_ROOT_URI, temp_uuid))
         self.assertEqual(redirect_addr, response["Location"])
 
@@ -260,14 +260,12 @@ class TestNfPackageSubscription(TestCase):
             'vnfdId': uuid_vnfdid,
             '_links': {
                 'vnfPackage': {
-                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                 pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL,
                                                                  const.PKG_URL_PREFIX,
                                                                  uuid_vnfPackageId)
                 },
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL,
                                                    const.VNFPKG_SUBSCRIPTION_ROOT_URI,
                                                    uuid_subscriptid)}
             },
@@ -333,14 +331,12 @@ class NotificationTest(TestCase):
             'vnfdId': "vnfdid1",
             '_links': {
                 'vnfPackage': {
-                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                 pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL,
                                                                  const.PKG_URL_PREFIX,
                                                                  "vnfpkgid1")
                 },
                 'subscription': {
-                    'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                                   pub_config.MSB_SERVICE_PORT,
+                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL,
                                                    const.VNFPKG_SUBSCRIPTION_ROOT_URI,
                                                    "1")}
             },
