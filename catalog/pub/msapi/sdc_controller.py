@@ -47,7 +47,7 @@ class SDCController(Thread):
             self.scheduler.start()
         except Exception as e:
             logger.error('start sdc controller failed.')
-            logger.error(e.message)
+            logger.error(str(e))
             logger.error(traceback.format_exc())
 
     def fetch_notification(self):
@@ -62,7 +62,7 @@ class SDCController(Thread):
                     process_notification(notification_callback)
         except Exception as e:
             logger.error('fetch message from dmaap failed.')
-            logger.error(e.message)
+            logger.error(str(e))
             logger.error(traceback.format_exc())
 
 
@@ -184,7 +184,7 @@ def send_notification_status(status_topic, now_ms, distribution_id, artifact, is
             logger.error('failed to send notification status, %s messages unsent', len(stuck))
     except Exception as e:
         logger.error('failed to send notification status.')
-        logger.error(e.message)
+        logger.error(str(e))
         logger.error(traceback.format_exc())
 
     return status

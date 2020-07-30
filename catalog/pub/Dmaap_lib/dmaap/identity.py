@@ -47,7 +47,7 @@ class IdentityClient:
             }
             return resp_data
         except Exception as e:
-            raise DmaapClientException('create apikey from dmaap failed: ' + e.message)
+            raise DmaapClientException('create apikey from dmaap failed: ' + str(e))
 
     def get_apikey(self, apikey):
         try:
@@ -59,7 +59,7 @@ class IdentityClient:
             ret = ret.json()
             return ret
         except Exception as e:
-            raise DmaapClientException('get apikey from dmaap failed: ' + e.message)
+            raise DmaapClientException('get apikey from dmaap failed: ' + str(e))
 
     def delete_apikey(self):
         pass
