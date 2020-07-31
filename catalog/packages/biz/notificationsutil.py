@@ -61,10 +61,7 @@ class NotificationsUtil(object):
             # set subscription id
             notification["subscriptionId"] = sub.get_subscription_id()
             notification['_links']['subscription'] = {
-                'href': 'http://%s:%s/%s%s' % (pub_config.MSB_SERVICE_IP,
-                                               pub_config.MSB_SERVICE_PORT,
-                                               self.subscription_root_uri,
-                                               notification["subscriptionId"])
+                'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, self.subscription_root_uri, notification["subscriptionId"])
             }
             callbackuri = sub.callback_uri
             """
@@ -152,10 +149,7 @@ class PkgNotifications(NotificationsUtil):
             'vnfdId': vnfd_id,
             '_links': {
                 'vnfPackage': {
-                    'href': 'http://%s:%s/%s/vnf_packages/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                 pub_config.MSB_SERVICE_PORT,
-                                                                 const.PKG_URL_PREFIX,
-                                                                 self.vnf_pkg_id)
+                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, self.vnf_pkg_id)
                 }
             }
         }
@@ -198,10 +192,7 @@ class NsdNotifications(NotificationsUtil):
             'nsdId': self.nsd_id,
             '_links': {
                 'nsdInfo': {
-                    'href': 'http://%s:%s/%s/ns_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                   pub_config.MSB_SERVICE_PORT,
-                                                                   const.NSD_URL_PREFIX,
-                                                                   self.nsd_info_id)
+                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL, const.NSD_URL_PREFIX, self.nsd_info_id)
                 }
             }
         }
@@ -241,10 +232,9 @@ class PnfNotifications(NotificationsUtil):
             'pnfdId': self.pnfd_id,
             '_links': {
                 'pnfdInfo': {
-                    'href': 'http://%s:%s/%s/pnf_descriptors/%s' % (pub_config.MSB_SERVICE_IP,
-                                                                    pub_config.MSB_SERVICE_PORT,
-                                                                    const.NSD_URL_PREFIX,
-                                                                    self.pnfd_info_id)
+                    'href': '%s/%s/pnf_descriptors/%s' % (pub_config.MSB_BASE_URL,
+                                                          const.NSD_URL_PREFIX,
+                                                          self.pnfd_info_id)
                 }
             }
         }

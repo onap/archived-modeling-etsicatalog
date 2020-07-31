@@ -27,7 +27,7 @@ from catalog.pub.database.models import VnfPkgSubscriptionModel
 from catalog.pub.exceptions import VnfPkgSubscriptionException, \
     VnfPkgDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
-from catalog.pub.config.config import MSB_SERVICE_IP, MSB_SERVICE_PORT
+from catalog.pub.config.config import MSB_BASE_URL
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +133,7 @@ class CreateSubscription(object):
                 links = json.loads(subscription.links)
                 logger.error("Subscriptions has already exists with the same callbackUri and filter:%s" % links)
                 raise VnfPkgDuplicateSubscriptionException(
-                    "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT, links["self"]["href"]))
+                    "%s/%s" % (MSB_BASE_URL, links["self"]["href"]))
 
         return True
 

@@ -20,7 +20,7 @@ import uuid
 import httplib2
 import base64
 
-from catalog.pub.config.config import MSB_SERVICE_IP, MSB_SERVICE_PORT
+from catalog.pub.config.config import MSB_BASE_URL
 
 rest_no_auth, rest_oneway_auth, rest_bothway_auth = 0, 1, 2
 HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_202_ACCEPTED = '200', '201', '204', '202'
@@ -84,13 +84,12 @@ def call_req(base_url, user, passwd, auth_type, resource, method, content='', ad
 
 
 def req_by_msb(resource, method, content=''):
-    base_url = "https://%s:%s/" % (MSB_SERVICE_IP, MSB_SERVICE_PORT)
-    return call_req(base_url, "", "", rest_no_auth, resource, method, content)
+    return call_req(MSB_BASE_URL, "", "", rest_no_auth, resource, method, content)
 
 
 def upload_by_msb(resource, method, file_data={}):
     headers = {'Content-Type': 'application/octet-stream'}
-    full_url = "https://%s:%s/%s" % (MSB_SERVICE_IP, MSB_SERVICE_PORT, resource)
+    full_url = "%s/%s" % (MSB_BASE_URL, resource)
     http = httplib2.Http()
     resp, resp_content = http.request(full_url, method=method.upper(), body=file_data, headers=headers)
     resp_status, resp_body = resp['status'], resp_content.decode('UTF-8')

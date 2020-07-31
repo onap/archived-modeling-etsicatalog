@@ -24,7 +24,7 @@ import zipfile
 from catalog.packages import const
 from catalog.packages.biz.common import parse_file_range, read, save
 from catalog.packages.biz.notificationsutil import PkgNotifications
-from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_SERVICE_IP, MSB_SERVICE_PORT, MSB_SERVICE_PROTOCOL
+from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_BASE_URL
 from catalog.pub.database.models import VnfPackageModel, NSPackageModel
 from catalog.pub.exceptions import CatalogException, ResourceNotFoundException
 from catalog.pub.utils import fileutil, toscaparser
@@ -279,11 +279,7 @@ def fill_artifacts_data(vnf_pkg_id):
 
 
 def fill_links(pkg_id, is_onboarded=False):
-    self_href = "%s://%s:%s/api/vnfpkgm/v1/vnf_packages/%s" % (
-        MSB_SERVICE_PROTOCOL,
-        MSB_SERVICE_IP,
-        MSB_SERVICE_PORT,
-        pkg_id)
+    self_href = "%s/api/vnfpkgm/v1/vnf_packages/%s" % (MSB_BASE_URL, pkg_id)
     links = {
         "self": {"href": self_href},
         "vnfd": {"href": "%s/%s" % (self_href, "vnfd")},
