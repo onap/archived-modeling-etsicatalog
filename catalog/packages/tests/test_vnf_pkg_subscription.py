@@ -18,21 +18,20 @@ import uuid
 
 import mock
 from django.test import TestCase
+from requests.auth import HTTPBasicAuth
 from rest_framework import status
 from rest_framework.test import APIClient
-from requests.auth import HTTPBasicAuth
 
 import catalog.pub.utils.timeutil
 from catalog.packages import const
 from catalog.packages.biz.notificationsutil import PkgNotifications
 from catalog.packages.biz.vnf_pkg_subscription import QuerySubscription, TerminateSubscription
-from catalog.pub.config import config as pub_config
-from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_BASE_URL
+from catalog.packages.tests.const import vnfd_data
+from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import VnfPkgSubscriptionModel, VnfPackageModel
 from catalog.pub.exceptions import SubscriptionDoesNotExistsException
-from .const import vnf_subscription_data
 from catalog.pub.utils import toscaparser
-from catalog.packages.tests.const import vnfd_data
+from .const import vnf_subscription_data
 
 
 class TestNfPackageSubscription(TestCase):
@@ -92,7 +91,7 @@ class TestNfPackageSubscription(TestCase):
             format='json'
         )
         self.assertEqual(303, response.status_code)
-        redirect_addr = "%s/%s" % (MSB_BASE_URL, os.path.join(const.VNFPKG_SUBSCRIPTION_ROOT_URI, temp_uuid))
+        redirect_addr = "/%s" % (os.path.join(const.VNFPKG_SUBSCRIPTION_ROOT_URI, temp_uuid))
         self.assertEqual(redirect_addr, response["Location"])
 
     @mock.patch("requests.get")
@@ -259,14 +258,15 @@ class TestNfPackageSubscription(TestCase):
             'vnfdId': uuid_vnfdid,
             '_links': {
                 'vnfPackage': {
-                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, uuid_vnfPackageId)
+                    'href': '/%s/vnf_packages/%s' % (const.PKG_URL_PREFIX, uuid_vnfPackageId)
                 },
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI, uuid_subscriptid)}
+                    'href': '/%s%s' % (const.VNFPKG_SUBSCRIPTION_ROOT_URI, uuid_subscriptid)}
             },
             "subscriptionId": uuid_subscriptid
         }
-        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"], data=json.dumps(expect_notification),
+        mock_requests_post.assert_called_with(vnf_subscription_data["callbackUri"],
+                                              data=json.dumps(expect_notification),
                                               headers={'Connection': 'close',
                                                        'content-type': 'application/json',
                                                        'accept': 'application/json'},
@@ -326,10 +326,10 @@ class NotificationTest(TestCase):
             'vnfdId': "vnfdid1",
             '_links': {
                 'vnfPackage': {
-                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, "vnfpkgid1")
+                    'href': '/%s/vnf_packages/%s' % (const.PKG_URL_PREFIX, "vnfpkgid1")
                 },
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI, "1")}
+                    'href': '/%s%s' % (const.VNFPKG_SUBSCRIPTION_ROOT_URI, "1")}
             },
             'changeType': const.PKG_CHANGE_TYPE.OP_STATE_CHANGE,
             'operationalState': None,

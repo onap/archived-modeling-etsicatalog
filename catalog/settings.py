@@ -13,16 +13,14 @@
 # limitations under the License.
 
 import os
-import sys
 import platform
-
-# import catalog.pub.redisco
-
-# from catalog.pub.config.config import REDIS_HOST, REDIS_PORT, REDIS_PASSWD
-from catalog.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, DB_PORT
-from catalog.pub.config import config as pub_config
+import sys
 from logging import config as log_config
+
 from onaplogging import monkey
+
+from catalog.pub.config import config as pub_config
+from catalog.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, DB_PORT
 
 monkey.patch_all()
 
@@ -139,7 +137,6 @@ STATICFILES_DIRS = [
 
 pub_config.CATALOG_ROOT_PATH = os.path.join(STATICFILES_DIRS[0], "catalog")
 pub_config.CATALOG_URL_PATH = "static/catalog"
-pub_config.SDC_BASE_URL = "https://%s:%s/api" % (pub_config.MSB_SERVICE_IP, pub_config.MSB_SERVICE_PORT)
 
 if platform.system() == 'Windows' or 'test' in sys.argv:
     LOGGING = {

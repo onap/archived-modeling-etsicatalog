@@ -12,13 +12,11 @@ from apscheduler.scheduler import Scheduler
 from catalog.pub.Dmaap_lib.dmaap.consumer import ConsumerClient
 from catalog.pub.Dmaap_lib.dmaap.identity import IdentityClient
 from catalog.pub.Dmaap_lib.dmaap.publisher import BatchPublisherClient
-from catalog.pub.config.config import CONSUMER_GROUP, CONSUMER_ID, POLLING_INTERVAL, DMAAP_MR_IP, \
-    DMAAP_MR_PORT
+from catalog.pub.config.config import CONSUMER_GROUP, CONSUMER_ID, POLLING_INTERVAL, DMAAP_MR_BASE_URL
 from catalog.pub.msapi import sdc
 
 logger = logging.getLogger(__name__)
 
-DMAAP_MR_BASE_URL = "https://%s:%s" % (DMAAP_MR_IP, DMAAP_MR_PORT)
 ARTIFACT_TYPES_LIST = ["TOSCA_TEMPLATE", "TOSCA_CSAR"]
 
 

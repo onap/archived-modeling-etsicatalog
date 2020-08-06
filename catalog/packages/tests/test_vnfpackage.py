@@ -13,24 +13,23 @@
 # limitations under the License.
 
 import json
-import mock
 import os
-import catalog.pub.utils.timeutil
-from requests.auth import HTTPBasicAuth
 
+import mock
 from django.test import TestCase
+from requests.auth import HTTPBasicAuth
 from rest_framework import status
 from rest_framework.test import APIClient
 
+import catalog.pub.utils.timeutil
+from catalog.packages import const
 from catalog.packages.biz.sdc_vnf_package import NfDistributeThread, NfPkgDeleteThread
+from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import JobStatusModel, JobModel
 from catalog.pub.database.models import VnfPackageModel
 from catalog.pub.msapi import sdc
 from catalog.pub.utils import restcall, toscaparser
 from .const import vnfd_data
-from catalog.pub.config.config import CATALOG_ROOT_PATH
-from catalog.packages import const
-from catalog.pub.config import config as pub_config
 
 
 class TestNfPackage(TestCase):
@@ -326,9 +325,9 @@ class TestNfPackage(TestCase):
             'vnfdId': "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
             '_links': {
                 'vnfPackage': {
-                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, uuid_csarid)},
+                    'href': '/%s/vnf_packages/%s' % (const.PKG_URL_PREFIX, uuid_csarid)},
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI, uuid_subscriptid)}
+                    'href': '/%s%s' % (const.VNFPKG_SUBSCRIPTION_ROOT_URI, uuid_subscriptid)}
 
             },
             "subscriptionId": uuid_subscriptid
@@ -350,11 +349,11 @@ class TestNfPackage(TestCase):
             'vnfdId': "b1bb0ce7-2222-4fa7-95ed-4840d70a1177",
             '_links': {
                 'vnfPackage': {
-                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX,
-                                                       uuid_csarid)},
-                    'subscription': {
-                        'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.VNFPKG_SUBSCRIPTION_ROOT_URI,
-                                             uuid_subscriptid)}
+                    'href': '/%s/vnf_packages/%s' % (const.PKG_URL_PREFIX,
+                                                     uuid_csarid)},
+                'subscription': {
+                    'href': '/%s%s' % (const.VNFPKG_SUBSCRIPTION_ROOT_URI,
+                                       uuid_subscriptid)}
 
             },
             'changeType': const.PKG_CHANGE_TYPE.PKG_DELETE,

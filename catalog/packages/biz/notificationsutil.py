@@ -26,7 +26,6 @@ import catalog.pub.utils.timeutil
 from catalog.packages import const
 from catalog.packages.serializers.vnf_pkg_notifications import PkgChangeNotificationSerializer, \
     PkgOnboardingNotificationSerializer
-from catalog.pub.config import config as pub_config
 from catalog.pub.database.models import VnfPackageModel, VnfPkgSubscriptionModel, NsdmSubscriptionModel
 from catalog.pub.utils.values import remove_none_key
 
@@ -61,7 +60,7 @@ class NotificationsUtil(object):
             # set subscription id
             notification["subscriptionId"] = sub.get_subscription_id()
             notification['_links']['subscription'] = {
-                'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, self.subscription_root_uri, notification["subscriptionId"])
+                'href': '/%s%s' % (self.subscription_root_uri, notification["subscriptionId"])
             }
             callbackuri = sub.callback_uri
             """
@@ -149,7 +148,7 @@ class PkgNotifications(NotificationsUtil):
             'vnfdId': vnfd_id,
             '_links': {
                 'vnfPackage': {
-                    'href': '%s/%s/vnf_packages/%s' % (pub_config.MSB_BASE_URL, const.PKG_URL_PREFIX, self.vnf_pkg_id)
+                    'href': '/%s/vnf_packages/%s' % (const.PKG_URL_PREFIX, self.vnf_pkg_id)
                 }
             }
         }
@@ -192,7 +191,8 @@ class NsdNotifications(NotificationsUtil):
             'nsdId': self.nsd_id,
             '_links': {
                 'nsdInfo': {
-                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL, const.NSD_URL_PREFIX, self.nsd_info_id)
+                    'href': '/%s/ns_descriptors/%s' % (
+                        const.NSD_URL_PREFIX, self.nsd_info_id)
                 }
             }
         }
@@ -232,9 +232,8 @@ class PnfNotifications(NotificationsUtil):
             'pnfdId': self.pnfd_id,
             '_links': {
                 'pnfdInfo': {
-                    'href': '%s/%s/pnf_descriptors/%s' % (pub_config.MSB_BASE_URL,
-                                                          const.NSD_URL_PREFIX,
-                                                          self.pnfd_info_id)
+                    'href': '/%s/pnf_descriptors/%s' % (const.NSD_URL_PREFIX,
+                                                        self.pnfd_info_id)
                 }
             }
         }

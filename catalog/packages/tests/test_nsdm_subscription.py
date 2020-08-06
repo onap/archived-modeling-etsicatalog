@@ -13,23 +13,23 @@
 # limitations under the License.
 
 import json
-import mock
-import uuid
 import os
-from django.test import TestCase
-from rest_framework.test import APIClient
-from rest_framework import status
-from requests.auth import HTTPBasicAuth
+import uuid
 
-from catalog.packages.biz.nsdm_subscription import NsdmSubscription
-from catalog.pub.database.models import NsdmSubscriptionModel
-from catalog.packages.biz.notificationsutil import NsdNotifications, PnfNotifications
-from catalog.packages import const
-from catalog.pub.config import config as pub_config
+import mock
+from django.test import TestCase
+from requests.auth import HTTPBasicAuth
+from rest_framework import status
+from rest_framework.test import APIClient
+
 import catalog.pub.utils.timeutil
+from catalog.packages import const
+from catalog.packages.biz.notificationsutil import NsdNotifications, PnfNotifications
+from catalog.packages.biz.nsdm_subscription import NsdmSubscription
 from catalog.packages.tests.const import nsd_data
+from catalog.pub.config.config import CATALOG_ROOT_PATH
 from catalog.pub.database.models import NSPackageModel, VnfPackageModel, PnfPackageModel
-from catalog.pub.config.config import CATALOG_ROOT_PATH, MSB_BASE_URL
+from catalog.pub.database.models import NsdmSubscriptionModel
 from catalog.pub.utils import toscaparser
 
 
@@ -180,7 +180,7 @@ class TestNsdmSubscription(TestCase):
         response = self.client.post("/api/nsd/v1/subscriptions",
                                     data=self.subscription, format='json')
         self.assertEqual(303, response.status_code)
-        redirect_addr = "%s/%s" % (MSB_BASE_URL, os.path.join(const.NSDM_SUBSCRIPTION_ROOT_URI, subscriptionid))
+        redirect_addr = "/%s" % (os.path.join(const.NSDM_SUBSCRIPTION_ROOT_URI, subscriptionid))
         self.assertEqual(redirect_addr, response["Location"])
 
     @mock.patch("requests.get")
@@ -626,9 +626,10 @@ class TestNsdmSubscription(TestCase):
             'nsdId': "b632bddc-bccd-4180-bd8d-4e8a9578eff7",
             '_links': {
                 'nsdInfo': {
-                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL, const.NSD_URL_PREFIX, "d0ea5ec3-0b98-438a-9bea-488230cff174")},
+                    'href': '/%s/ns_descriptors/%s' % (
+                        const.NSD_URL_PREFIX, "d0ea5ec3-0b98-438a-9bea-488230cff174")},
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.NSDM_SUBSCRIPTION_ROOT_URI, "1111")}
+                    'href': '/%s%s' % (const.NSDM_SUBSCRIPTION_ROOT_URI, "1111")}
 
             },
             "subscriptionId": "1111"
@@ -675,10 +676,10 @@ class NotificationTest(TestCase):
             'nsdId': "nsdid1",
             '_links': {
                 'nsdInfo': {
-                    'href': '%s/%s/ns_descriptors/%s' % (pub_config.MSB_BASE_URL, const.NSD_URL_PREFIX, "nsdinfoid1")
+                    'href': '/%s/ns_descriptors/%s' % (const.NSD_URL_PREFIX, "nsdinfoid1")
                 },
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.NSDM_SUBSCRIPTION_ROOT_URI, "1")}
+                    'href': '/%s%s' % (const.NSDM_SUBSCRIPTION_ROOT_URI, "1")}
             },
             'onboardingFailureDetails': "NSD(nsdid1) already exists.",
             "subscriptionId": "1"
@@ -711,10 +712,10 @@ class NotificationTest(TestCase):
             'pnfdId': "pnfdId1",
             '_links': {
                 'pnfdInfo': {
-                    'href': '%s/%s/pnf_descriptors/%s' % (pub_config.MSB_BASE_URL, const.NSD_URL_PREFIX, "pnfdInfoIds1")
+                    'href': '/%s/pnf_descriptors/%s' % (const.NSD_URL_PREFIX, "pnfdInfoIds1")
                 },
                 'subscription': {
-                    'href': '%s/%s%s' % (pub_config.MSB_BASE_URL, const.NSDM_SUBSCRIPTION_ROOT_URI, "1")},
+                    'href': '/%s%s' % (const.NSDM_SUBSCRIPTION_ROOT_URI, "1")},
             },
             "subscriptionId": "1",
         }
