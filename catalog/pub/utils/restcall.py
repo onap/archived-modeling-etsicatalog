@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import base64
+import logging
 import sys
 import traceback
-import logging
 import urllib
 import uuid
+
 import httplib2
-import base64
 
 from catalog.pub.config.config import MSB_BASE_URL
 

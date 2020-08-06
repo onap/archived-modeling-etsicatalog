@@ -16,18 +16,18 @@ import ast
 import json
 import logging
 import os
-import requests
 import uuid
-
 from collections import Counter
-from rest_framework import status
+
+import requests
 from requests.auth import HTTPBasicAuth
+from rest_framework import status
+
 from catalog.packages import const
 from catalog.pub.database.models import VnfPkgSubscriptionModel
 from catalog.pub.exceptions import VnfPkgSubscriptionException, \
     VnfPkgDuplicateSubscriptionException, SubscriptionDoesNotExistsException
 from catalog.pub.utils.values import ignore_case_get
-from catalog.pub.config.config import MSB_BASE_URL
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +133,7 @@ class CreateSubscription(object):
                 links = json.loads(subscription.links)
                 logger.error("Subscriptions has already exists with the same callbackUri and filter:%s" % links)
                 raise VnfPkgDuplicateSubscriptionException(
-                    "%s/%s" % (MSB_BASE_URL, links["self"]["href"]))
+                    "/%s" % (links["self"]["href"]))
 
         return True
 
