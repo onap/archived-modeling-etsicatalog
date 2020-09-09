@@ -10,7 +10,7 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
-Version: 1.0.6
+Version: 1.0.7
 --------------
 
 :Release Date: 2020-05-11
@@ -22,10 +22,18 @@ Version: 1.0.6
 Released components:
  - etsicatalog 1.0.6
 
-**Bug Fixes**
+Version: 1.0.7
+--------------
 
-- fix bug: Failed to fetch NS package from SDC when having VL resource
-- fix bug: Failed to open admin url
+:Release Date: 2020-09-09
+
+**New Features**
+
+- Optimize the docker image
+- Remove the mandatory dependency on MSB
+
+Released components:
+ - etsicatalog 1.0.7
 
 Version: 1.0.5
 --------------
