@@ -13,18 +13,6 @@ Service.
 Version: 1.0.7
 --------------
 
-:Release Date: 2020-05-11
-
-**New Features**
-
-- optimize the docker image
-
-Released components:
- - etsicatalog 1.0.6
-
-Version: 1.0.7
---------------
-
 :Release Date: 2020-09-09
 
 **New Features**
@@ -34,6 +22,18 @@ Version: 1.0.7
 
 Released components:
  - etsicatalog 1.0.7
+
+Version: 1.0.6
+--------------
+
+:Release Date: 2020-05-11
+
+**New Features**
+
+- optimize the docker image
+
+Released components:
+ - etsicatalog 1.0.6
 
 Version: 1.0.5
 --------------

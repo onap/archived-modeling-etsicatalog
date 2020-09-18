@@ -21,8 +21,7 @@ import time
 from hashlib import sha1
 
 import requests
-from apscheduler.scheduler import Scheduler
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from catalog.pub.Dmaap_lib.pub.exceptions import DmaapClientException
 
 logger = logging.getLogger(__name__)
@@ -40,9 +39,10 @@ class BatchPublisherClient:
         self.pending = []
         self.closed = False
         self.dont_send_until_ms = 0
-        self.scheduler = Scheduler(standalone=False)
+        self.scheduler = BackgroundScheduler()
 
-        @self.scheduler.interval_schedule(second=1)
+        # @self.scheduler.interval_schedule(second=1)
+        @self.scheduler.scheduled_job(second=1)
         def crawl_job():
             self.send_message(False)
 
