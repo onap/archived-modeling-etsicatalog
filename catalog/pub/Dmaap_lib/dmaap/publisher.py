@@ -60,7 +60,7 @@ class BatchPublisherClient:
             self.pending.append(message)
             return len(self.pending)
         except Exception as e:
-            raise DmaapClientException("append message failed: " + e.message)
+            raise DmaapClientException("append message failed: " + str(e))
 
     def send_message(self, force):
         if force or self.should_send_now():
@@ -122,7 +122,7 @@ class BatchPublisherClient:
             return True
 
         except Exception as e:
-            logger.error(e.message)
+            logger.error(str(e))
             return False
 
     def create_headers(self):
@@ -163,7 +163,7 @@ class BatchPublisherClient:
                 time.sleep(0.25)
             return self.pending
         except Exception as e:
-            raise DmaapClientException("send message failed: " + e.message)
+            raise DmaapClientException("send message failed: " + str(e))
 
 
 class Message:

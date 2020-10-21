@@ -89,4 +89,4 @@ class ConsumerClient:
                 msgs.append(msg)
             return msgs
         except Exception as e:
-            raise DmaapClientException(e.message)
+            raise DmaapClientException(str(e))
