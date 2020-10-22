@@ -16,7 +16,7 @@ import os
 
 # [MSB]
 MSB_BASE_URL = os.getenv("MSB_ADDR", "http://127.0.0.1:80")
-MSB_ENABLED = os.getenv("MSB_ENABLED", "true")
+MSB_ENABLED = os.getenv("MSB_ENABLED", "false")
 
 # [SDC config]
 if MSB_ENABLED == "true":
@@ -29,7 +29,7 @@ SDC_PASSWD = "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
 SERVICE_IP = os.getenv("SERVICE_IP", "127.0.0.1")
 
 # [DMAAP config]
-DMAAP_ENABLED = os.getenv("DMAAP_ENABLED", False)
+DMAAP_ENABLED = os.getenv("DMAAP_ENABLED", "false")
 DMAAP_MR_BASE_URL = os.getenv("DMAAP_ADDR")
 CONSUMER_GROUP = "consumerGroup"
 CONSUMER_ID = "consumerId"
