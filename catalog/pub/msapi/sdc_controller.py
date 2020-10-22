@@ -1,7 +1,6 @@
 # Copyright 2019 CMCC Technologies Co., Ltd.
 import json
 import logging
-import os
 import time
 import traceback
 import uuid
@@ -9,11 +8,9 @@ from threading import Thread
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from catalog.pub.database.models import NSPackageModel, VnfPackageModel
+from catalog.pub.database.models import VnfPackageModel
 from catalog.pub.exceptions import CatalogException
-from catalog.packages.biz import sdc_vnf_package
-from catalog.pub.utils import fileutil
-from catalog.packages.biz.ns_descriptor import NsDescriptor
+from catalog.packages.biz import sdc_vnf_package, sdc_ns_package
 from catalog.pub.utils.jobutil import JobUtil
 from catalog.pub.utils.values import ignore_case_get
 
@@ -232,31 +229,7 @@ def process_notification(msg):
         for artifact in service_artifacts:
             if artifact['artifactType'] == 'TOSCA_CSAR':
                 csar_id = artifact['artifactUUID']
-                if not NSPackageModel.objects.filter(nsPackageId=artifact['artifactUUID']):
-                    download_url = artifact['artifactURL']
-                    localhost_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                    ns_csar_base = os.path.join(localhost_dir, "csars", "ns")
-                    local_path = os.path.join(ns_csar_base, msg['distributionID'])
-                    file_name = artifact['artifactName']
-                    # csar_version = artifact['artifactVersion']
-
-                    # download csar package
-                    local_file_name = sdc.download_artifacts(download_url, local_path, file_name)
-                    if local_file_name.endswith(".csar") or local_file_name.endswith(".zip"):
-                        artifact_vnf_file = fileutil.unzip_file(local_file_name, local_path,
-                                                                "Artifacts/Deployment/OTHER/ns.csar")
-                        if os.path.exists(artifact_vnf_file):
-                            local_file_name = artifact_vnf_file
-
-                    data = {
-                        'userDefinedData': {}
-                    }
-                    nsd = NsDescriptor()
-                    nsd.create(data, csar_id)
-                    nsd.parse_nsd_and_save(csar_id, local_file_name)
-                    logger.debug("CSAR(%s) distriuted successfully.", csar_id)
-                else:
-                    logger.debug("CSAR(%s) has been distriuted", csar_id)
+                sdc_ns_package.ns_on_distribute(csar_id)
     except CatalogException as e:
         logger.error("Failed to download the resource")
         logger.error(str(e))
