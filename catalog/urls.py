@@ -39,5 +39,5 @@ if REG_TO_MSB_WHEN_START:
     for reg_param in REG_TO_MSB_REG_PARAM:
         req_by_msb(REG_TO_MSB_REG_URL, "POST", json.JSONEncoder().encode(reg_param))
 
-if DMAAP_ENABLED:
+if DMAAP_ENABLED == "true":
     SDCController().start()
