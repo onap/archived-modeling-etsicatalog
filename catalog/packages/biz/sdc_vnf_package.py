@@ -131,12 +131,12 @@ class NfDistributeThread(threading.Thread):
         if local_file_name.endswith(".csar") or local_file_name.endswith(".zip"):
             fileutil.unzip_csar(local_file_name, local_path)
             vendor_vnf_file = ''
-            # find original vendor ETSI package under the ONBOARDING_PACKAGE directory
-            onboarding_package_dir = os.path.join(local_path, "Artifacts/Deployment/ONBOARDED_PACKAGE")
-            if os.path.exists(onboarding_package_dir):
-                files = os.listdir(onboarding_package_dir)
+            # find original vendor ETSI package under the ETSI_PACKAGE directory
+            etsi_package_dir = os.path.join(local_path, "Artifacts/Deployment/ETSI_PACKAGE")
+            if os.path.exists(etsi_package_dir):
+                files = os.listdir(etsi_package_dir)
                 for file_name in files:
-                    a_file = os.path.join(onboarding_package_dir, file_name)
+                    a_file = os.path.join(etsi_package_dir, file_name)
                     if os.path.isfile(a_file) & file_name.endswith(".csar"):
                         vendor_vnf_file = a_file
                         break
