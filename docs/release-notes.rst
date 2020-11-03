@@ -10,18 +10,21 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
-Version: 1.0.7
+Version: 1.0.9
 --------------
 
-:Release Date: 2020-09-09
+:Release Date: 2020-11-03
 
 **New Features**
 
+- Support SDC-ETSI Catalog Manager direct interface
+- Query SDC for ETSI packages from the ETSI_PACKAGE directory and store the packages
 - Optimize the docker image
 - Remove the mandatory dependency on MSB
 
 Released components:
- - etsicatalog 1.0.7
+ - etsicatalog 1.0.9
+
 
 Version: 1.0.6
 --------------
