@@ -7,7 +7,7 @@
 Release Notes
 ==============
 
-etsicatalog provides package management service and parser service as Micro
+Modeling/etsicatalog provides package management service and parser service as Micro
 Service.
 
 Version: 1.0.9
