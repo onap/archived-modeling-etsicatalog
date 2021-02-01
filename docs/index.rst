@@ -3,14 +3,15 @@
 
 Etsicatalog Project
 -------------------
+
 .. toctree::
    :maxdepth: 2
 
-   introduction
    architecture
-   installation
+   developer-guide
    offeredapis
    consumedapis
+   installation
    administration
    humaninterfaces
    release-notes
