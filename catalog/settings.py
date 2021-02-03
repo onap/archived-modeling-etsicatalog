@@ -17,12 +17,8 @@ import platform
 import sys
 from logging import config as log_config
 
-from onaplogging import monkey
-
 from catalog.pub.config import config as pub_config
 from catalog.pub.config.config import DB_NAME, DB_IP, DB_USER, DB_PASSWD, DB_PORT
-
-monkey.patch_all()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -86,7 +82,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'catalog.middleware.LogContextMiddleware',
 ]
 
 ROOT_URLCONF = 'catalog.urls'

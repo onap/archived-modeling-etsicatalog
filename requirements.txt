@@ -5,13 +5,6 @@ djangorestframework==3.10.3
 # for access MySQL
 PyMySQL==0.9.3
 
-# redis cache
-# redis==2.10.5
-
-# for access redis cache
-# redisco==0.1.4
-# django-redis-cache==0.13.1
-
 # for call rest api
 httplib2==0.12.3
 
@@ -30,9 +23,6 @@ ruamel.yaml==0.16.10
 drf-yasg==1.17.0
 flex>=6.11.1
 swagger-spec-validator>=2.1.0
-
-# for onap logging
-onappylog==1.0.9
 
 # uwsgi for parallel processing
 uwsgi
