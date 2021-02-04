@@ -15,6 +15,7 @@
 import os
 import platform
 import sys
+import yaml
 from logging import config as log_config
 
 from catalog.pub.config import config as pub_config
@@ -175,9 +176,15 @@ if platform.system() == 'Windows' or 'test' in sys.argv:
     }
 else:
     LOGGING_CONFIG = None
+    log_path = '/var/log/onap/modeling/etsicatalog'
+    if not os.path.exists(log_path):
+        os.makedirs(log_path)
+
     # yaml configuration of logging
     LOGGING_FILE = os.path.join(BASE_DIR, 'catalog/log.yml')
-    log_config.yamlConfig(filepath=LOGGING_FILE, watchDog=True)
+    with open(file=LOGGING_FILE, mode='r', encoding="utf-8")as file:
+        logging_yaml = yaml.load(stream=file, Loader=yaml.FullLoader)
+    log_config.dictConfig(config=logging_yaml)
 
 if 'test' in sys.argv:
     pub_config.REG_TO_MSB_WHEN_START = False
