@@ -10,6 +10,26 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
+Version: 1.0.10
+---------------
+
+:Release Date: 2021-03-03
+
+**New Features**
+
+- Support Subscription and Notification for NSD packages
+- Refactor logging to remove dependency on onaplogging component
+- Upgrade to Python3.8
+- Update document of installation and developer guide
+
+**Bug Fixes**
+
+- Fix bug: Get VNF Package Artifact endpoint doesn't accept file extensions
+
+Released components:
+ - etsicatalog 1.0.10
+
+
 Version: 1.0.9
 --------------
 

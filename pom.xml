@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.modeling.etsicatalog</groupId>
     <artifactId>modeling-etsicatalog</artifactId>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>modeling-etsicatalog</name>
     <description>modeling etsicatalog</description>
