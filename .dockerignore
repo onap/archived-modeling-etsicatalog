@@ -1,0 +1,12 @@
+./.*
+./*.yaml
+./*.xml
+./*.md
+./*.properties
+./*.out
+./target
+./resources
+./releases
+./docs
+./test-reports
+./mvn-phase-script.sh
