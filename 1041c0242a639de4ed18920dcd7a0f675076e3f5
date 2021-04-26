@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "3cbe7f99_a97a62e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T13:01:26Z",
+      "side": 1,
+      "message": "a space after hyphen makes it a bit easier to read",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "392cae32_0e8788be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T13:01:26Z",
+      "side": 1,
+      "message": "also when the rest of text is indented to the level of text in the hyphen line makes it more obvious continuation of the bullet point",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "73bd1e11_902d5bd2",
         "filename": "docker/Dockerfile",
         "patchSetId": 2
