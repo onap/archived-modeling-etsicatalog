@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73bd1e11_902d5bd2",
+        "filename": "docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "uneven spacing",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 1
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fc6765e_8e19d01f",
+        "filename": "docker/docker-entrypoint.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "if the apps are for py3 I\u0027d go for calling python3 to clearly indicate py2/3 (as onap still has py2 used in some places)",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 6
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c245738_fbc0ec70",
+        "filename": "docker/docker-entrypoint.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "trailing whitespaces",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884ee9cf_117d97e8",
+        "filename": "mvn-phase-script.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "no need for changing it - this is not run in docker",
+      "range": {
+        "startLine": 1,
+        "startChar": 4,
+        "endLine": 1,
+        "endChar": 9
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "426840ce_f11da6f0",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "trailing whitespaces",
+      "range": {
+        "startLine": 38,
+        "startChar": 59,
+        "endLine": 38,
+        "endChar": 60
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0419499b_bb99138f",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "imho a comment on what those envs are for would make it easier to read",
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acc192f7_3df9b216",
+        "filename": "stop.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-04-26T12:41:17Z",
+      "side": 1,
+      "message": "not related to the review at hand, just a note: this whole line could be switched to one pkill (same with below) https://linux.die.net/man/1/pkill",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
