@@ -1,0 +1,10 @@
+./.*
+./*.yaml
+./*.xml
+./*.md
+./*.properties
+./*.out
+./target
+./resources
+./releases
+./docs
