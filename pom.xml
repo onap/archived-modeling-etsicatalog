@@ -16,26 +16,33 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.onap.oparent</groupId>
+	<groupId>org.onap.oparent</groupId>
         <artifactId>oparent</artifactId>
-        <version>2.1.0</version>
+	<version>2.1.0</version>
+	<relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.modeling.etsicatalog</groupId>
     <artifactId>modeling-etsicatalog</artifactId>
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>modeling-etsicatalog</name>
     <description>modeling etsicatalog</description>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.sources>.</sonar.sources>
-        <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
-        <sonar.python.coverage.reportPaths>coverage.xml</sonar.python.coverage.reportPaths>
-        <sonar.language>py</sonar.language>
-        <sonar.pluginname>python</sonar.pluginname>
-        <sonar.inclusions>**/**.py</sonar.inclusions>
-        <sonar.exclusions>**/tests/**.py,**/test*.py</sonar.exclusions>
+	<maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
+	<docker.noCache>true</docker.noCache>
+	<docker.skip.save>true</docker.skip.save>
+	<docker.buildArg.HTTPS_PROXY></docker.buildArg.HTTPS_PROXY>
+	<docker.buildArg.HTTP_PROXY></docker.buildArg.HTTP_PROXY>
+	<docker.buildArg.PKG_VERSION>1.1.0</docker.buildArg.PKG_VERSION>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<sonar.sources>.</sonar.sources>
+	<sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
+	<sonar.python.coverage.reportPaths>coverage.xml</sonar.python.coverage.reportPaths>
+	<sonar.language>py</sonar.language>
+	<sonar.pluginname>python</sonar.pluginname>
+	<sonar.inclusions>**/**.py</sonar.inclusions>
+	<sonar.exclusions>**/tests/**.py,**/test*.py</sonar.exclusions>
     </properties>
     <build>
       <pluginManagement>
@@ -107,7 +114,60 @@
                     </goals>
                 </execution>
             </executions>
+	</plugin>
+        <plugin>
+         <groupId>io.fabric8</groupId>
+         <artifactId>docker-maven-plugin</artifactId>
+         <version>0.35.0</version>
+         <configuration>
+          <images>
+	   <image>
+	    <name>${docker.push.registry}/onap/modeling/etsicatalog</name>
+	    <build>
+	     <dockerFile>${project.basedir}/docker/Dockerfile</dockerFile>
+	     <contextDir>${project.basedir}</contextDir>
+	     <tags>
+              <tag>latest</tag>
+              <tag>1.1.0-SNAPSHOT-latest</tag>
+              <tag>1.1.0-STAGING-latest</tag>
+              <tag>1.1.0-STAGING-${maven.build.timestamp}</tag>
+             </tags>
+	    </build>
+           </image>
+          </images>
+         </configuration>
+	 <executions>
+	  <execution>
+           <id>build</id>
+	   <phase>install</phase>
+	   <goals>
+	    <goal>stop</goal>
+            <goal>build</goal>
+           </goals>
+          </execution>
+          <execution>
+           <id>start</id>
+           <phase></phase>
+	   <goals>
+            <goal>start</goal>
+           </goals>
+          </execution>
+          <execution>
+	   <id>stop</id>
+	   <phase></phase>
+           <goals>
+            <goal>stop</goal>
+           </goals>
+          </execution>
+          <execution>
+           <id>push</id>
+	   <phase>deploy</phase>
+           <goals>
+            <goal>push</goal>
+           </goals>
+          </execution>
+         </executions>
         </plugin>
-      </plugins>
+       </plugins>
     </build>
 </project>
