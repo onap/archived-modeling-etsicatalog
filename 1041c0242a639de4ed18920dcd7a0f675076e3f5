@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "591d5ba5_69ca973f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cbe7f99_a97a62e2",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "392cae32_0e8788be",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3046a2c_011db711",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "392cae32_0e8788be",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3fbfd4b9_7b811844",
+        "filename": "docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73bd1e11_902d5bd2",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 1
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fc6765e_8e19d01f",
         "filename": "docker/docker-entrypoint.sh",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfbf3871_b33b99b1",
+        "filename": "docker/docker-entrypoint.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fc6765e_8e19d01f",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 6
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a846bd1c_3fea8be4",
+        "filename": "docker/docker-entrypoint.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c245738_fbc0ec70",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "884ee9cf_117d97e8",
         "filename": "mvn-phase-script.sh",
         "patchSetId": 2
@@ -137,6 +257,30 @@
       "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff6af2b4_57346b96",
+        "filename": "mvn-phase-script.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "884ee9cf_117d97e8",
+      "range": {
+        "startLine": 1,
+        "startChar": 4,
+        "endLine": 1,
+        "endChar": 9
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "fce5f0df_d74ba26f",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "426840ce_f11da6f0",
+      "range": {
+        "startLine": 38,
+        "startChar": 59,
+        "endLine": 38,
+        "endChar": 60
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0419499b_bb99138f",
         "filename": "pom.xml",
         "patchSetId": 2
@@ -177,6 +345,24 @@
       "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aab7cc0_6bc6b1e2",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-06T09:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0419499b_bb99138f",
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
