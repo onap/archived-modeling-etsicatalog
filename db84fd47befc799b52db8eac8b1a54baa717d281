@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f3491b2_436eb7df",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "might deserve minor version bump",
+      "range": {
+        "startLine": 27,
+        "startChar": 15,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0b9e2be_ecfcc11d",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "alias, containerNamePattern \u0026 showLogs are only for docker:run, which would work without those params anyway, is there any gain from adding those?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b99a63_9d6c494b",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "any reason for not specyfing docker stuff in plugin section? Most of this stuff is set \u0026 forget, I\u0027d place here only those params that someone might want to configure for specific runs",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 8
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4bba0d_25a7862e",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "use stuff from the common nexus settings, e.g. this should be ${docker.push.registry} (which also allows for overwriting- e.g. mvn deploy \u0027-Ddocker.push.registry\u003dlocalhost:5000\u0027",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 35
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5b15df7_6450a777",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "reuse version tag so it doesn\u0027t have to be updated in more than one place",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f05274e_58bb6d04",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "Considering that update in jjb is required I think it would be best to follow this: https://wiki.onap.org/pages/viewpage.action?pageId\u003d93001968\nWorth looking at:\nhttps://gerrit.linuxfoundation.org/infra/gitweb?p\u003dreleng/global-jjb.git;a\u003dblob;f\u003djjb/lf-maven-jobs.yaml;h\u003d2b5c7944c894af309d06224b69dce2b7b3a536f3;hb\u003dHEAD#l1042\nhttps://gerrit.onap.org/r/gitweb?p\u003dci-management.git;a\u003dblob;f\u003djjb/dmaap/dmaap-datarouter.yaml;h\u003db79f2ed54c4b98cdcbf85214a2febae5edbe4473;hb\u003drefs/heads/master",
+      "range": {
+        "startLine": 39,
+        "startChar": 16,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a5d3778_564c08a2",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "reuse version tag \u0026 add profile for STAGING",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "092424ff_382517bc",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-11T11:22:19Z",
+      "side": 1,
+      "message": "no need for trailing slash",
+      "range": {
+        "startLine": 42,
+        "startChar": 38,
+        "endLine": 42,
+        "endChar": 39
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
