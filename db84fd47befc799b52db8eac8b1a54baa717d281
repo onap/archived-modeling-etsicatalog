@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7702025_d417fa4a",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "1.0.11?",
+      "parentUuid": "9f3491b2_436eb7df",
+      "range": {
+        "startLine": 27,
+        "startChar": 15,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0b9e2be_ecfcc11d",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "fd74d96e_c7a4464c",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "I used the original pom as the example - plugin variables defined here. Also, i didnt know which params would be used for a \"specific run\".",
+      "parentUuid": "53b99a63_9d6c494b",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 8
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0eda000_475bd19d",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "It mimics the behavior from the build script - I wasn\u0027t sure if it is needed somewhere else so I copied it.",
+      "parentUuid": "e0b9e2be_ecfcc11d",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f4bba0d_25a7862e",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "22380968_9a94920b",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "These are the variable values from the original build script put together.",
+      "parentUuid": "8f4bba0d_25a7862e",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 35
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5b15df7_6450a777",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -105,6 +201,30 @@
       "writtenOn": "2021-05-11T11:22:19Z",
       "side": 1,
       "message": "reuse version tag so it doesn\u0027t have to be updated in more than one place",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b3d9cf_3e4b0243",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "The version tag has \"-snapshot\" at the end of it so thats why i didnt use it and I certainly didn\u0027t want to change it.",
+      "parentUuid": "f5b15df7_6450a777",
       "range": {
         "startLine": 38,
         "startChar": 16,
@@ -151,6 +271,30 @@
       "writtenOn": "2021-05-11T11:22:19Z",
       "side": 1,
       "message": "reuse version tag \u0026 add profile for STAGING",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac2eae69_8403386a",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-11T14:20:07Z",
+      "side": 1,
+      "message": "The version tag has \"-snapshot\" at the end of it so thats why i didnt use it and I certainly didn\u0027t want to change it.",
+      "parentUuid": "3a5d3778_564c08a2",
       "range": {
         "startLine": 40,
         "startChar": 16,
