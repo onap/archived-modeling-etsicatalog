@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "25e58ec7_d31b66fb",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-12T15:43:24Z",
+      "side": 1,
+      "message": "https://semver.org/#spec-item-2\nA normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -\u003e 1.10.0 -\u003e 1.11.0.\nhttps://semver.org/#spec-item-7\n(...) It MAY be incremented if substantial new functionality or improvements are introduced within the private code. It MAY include patch level changes. Patch version MUST be reset to 0 when minor version is incremented.\n\nimho 1.1.0 due to base image change + deployment cleanup",
+      "parentUuid": "f7702025_d417fa4a",
+      "range": {
+        "startLine": 27,
+        "startChar": 15,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0b9e2be_ecfcc11d",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "f4d4c416_98706772",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-12T15:43:24Z",
+      "side": 1,
+      "message": "there is similar tag but its in a func that is not called, no need for it",
+      "parentUuid": "b0eda000_475bd19d",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f4bba0d_25a7862e",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "These are the variable values from the original build script put together.",
       "parentUuid": "8f4bba0d_25a7862e",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 35
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1881b8e2_8815d368",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-12T15:43:24Z",
+      "side": 1,
+      "message": "yeah, but its now managed via maven\u0027s pom which already has some vars defined, no need for plaintext",
+      "parentUuid": "22380968_9a94920b",
       "range": {
         "startLine": 36,
         "startChar": 14,
@@ -307,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "d81496d9_97b812cb",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-12T15:43:24Z",
+      "side": 1,
+      "message": "Yeah, usage of STAGING and SNAPSHOT is still unclear, I think it would be best to follow Lasse proposal (partially as it includes moving CSIT to proejct repo and have it run in jenkins) thus:\nSNAPSHOT built \u0026 not pushed to nexus + STAGING that would be pushed to nexus.\nin jjb I\u0027d go for triggering STAGING build only for now and if the prj would transition csit to its own repo SNAPSHOT builds could be turned on \u0026 used in CSIT",
+      "parentUuid": "ac2eae69_8403386a",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "092424ff_382517bc",
         "filename": "pom.xml",
         "patchSetId": 5
@@ -323,6 +419,29 @@
         "startChar": 38,
         "endLine": 42,
         "endChar": 39
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21a80009_17e1a909",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7352
+      },
+      "writtenOn": "2021-05-12T15:43:24Z",
+      "side": 1,
+      "message": "those build args might be uncommented, its best to overwrite with sys property (-Ddocker.buildArg.HTTPS_PROXY\u003dasdf)",
+      "range": {
+        "startLine": 44,
+        "startChar": 23,
+        "endLine": 44,
+        "endChar": 34
       },
       "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
