@@ -452,6 +452,30 @@
     },
     {
       "key": {
+        "uuid": "94a418d8_49dbdaa9",
+        "filename": "pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-17T18:35:13Z",
+      "side": 1,
+      "message": "undone",
+      "parentUuid": "eff020ef_77159506",
+      "range": {
+        "startLine": 39,
+        "startChar": 16,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "db84fd47befc799b52db8eac8b1a54baa717d281",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a5d3778_564c08a2",
         "filename": "pom.xml",
         "patchSetId": 5
