@@ -386,6 +386,30 @@
       "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "174b85d1_beb99a87",
+        "filename": "stop.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7715
+      },
+      "writtenOn": "2021-05-17T10:17:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "acc192f7_3df9b216",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "1041c0242a639de4ed18920dcd7a0f675076e3f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
