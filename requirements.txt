@@ -6,7 +6,7 @@ djangorestframework==3.10.3
 PyMySQL==0.9.3
 
 # for call rest api
-httplib2==0.12.3
+httplib2==0.19.1
 
 # for unit test
 coverage==4.2
