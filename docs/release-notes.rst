@@ -10,6 +10,19 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
+Version: 1.0.11
+--------------
+
+:Release Date: 2021-08-31
+
+**New Features**
+
+- update PyYAML & httplib2 version
+
+Released components:
+ - etsicatalog 1.0.11
+
+
 Version: 1.0.10
 ---------------
 
