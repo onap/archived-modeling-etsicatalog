@@ -38,6 +38,10 @@ JOB_ERROR = 255
 
 
 def nf_get_csars():
+    """
+    Get NF packages
+    :return:
+    """
     ret = None
     try:
         ret = NfPackage().get_csars()
@@ -51,6 +55,11 @@ def nf_get_csars():
 
 
 def nf_get_csar(csar_id):
+    """
+    Get NF package by id
+    :param csar_id:
+    :return:
+    """
     ret = None
     try:
         ret = NfPackage().get_csar(csar_id)
@@ -64,6 +73,12 @@ def nf_get_csar(csar_id):
 
 
 def parse_vnfd(csar_id, inputs):
+    """
+    Parse VNFD
+    :param csar_id:
+    :param inputs:
+    :return:
+    """
     ret = None
     try:
         nf_pkg = VnfPackageModel.objects.filter(vnfPackageId=csar_id)
@@ -167,6 +182,7 @@ class NfDistributeThread(threading.Thread):
         vnf_provider = vnfd["vnf"]["properties"].get("provider", "")
         vnf_software_version = vnfd["vnf"]["properties"].get("software_version", "")
         vnfd_product_name = vnfd["vnf"]["properties"].get("product_name", "")
+        # Update VNF package Model to DB
         VnfPackageModel(
             vnfPackageId=self.csar_id,
             vnfdId=vnfd_id,

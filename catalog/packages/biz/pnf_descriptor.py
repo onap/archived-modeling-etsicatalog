@@ -32,11 +32,19 @@ logger = logging.getLogger(__name__)
 
 
 class PnfDescriptor(object):
+    """
+    PNF package management
+    """
 
     def __init__(self):
         pass
 
     def create(self, data):
+        """
+        Create a PNF package
+        :param data:
+        :return:
+        """
         logger.info('Start to create a PNFD...')
         user_defined_data = ignore_case_get(data, 'userDefinedData', {})
         data = {
@@ -56,6 +64,11 @@ class PnfDescriptor(object):
         return data
 
     def query_multiple(self, request):
+        """
+        Query PNF packages
+        :param request:
+        :return:
+        """
         pnfdId = request.query_params.get('pnfdId')
         if pnfdId:
             pnf_pkgs = PnfPackageModel.objects.filter(pnfdId=pnfdId)
@@ -68,6 +81,11 @@ class PnfDescriptor(object):
         return response_data
 
     def query_single(self, pnfd_info_id):
+        """
+        Query PNF package by id
+        :param pnfd_info_id:
+        :return:
+        """
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         if not pnf_pkgs.exists():
             logger.error('PNFD(%s) does not exist.' % pnfd_info_id)
@@ -75,6 +93,12 @@ class PnfDescriptor(object):
         return self.fill_response_data(pnf_pkgs[0])
 
     def upload(self, remote_file, pnfd_info_id):
+        """
+        Upload PNF package file
+        :param remote_file:
+        :param pnfd_info_id:
+        :return:
+        """
         logger.info('Start to upload PNFD(%s)...' % pnfd_info_id)
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         if not pnf_pkgs.exists():
@@ -93,6 +117,11 @@ class PnfDescriptor(object):
         return local_file_name
 
     def delete_single(self, pnfd_info_id):
+        """
+        Delete PNF package by id
+        :param pnfd_info_id:
+        :return:
+        """
         logger.info('Start to delete PNFD(%s)...' % pnfd_info_id)
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         if not pnf_pkgs.exists():
@@ -122,6 +151,11 @@ class PnfDescriptor(object):
         logger.debug('PNFD(%s) has been deleted.' % pnfd_info_id)
 
     def download(self, pnfd_info_id):
+        """
+        Download PNF package file by id
+        :param pnfd_info_id:
+        :return:
+        """
         logger.info('Start to download PNFD(%s)...' % pnfd_info_id)
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         if not pnf_pkgs.exists():
@@ -137,6 +171,12 @@ class PnfDescriptor(object):
         return read(local_file_path, start, end)
 
     def parse_pnfd_and_save(self, pnfd_info_id, local_file_name):
+        """
+        Parse PNFD and save the information
+        :param pnfd_info_id:
+        :param local_file_name:
+        :return:
+        """
         logger.info('Start to process PNFD(%s)...' % pnfd_info_id)
         pnf_pkgs = PnfPackageModel.objects.filter(pnfPackageId=pnfd_info_id)
         pnf_pkgs.update(onboardingState=PKG_STATUS.PROCESSING)
@@ -198,6 +238,11 @@ class PnfDescriptor(object):
         logger.info('PNFD(%s) has been processed.' % pnfd_info_id)
 
     def fill_response_data(self, pnf_pkg):
+        """
+        Fill response data
+        :param pnf_pkg:
+        :return:
+        """
         data = {
             'id': pnf_pkg.pnfPackageId,
             'pnfdId': pnf_pkg.pnfdId,
@@ -218,10 +263,21 @@ class PnfDescriptor(object):
         return data
 
     def handle_upload_failed(self, pnf_pkg_id):
+        """
+        Faild process
+        :param pnf_pkg_id:
+        :return:
+        """
         pnf_pkg = PnfPackageModel.objects.filter(pnfPackageId=pnf_pkg_id)
         pnf_pkg.update(onboardingState=PKG_STATUS.CREATED)
 
     def parse_pnfd(self, csar_id, inputs):
+        """
+        Parse PNFD
+        :param csar_id:
+        :param inputs:
+        :return:
+        """
         try:
             pnf_pkg = PnfPackageModel.objects.filter(pnfPackageId=csar_id)
             if not pnf_pkg:
@@ -237,5 +293,13 @@ class PnfDescriptor(object):
 
 
 def send_notification(type, pnfd_info_id, pnfd_id=None, failure_details=None):
+    """
+    Send notification
+    :param type:
+    :param pnfd_info_id:
+    :param pnfd_id:
+    :param failure_details:
+    :return:
+    """
     notify = PnfNotifications(type, pnfd_info_id, pnfd_id, failure_details=failure_details)
     notify.send_notification()

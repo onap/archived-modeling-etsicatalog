@@ -33,6 +33,10 @@ logger = logging.getLogger(__name__)
 
 
 class NotificationsUtil(object):
+    """
+    Util for notifications
+    """
+
     def __init__(self, notification_type):
         self.notification_type = notification_type
         self.notifyserializer = None
@@ -41,6 +45,10 @@ class NotificationsUtil(object):
         pass
 
     def send_notification(self):
+        """
+        Send notification
+        :return:
+        """
         notification = self.prepare_notification()
 
         subscriptions_filter = {v + "__contains": notification[k] for k, v in self.filter.items()}
@@ -79,6 +87,13 @@ class NotificationsUtil(object):
                 self.post_notification(callbackuri, notification)
 
     def post_notification(self, callbackuri, notification, auth_info=None):
+        """
+        Post notification
+        :param callbackuri:
+        :param notification:
+        :param auth_info:
+        :return:
+        """
         try:
             if auth_info:
                 if const.BASIC in auth_info.get("authType", ''):
@@ -116,6 +131,10 @@ class NotificationsUtil(object):
 
 
 class PkgNotifications(NotificationsUtil):
+    """
+    Notification Utils for VNF pckages
+    """
+
     def __init__(self, notification_type, vnf_pkg_id, change_type=None, operational_state=None):
         super(PkgNotifications, self).__init__(notification_type)
         self.filter = {
@@ -133,6 +152,10 @@ class PkgNotifications(NotificationsUtil):
             self.notifyserializer = PkgOnboardingNotificationSerializer
 
     def prepare_notification(self):
+        """
+        Prepare notification
+        :return:
+        """
         logger.info('Start to prepare Pkgnotification')
 
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=self.vnf_pkg_id)
@@ -161,6 +184,10 @@ class PkgNotifications(NotificationsUtil):
 
 
 class NsdNotifications(NotificationsUtil):
+    """
+    Notification Util for NS packages
+    """
+
     def __init__(self, notification_type, nsd_info_id, nsd_id, failure_details=None, operational_state=None):
         super(NsdNotifications, self).__init__(notification_type)
         self.filter = {
@@ -180,6 +207,10 @@ class NsdNotifications(NotificationsUtil):
         #     self.notifyserializer = PkgOnboardingNotificationSerializer
 
     def prepare_notification(self):
+        """
+        Prepare notification
+        :return:
+        """
         logger.info('Start to prepare Nsdnotification')
 
         notification_content = {
@@ -204,6 +235,9 @@ class NsdNotifications(NotificationsUtil):
 
 
 class PnfNotifications(NotificationsUtil):
+    """
+    Notification util for PNF package
+    """
     def __init__(self, notification_type, pnfd_info_id, pnfd_id, failure_details=None):
         super(PnfNotifications, self).__init__(notification_type)
         self.filter = {
@@ -222,6 +256,12 @@ class PnfNotifications(NotificationsUtil):
         #     self.notifyserializer = PkgOnboardingNotificationSerializer
 
     def prepare_notification(self, *args, **kwargs):
+        """
+        Prepare notification
+        :param args:
+        :param kwargs:
+        :return:
+        """
         logger.info('Start to prepare Pnfnotification')
         notification_content = {
             'id': str(uuid.uuid4()),  # shall be the same if sent multiple times due to multiple subscriptions.

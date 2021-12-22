@@ -62,6 +62,11 @@ sample of return value
 
 
 def get_artifacts(asset_type):
+    """
+    Get artifacts by given asset type
+    :param asset_type:
+    :return:
+    """
     resource = "/sdc/v1/catalog/{assetType}"
     resource = resource.format(assetType=asset_type)
     ret = call_sdc(resource, "GET")
@@ -72,6 +77,12 @@ def get_artifacts(asset_type):
 
 
 def get_artifact(asset_type, csar_id):
+    """
+    Get artifact by given asset type and csar id
+    :param asset_type:
+    :param csar_id:
+    :return:
+    """
     artifacts = get_artifacts(asset_type)
     for artifact in artifacts:
         if artifact["uuid"] == csar_id:
@@ -84,6 +95,12 @@ def get_artifact(asset_type, csar_id):
 
 
 def get_asset(asset_type, uuid):
+    """
+    Get asset by given type and UUID
+    :param asset_type:
+    :param uuid:
+    :return:
+    """
     resource = "/sdc/v1/catalog/{assetType}/{uuid}/metadata".format(assetType=asset_type, uuid=uuid)
     ret = call_sdc(resource, "GET")
     if ret[0] != 0:
@@ -99,6 +116,13 @@ def get_asset(asset_type, uuid):
 
 
 def delete_artifact(asset_type, asset_id, artifact_id):
+    """
+    Delete artifact by conditions from SDC
+    :param asset_type:
+    :param asset_id:
+    :param artifact_id:
+    :return:
+    """
     resource = "/sdc/v1/catalog/{assetType}/{uuid}/artifacts/{artifactUUID}"
     resource = resource.format(assetType=asset_type, uuid=asset_id, artifactUUID=artifact_id)
     ret = call_sdc(resource, "DELETE")
@@ -109,6 +133,13 @@ def delete_artifact(asset_type, asset_id, artifact_id):
 
 
 def download_artifacts(download_url, local_path, file_name):
+    """
+    Downlaod artifacts from SDC
+    :param download_url:
+    :param local_path:
+    :param file_name:
+    :return:
+    """
     additional_headers = {
         'X-ECOMP-InstanceID': 'VFC',
         'accept': 'application/octet-stream'
@@ -132,6 +163,13 @@ def download_artifacts(download_url, local_path, file_name):
 
 
 def create_consumer(name, salt, password):
+    """
+    Create a consumer to access the SDC
+    :param name:
+    :param salt:
+    :param password:
+    :return:
+    """
     req_data = {
         'consumerName': name,
         'consumerSalt': salt,
@@ -154,6 +192,11 @@ def create_consumer(name, salt, password):
 
 
 def register_for_topics(key):
+    """
+    Register a topics of SDC
+    :param key:
+    :return:
+    """
     req_data = {
         'apiPublicKey': key,
         'distrEnvName': 'AUTO',

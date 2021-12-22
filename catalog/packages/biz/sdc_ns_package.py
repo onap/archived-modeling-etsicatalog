@@ -38,6 +38,11 @@ def fmt_ns_pkg_rsp(status, desc, error_code="500"):
 
 
 def ns_on_distribute(csar_id):
+    """
+    Get NS pckage from SDC
+    :param csar_id:
+    :return:
+    """
     ret = None
     try:
         ret = NsPackage().on_distribute(csar_id)
@@ -54,6 +59,11 @@ def ns_on_distribute(csar_id):
 
 
 def ns_delete_csar(csar_id):
+    """
+    Delete NS package
+    :param csar_id:
+    :return:
+    """
     ret = None
     try:
         ret = NsPackage().delete_csar(csar_id)
@@ -66,6 +76,10 @@ def ns_delete_csar(csar_id):
 
 
 def ns_get_csars():
+    """
+    Get NS packages
+    :return:
+    """
     ret = None
     try:
         ret = NsPackage().get_csars()
@@ -78,6 +92,11 @@ def ns_get_csars():
 
 
 def ns_get_csar(csar_id):
+    """
+    Get NS package by id
+    :param csar_id:
+    :return:
+    """
     ret = None
     try:
         ret = NsPackage().get_csar(csar_id)
@@ -91,6 +110,12 @@ def ns_get_csar(csar_id):
 
 
 def parse_nsd(csar_id, inputs):
+    """
+    Parse NSD
+    :param csar_id:
+    :param inputs:
+    :return:
+    """
     ret = None
     try:
         ns_pkg = NSPackageModel.objects.filter(nsPackageId=csar_id)
@@ -151,11 +176,20 @@ class NsPackage(object):
         return [0, "CSAR(%s) distributed successfully." % csar_id]
 
     def delete_csar(self, csar_id):
+        """
+        Delete NS package by id
+        :param csar_id:
+        :return:
+        """
         nsd = NsDescriptor()
         nsd.delete_single(csar_id)
         return [0, "Delete CSAR(%s) successfully." % csar_id]
 
     def get_csars(self):
+        """
+        Get ns packages
+        :return:
+        """
         csars = []
         nss = NSPackageModel.objects.filter()
         for ns in nss:
@@ -164,6 +198,11 @@ class NsPackage(object):
         return [0, csars]
 
     def get_csar(self, csar_id):
+        """
+        Get NS package by id
+        :param csar_id:
+        :return:
+        """
         package_info = {}
         csars = NSPackageModel.objects.filter(nsPackageId=csar_id)
         if csars:

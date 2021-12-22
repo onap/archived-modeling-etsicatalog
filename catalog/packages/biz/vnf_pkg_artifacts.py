@@ -22,7 +22,16 @@ logger = logging.getLogger(__name__)
 
 
 class FetchVnfPkgArtifact(object):
+    """
+    Fetch the artifact of VNF package
+    """
     def fetch(self, vnfPkgId, artifactPath):
+        """
+        Fetch artifact by given vnf package id and the path of artifact
+        :param vnfPkgId:
+        :param artifactPath:
+        :return:
+        """
         logger.debug("FetchVnfPkgArtifact--get--single--artifact--biz::>"
                      "ID: %s path: %s" % (vnfPkgId, artifactPath))
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnfPkgId)

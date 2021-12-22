@@ -45,6 +45,9 @@ def is_filter_type_equal(new_filter, existing_filter):
 
 
 class CreateSubscription(object):
+    """
+    Create subscription info
+    """
     def __init__(self, data):
         self.data = data
         self.filter = ignore_case_get(self.data, "filter", {})
@@ -59,6 +62,10 @@ class CreateSubscription(object):
             ignore_case_get(self.filter, "vnfProductsFromProviders", [])
 
     def check_callbackuri_connection(self):
+        """
+        Check if the callback uri can access
+        :return:
+        """
         logger.debug("SubscribeNotification-post::> Sending GET request "
                      "to %s" % self.callback_uri)
         try:
@@ -90,6 +97,10 @@ class CreateSubscription(object):
             )
 
     def do_biz(self):
+        """
+        Do business
+        :return:
+        """
         self.subscription_id = str(uuid.uuid4())
         self.check_valid_auth_info()
         self.check_callbackuri_connection()
@@ -102,6 +113,10 @@ class CreateSubscription(object):
             return subscription.toDict()
 
     def check_valid_auth_info(self):
+        """
+        Check if the Auth info is valid
+        :return:
+        """
         logger.debug("SubscribeNotification--post::> Validating Auth "
                      "details if provided")
         if self.authentication.get("paramsBasic", {}) and const.BASIC not in self.authentication.get("authType"):
@@ -138,6 +153,10 @@ class CreateSubscription(object):
         return True
 
     def save_db(self):
+        """
+        Save the subscription info to DB
+        :return:
+        """
         logger.debug("SubscribeNotification--post::> Saving the subscription "
                      "%s to the database" % self.subscription_id)
         links = {
@@ -160,7 +179,15 @@ class CreateSubscription(object):
 
 
 class QuerySubscription(object):
+    """
+    The class for query subscription
+    """
     def query_multi_subscriptions(self, params):
+        """
+        Query subscriptions
+        :param params:
+        :return:
+        """
         query_data = {}
         logger.debug("QuerySubscription--get--multi--subscriptions--biz::> Check "
                      "for filter in query params %s" % params)
@@ -177,6 +204,11 @@ class QuerySubscription(object):
         return [subscription.toDict() for subscription in subscriptions]
 
     def query_single_subscription(self, subscription_id):
+        """
+        Query subscription by id
+        :param subscription_id:
+        :return:
+        """
         logger.debug("QuerySingleSubscriptions--get--single--subscription--biz::> "
                      "ID: %s" % subscription_id)
 
@@ -189,6 +221,9 @@ class QuerySubscription(object):
 
 
 class TerminateSubscription(object):
+    """
+    The class to terminate the subscription
+    """
     def terminate(self, subscription_id):
         logger.debug("TerminateSubscriptions--delete--biz::> "
                      "ID: %s" % subscription_id)

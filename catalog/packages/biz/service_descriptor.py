@@ -36,6 +36,12 @@ class ServiceDescriptor(object):
         pass
 
     def create(self, data, csar_id=None):
+        """
+        Create a Service package
+        :param data:
+        :param csar_id:
+        :return:
+        """
         logger.info('Start to create a ServiceD...')
         user_defined_data = ignore_case_get(data, 'userDefinedData', {})
         data = {
@@ -57,6 +63,12 @@ class ServiceDescriptor(object):
         return data
 
     def parse_serviced_and_save(self, serviced_info_id, local_file_name):
+        """
+        Parse service package and save information to DB
+        :param serviced_info_id:
+        :param local_file_name:
+        :return:
+        """
         logger.info('Start to process ServiceD(%s)...' % serviced_info_id)
         service_pkgs = ServicePackageModel.objects.filter(servicePackageId=serviced_info_id)
         service_pkgs.update(onboardingState=PKG_STATUS.PROCESSING)
@@ -118,12 +130,19 @@ class ServiceDescriptor(object):
         logger.info('ServiceD(%s) has been processed.' % serviced_info_id)
 
     def delete_single(self, serviced_info_id):
+        """
+        Delete a service package by given id
+        :param serviced_info_id:
+        :return:
+        """
         logger.info('Start to delete ServiceD(%s)...' % serviced_info_id)
         service_pkgs = ServicePackageModel.objects.filter(servicePackageId=serviced_info_id)
         if not service_pkgs.exists():
             logger.warn('ServiceD(%s) not found.' % serviced_info_id)
             raise PackageNotFoundException("Service package[%s] not Found." % serviced_info_id)
         service_pkgs.delete()
+
+        # Delete package dir
         service_pkg_path = os.path.join(CATALOG_ROOT_PATH, serviced_info_id)
         fileutil.delete_dirs(service_pkg_path)
         logger.info('ServiceD(%s) has been deleted.' % serviced_info_id)

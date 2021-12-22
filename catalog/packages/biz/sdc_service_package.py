@@ -37,7 +37,14 @@ class ServicePackage(object):
         pass
 
     def on_distribute(self, csar_id):
+        """
+        Get service packge from SDC and process
+        :param csar_id:
+        :return:
+        """
         if ServicePackageModel.objects.filter(servicePackageId=csar_id):
+            err_msg = "Service CSAR(%s) already exists." % csar_id
+            logger.warn(err_msg)
             raise PackageHasExistsException("Service CSAR(%s) already exists." % csar_id)
 
         try:
@@ -71,10 +78,19 @@ class ServicePackage(object):
             raise e
 
     def delete_csar(self, csar_id):
+        """
+        Delete service package
+        :param csar_id:
+        :return:
+        """
         serviced = ServiceDescriptor()
         serviced.delete_single(csar_id)
 
     def get_csars(self):
+        """
+        Get service packages from DB
+        :return:
+        """
         csars = []
         packages = ServicePackageModel.objects.filter()
         for package in packages:
@@ -83,6 +99,11 @@ class ServicePackage(object):
         return csars
 
     def get_csar(self, csar_id):
+        """
+        Get a service package by id
+        :param csar_id:
+        :return:
+        """
         package_info = {}
         csars = ServicePackageModel.objects.filter(servicePackageId=csar_id)
         if csars:
@@ -107,6 +128,12 @@ class ServicePackage(object):
         return {"csarId": csar_id, "packageInfo": package_info}
 
     def parse_serviced(self, csar_id, inputs):
+        """
+        Parse service package
+        :param csar_id:
+        :param inputs:
+        :return:
+        """
         service_pkg = ServicePackageModel.objects.filter(servicePackageId=csar_id)
         if not service_pkg:
             raise PackageNotFoundException("Service CSAR(%s) does not exist." % csar_id)

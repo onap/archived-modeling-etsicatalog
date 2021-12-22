@@ -34,11 +34,19 @@ logger = logging.getLogger(__name__)
 
 
 class VnfPackage(object):
+    """
+    The class for VNF package management
+    """
 
     def __init__(self):
         pass
 
     def create_vnf_pkg(self, data):
+        """
+        Create a VNF package
+        :param data: user defined data
+        :return: VNF package info
+        """
         user_defined_data = ignore_case_get(data, "userDefinedData", {})
         vnf_pkg_id = str(uuid.uuid4())
         VnfPackageModel.objects.create(
@@ -59,6 +67,10 @@ class VnfPackage(object):
         return data
 
     def query_multiple(self):
+        """
+        Query the list of VNF package
+        :return: The list of VNF pakcage
+        """
         pkgs_info = []
         nf_pkgs = VnfPackageModel.objects.filter()
         for nf_pkg in nf_pkgs:
@@ -67,6 +79,11 @@ class VnfPackage(object):
         return pkgs_info
 
     def query_single(self, vnf_pkg_id):
+        """
+        Query a single VNF package by given id
+        :param vnf_pkg_id: The id of VNF package
+        :return: VNF pckage info
+        """
         nf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
         if not nf_pkg.exists():
             logger.error('VNF package(%s) does not exist.' % vnf_pkg_id)
@@ -74,6 +91,11 @@ class VnfPackage(object):
         return fill_response_data(nf_pkg[0])
 
     def delete_vnf_pkg(self, vnf_pkg_id):
+        """
+        Delete a VNF package by give id
+        :param vnf_pkg_id: The id of VNF package
+        :return:
+        """
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
         if not vnf_pkg.exists():
             logger.debug('VNF package(%s) has been deleted.' % vnf_pkg_id)
@@ -104,6 +126,12 @@ class VnfPackage(object):
         logger.info('VNF package(%s) has been deleted.' % vnf_pkg_id)
 
     def upload(self, vnf_pkg_id, remote_file):
+        """
+        Update VNF pckage file for given id
+        :param vnf_pkg_id: The id of VNF package
+        :param remote_file: VNF package file
+        :return:
+        """
         logger.info('Start to upload VNF package(%s)...' % vnf_pkg_id)
         vnf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
         # if vnf_pkg[0].onboardingState != PKG_STATUS.CREATED:
@@ -130,6 +158,11 @@ class VnfPackage(object):
         return read(local_file_path, start, end)
 
     def download_vnfd(self, vnf_pkg_id):
+        """
+        Download VNFD for given id
+        :param vnf_pkg_id: The id of VNF package
+        :return: VNFD
+        """
         logger.info('Start to download VNFD of VNF package(%s)...' % vnf_pkg_id)
         nf_pkg = VnfPackageModel.objects.filter(vnfPackageId=vnf_pkg_id)
         if not nf_pkg.exists():
@@ -183,6 +216,10 @@ class VnfPackage(object):
 
 
 class VnfPkgUploadThread(threading.Thread):
+    """
+    The Thread for upload VNF pckage
+    """
+
     def __init__(self, data, vnf_pkg_id):
         threading.Thread.__init__(self)
         self.vnf_pkg_id = vnf_pkg_id
