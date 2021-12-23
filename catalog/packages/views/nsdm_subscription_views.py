@@ -69,6 +69,7 @@ def validate_data(data, serializer):
 @view_safe_call_with_log(logger=logger)
 def nsd_subscription_rc(request):
     if request.method == 'POST':
+        # Subscribe to NSD and PNFD change notifications.
         logger.debug("SubscribeNotification--post::> %s" % request.data)
         nsdm_subscription_request = \
             validate_data(request.data,
@@ -79,6 +80,7 @@ def nsd_subscription_rc(request):
         return Response(data=subscription, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
+        # Query multiple subscriptions.
         logger.debug("Subscription Notification GET %s" % request.query_params)
         request_query_params = {}
         if request.query_params:
@@ -120,12 +122,20 @@ def nsd_subscription_rc(request):
 @api_view(http_method_names=['GET', 'DELETE'])
 @view_safe_call_with_log(logger=logger)
 def nsd_subscription_rd(request, **kwargs):
+    """
+    Individual subscription
+    :param request:
+    :param kwargs:
+    :return:
+    """
     subscription_id = kwargs.get("subscriptionId")
     validate_data({'subscription_id': subscription_id}, NsdmSubscriptionIdSerializer)
     if request.method == 'GET':
+        # Read an individual subscription resource
         subscription_data = NsdmSubscription().query_single_subscription(subscription_id)
         subscription = validate_data(subscription_data, NsdmSubscriptionSerializer)
         return Response(data=subscription.data, status=status.HTTP_200_OK)
     elif request.method == 'DELETE':
+        # Terminate a subscription
         subscription_data = NsdmSubscription().delete_single_subscription(subscription_id)
         return Response(status=status.HTTP_204_NO_CONTENT)

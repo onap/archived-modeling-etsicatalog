@@ -64,12 +64,14 @@ logger = logging.getLogger(__name__)
 @view_safe_call_with_log(logger=logger)
 def vnf_packages_rc(request):
     if request.method == 'GET':
+        # Query VNF packages information
         logger.debug("Query VNF packages> %s" % request.data)
         data = VnfPackage().query_multiple()
         validate_data(data, VnfPkgInfosSerializer)
         return Response(data=data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        # Create a new individual VNF package resource
         logger.debug("Create VNF package> %s" % request.data)
         create_vnf_pkg_info_request = validate_req_data(request.data, CreateVnfPkgInfoRequestSerializer)
         data = VnfPackage().create_vnf_pkg(create_vnf_pkg_info_request.data)
@@ -97,6 +99,12 @@ def vnf_packages_rc(request):
 @api_view(http_method_names=["GET"])
 @view_safe_call_with_log(logger=logger)
 def vnfd_rd(request, **kwargs):
+    """
+    Get the VNFD by VNF package id
+    :param request:
+    :param kwargs:
+    :return:
+    """
     vnf_pkg_id = kwargs.get("vnfPkgId")
     logger.debug("Read VNFD for  VNF package %s" % vnf_pkg_id)
     try:
@@ -139,6 +147,7 @@ def vnfd_rd(request, **kwargs):
 def package_content_ru(request, **kwargs):
     vnf_pkg_id = kwargs.get("vnfPkgId")
     if request.method == "PUT":
+        # Upload a VNF package by providing the content of the VNF package
         logger.debug("Upload VNF package %s" % vnf_pkg_id)
         files = request.FILES.getlist('file')
         try:
@@ -150,6 +159,7 @@ def package_content_ru(request, **kwargs):
             raise e
 
     if request.method == "GET":
+        # Fetch an on-boarded VNF package
         file_range = request.META.get('HTTP_RANGE')
         file_iterator = VnfPackage().download(vnf_pkg_id, file_range)
         return StreamingHttpResponse(file_iterator, status=status.HTTP_200_OK)
@@ -170,6 +180,12 @@ def package_content_ru(request, **kwargs):
 @api_view(http_method_names=['POST'])
 @view_safe_call_with_log(logger=logger)
 def upload_from_uri_c(request, **kwargs):
+    """
+    Upload a VNF package by providing the address information of the VNF package
+    :param request:
+    :param kwargs:
+    :return:
+    """
     vnf_pkg_id = kwargs.get("vnfPkgId")
     try:
         upload_vnf_from_uri_request = validate_req_data(request.data,
@@ -210,12 +226,14 @@ def upload_from_uri_c(request, **kwargs):
 def vnf_package_rd(request, **kwargs):
     vnf_pkg_id = kwargs.get("vnfPkgId")
     if request.method == 'GET':
+        # Read information about an individual VNF package
         logger.debug("Query an individual VNF package> %s" % request.data)
         data = VnfPackage().query_single(vnf_pkg_id)
         validate_data(data, VnfPkgInfoSerializer)
         return Response(data=data, status=status.HTTP_200_OK)
 
     if request.method == 'DELETE':
+        # Delete an individual VNF package
         logger.debug("Delete an individual VNF package> %s" % request.data)
         VnfPackage().delete_vnf_pkg(vnf_pkg_id)
         return Response(data=None, status=status.HTTP_204_NO_CONTENT)

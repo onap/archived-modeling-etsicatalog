@@ -25,6 +25,7 @@ PKG_STATUS = enum(
     DISABLED="DISABLED"
 )
 
+# CREDENTIALS
 AUTH_TYPES = [
     "BASIC",
     "OAUTH2_CLIENT_CREDENTIALS",
@@ -35,6 +36,7 @@ BASIC = "BASIC"
 
 OAUTH2_CLIENT_CREDENTIALS = "OAUTH2_CLIENT_CREDENTIALS"
 
+# subscription &  notification
 NOTIFICATION_TYPES = [
     "VnfPackageOnboardingNotification",
     "VnfPackageChangeNotification"

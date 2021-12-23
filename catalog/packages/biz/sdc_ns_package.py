@@ -141,6 +141,11 @@ class NsPackage(object):
         pass
 
     def on_distribute(self, csar_id):
+        """
+        Fetch NS package csar from SDC
+        :param csar_id:
+        :return:
+        """
         if NSPackageModel.objects.filter(nsPackageId=csar_id):
             return [1, "NS CSAR(%s) already exists." % csar_id]
 

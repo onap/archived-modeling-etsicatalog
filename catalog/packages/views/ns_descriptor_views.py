@@ -58,10 +58,12 @@ logger = logging.getLogger(__name__)
 def ns_info_rd(request, **kwargs):
     nsd_info_id = kwargs.get("nsdInfoId")
     if request.method == 'GET':
+        # Read information about an individual NS descriptor resource.
         data = NsDescriptor().query_single(nsd_info_id)
         nsd_info = validate_data(data, NsdInfoSerializer)
         return Response(data=nsd_info.data, status=status.HTTP_200_OK)
     if request.method == 'DELETE':
+        # Delete an individual NS descriptor resource.
         NsDescriptor().delete_single(nsd_info_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -90,12 +92,14 @@ def ns_info_rd(request, **kwargs):
 @view_safe_call_with_log(logger=logger)
 def ns_descriptors_rc(request):
     if request.method == 'POST':
+        # Create a new NS descriptor resource.
         create_nsd_info_request = validate_data(request.data, CreateNsdInfoRequestSerializer)
         data = NsDescriptor().create(create_nsd_info_request.data)
         validate_data(data, NsdInfoSerializer)
         return Response(data=data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
+        # Query information about multiple NS descriptor resources.
         nsdId = request.query_params.get("nsdId", None)
         data = NsDescriptor().query_multiple(nsdId)
         validate_data(data, NsdInfosSerializer)
@@ -128,6 +132,7 @@ def ns_descriptors_rc(request):
 def nsd_content_ru(request, **kwargs):
     nsd_info_id = kwargs.get("nsdInfoId")
     if request.method == 'PUT':
+        # Upload the content of a NSD.
         files = request.FILES.getlist('file')
         try:
             local_file_name = NsDescriptor().upload(nsd_info_id, files[0])
@@ -141,6 +146,7 @@ def nsd_content_ru(request, **kwargs):
             raise e
 
     if request.method == 'GET':
+        # Fetch the content of a NSD.
         file_range = request.META.get('HTTP_RANGE')
         file_iterator = NsDescriptor().download(nsd_info_id, file_range)
         return StreamingHttpResponse(file_iterator, status=status.HTTP_200_OK)

@@ -47,6 +47,11 @@ VALID_FILTERS = [
 
 
 class CreateQuerySubscriptionView(APIView):
+    """
+    This resource represents subscriptions.
+    The client can use this resource to subscribe to notifications related to NS lifecycle management,
+    and to query its subscriptions.
+    """
 
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
@@ -59,6 +64,11 @@ class CreateQuerySubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def post(self, request):
+        """
+        The POST method creates a new subscription
+        :param request:
+        :return:
+        """
         logger.debug("Create VNF package Subscription> %s" % request.data)
         vnf_pkg_subscription_request = validate_req_data(request.data, PkgmSubscriptionRequestSerializer)
         data = CreateSubscription(vnf_pkg_subscription_request.data).do_biz()
@@ -75,6 +85,12 @@ class CreateQuerySubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def get(self, request):
+        """
+        The GET method queries the list of active subscriptions of the functional block that invokes the method.
+        It can be used e.g. for resynchronization after error situations.
+        :param request:
+        :return:
+        """
         logger.debug("SubscribeNotification--get::> %s" % request.query_params)
 
         if request.query_params and not set(request.query_params).issubset(set(VALID_FILTERS)):
@@ -90,6 +106,10 @@ class CreateQuerySubscriptionView(APIView):
 
 
 class QueryTerminateSubscriptionView(APIView):
+    """
+    This resource represents an individual subscription.
+    It can be used by the client to read and to terminate a subscription to Notifications related to NS lifecycle management.
+    """
 
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
@@ -101,6 +121,12 @@ class QueryTerminateSubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def get(self, request, subscriptionId):
+        """
+        The GET method retrieves information about a subscription by reading an individual subscription resource.
+        :param request:
+        :param subscriptionId:
+        :return:
+        """
         logger.debug("SubscribeNotification--get::> %s" % subscriptionId)
 
         resp_data = QuerySubscription().query_single_subscription(subscriptionId)
@@ -121,6 +147,12 @@ class QueryTerminateSubscriptionView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def delete(self, request, subscriptionId):
+        """
+        The DELETE method terminates an individual subscription.
+        :param request:
+        :param subscriptionId:
+        :return:
+        """
         logger.debug("SubscribeNotification--get::> %s" % subscriptionId)
 
         TerminateSubscription().terminate(subscriptionId)
@@ -128,6 +160,10 @@ class QueryTerminateSubscriptionView(APIView):
 
 
 class PkgOnboardingNotificationView(APIView):
+    """
+    This resource represents a notification endpoint about package onboarding
+    """
+
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
         request_body=PkgOnboardingNotificationSerializer,
@@ -150,6 +186,10 @@ class PkgOnboardingNotificationView(APIView):
 
 
 class PkgChangeNotificationView(APIView):
+    """
+    This resource represents a notification endpoint about package change
+    """
+
     @swagger_auto_schema(
         tags=[TAG_VNF_PACKAGE_API],
         request_body=PkgChangeNotificationSerializer,

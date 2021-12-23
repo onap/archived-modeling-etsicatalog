@@ -54,6 +54,13 @@ class FetchVnfPkgmArtifactsView(APIView):
     )
     @view_safe_call_with_log(logger=logger)
     def get(self, request, vnfPkgId, artifactPath):
+        """
+        Fetch artifact from vnf package
+        :param request:
+        :param vnfPkgId:
+        :param artifactPath:
+        :return:
+        """
         logger.debug("FetchVnfPkgmArtifactsView--get::> ")
 
         resp_data = FetchVnfPkgArtifact().fetch(vnfPkgId, artifactPath)

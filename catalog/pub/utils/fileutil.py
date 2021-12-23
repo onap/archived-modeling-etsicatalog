@@ -23,11 +23,21 @@ logger = logging.getLogger(__name__)
 
 
 def make_dirs(path):
+    """
+    Make directories
+    :param path:
+    :return:
+    """
     if not os.path.exists(path):
         os.makedirs(path, 0o777)
 
 
 def delete_dirs(path):
+    """
+    Delete directories
+    :param path:
+    :return:
+    """
     try:
         if os.path.exists(path):
             shutil.rmtree(path)
@@ -37,6 +47,13 @@ def delete_dirs(path):
 
 
 def download_file_from_http(url, local_dir, file_name):
+    """
+    Download file from http and save to local dir
+    :param url:
+    :param local_dir:
+    :param file_name:
+    :return:
+    """
     local_file_name = os.path.join(local_dir, file_name)
     is_download_ok = False
     try:
@@ -54,6 +71,13 @@ def download_file_from_http(url, local_dir, file_name):
 
 
 def unzip_file(zip_src, dst_dir, csar_path):
+    """
+    Unzip the zip file to given path
+    :param zip_src:
+    :param dst_dir:
+    :param csar_path:
+    :return:
+    """
     logger.debug("unzip_file %s to %s.", zip_src, dst_dir)
     if os.path.exists(zip_src):
         logger.debug("unzip_file %s.", zip_src)
@@ -66,6 +90,12 @@ def unzip_file(zip_src, dst_dir, csar_path):
 
 
 def unzip_csar(zip_src, dst_dir):
+    """
+    Unzip csar package
+    :param zip_src:
+    :param dst_dir:
+    :return:
+    """
     if os.path.exists(zip_src):
         fz = zipfile.ZipFile(zip_src, 'r')
         for file in fz.namelist():
@@ -77,6 +107,11 @@ def unzip_csar(zip_src, dst_dir):
 
 
 def unzip_csar_to_tmp(zip_src):
+    """
+    Unzip csar package to temp path
+    :param zip_src:
+    :return:
+    """
     dirpath = tempfile.mkdtemp()
     zip_ref = zipfile.ZipFile(zip_src, 'r')
     zip_ref.extractall(dirpath)
@@ -84,6 +119,12 @@ def unzip_csar_to_tmp(zip_src):
 
 
 def get_artifact_path(vnf_path, artifact_file):
+    """
+    Get the path of artifact file
+    :param vnf_path:
+    :param artifact_file:
+    :return:
+    """
     for root, dirs, files in os.walk(vnf_path):
         if artifact_file in files:
             return os.path.join(root, artifact_file)
@@ -91,6 +132,12 @@ def get_artifact_path(vnf_path, artifact_file):
 
 
 def end_with(_s_in, *suffix):
+    """
+    Check if end with given suffix
+    :param _s_in:
+    :param suffix:
+    :return:
+    """
     array = map(_s_in.endswith, suffix)
     if True in array:
         return True
@@ -98,6 +145,12 @@ def end_with(_s_in, *suffix):
 
 
 def filter_files(search_path, suffix):
+    """
+    Filter file by given suffix
+    :param search_path:
+    :param suffix:
+    :return:
+    """
     f_find = []
     file_list = os.listdir(search_path)
     for file_item in file_list:
@@ -107,12 +160,24 @@ def filter_files(search_path, suffix):
 
 
 def recreate_dir(path):
+    """
+    Recreate directory
+    :param path:
+    :return:
+    """
     if os.path.exists(path):
         shutil.rmtree(path)
     os.makedirs(path, mode=0o777)
 
 
 def copy(src_file, dest_dir, new_file_name=None):
+    """
+    Copy file to given dest dir
+    :param src_file:
+    :param dest_dir:
+    :param new_file_name:
+    :return:
+    """
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
     if new_file_name is None:

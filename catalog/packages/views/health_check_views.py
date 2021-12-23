@@ -25,6 +25,10 @@ logger = logging.getLogger(__name__)
 
 
 class HealthCheckView(APIView):
+    """
+    APL Health Check
+    """
+
     @swagger_auto_schema(
         tags=[TAG_HEALTH_CHECK],
         responses={
