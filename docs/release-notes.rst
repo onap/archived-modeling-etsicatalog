@@ -10,18 +10,19 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
-Version: 1.0.12
+Version: 1.0.13
 --------------
 
-:Release Date: 2022-03-18
+:Release Date: 2022-03-30
 
 **New Features**
 
 - update Django version to 3.1.4
 - Update the vulnerable direct dependencies
+- Update Docker image to fix CSIT Failure
 
 Released components:
- - etsicatalog 1.0.12
+ - etsicatalog 1.0.13
 
 
 Version: 1.0.11
