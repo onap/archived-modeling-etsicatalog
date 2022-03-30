@@ -12,7 +12,7 @@ install_sf(){
     unzip modeling-etsicatalog.zip && \
     rm -rf modeling-etsicatalog.zip && \
     pip install --upgrade setuptools pip  && \
-    pip install --no-cache-dir --pre -r  /service/modeling/etsicatalog/requirements.txt
+    pip install -r /service/modeling/etsicatalog/requirements.txt
     find  /service -name '*.sh'|xargs chmod a+x
 }
 
