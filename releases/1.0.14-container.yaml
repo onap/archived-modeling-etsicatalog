@@ -1,0 +1,10 @@
+distribution_type: 'container'
+container_release_tag: '1.0.14'
+project: 'modeling-etsicatalog'
+container_pull_registry: nexus3.onap.org:10003
+container_push_registry: nexus3.onap.org:10002
+log_dir: 'modeling-etsicatalog-master-docker-java-version-shell-daily/987/'
+ref: '0d3ba8f5f2dac92e7c46091e391e0b6c90e016c4'
+containers:
+    - name: 'modeling/etsicatalog'
+      version: '1.0.14-STAGING-20220412T094523'
