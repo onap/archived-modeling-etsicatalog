@@ -10,6 +10,18 @@ Release Notes
 etsicatalog provides package management service and parser service as Micro
 Service.
 
+Version: 1.0.14
+--------------
+
+:Release Date: 2022-04-12
+
+**Bug Fixes**
+
+- Fix tox test loop in mvn-phase-script.sh
+
+Released components:
+ - etsicatalog 1.0.14
+
 Version: 1.0.13
 --------------
 
