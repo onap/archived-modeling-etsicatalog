@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Marine de Dorlodot <marine.de.dorlodot@intl.att.com>
+Code-Review+2: Thomas Kulik <thomas.kulik@telekom.de>
+Submitted-by: Thomas Kulik <thomas.kulik@telekom.de>
+Submitted-at: Mon, 28 Nov 2022 13:33:18 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/modeling/etsicatalog/+/132341
+Project: modeling/etsicatalog
+Branch: refs/heads/kohn
