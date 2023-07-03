@@ -11,7 +11,7 @@ etsicatalog provides package management service and parser service as Micro
 Service.
 
 Version: 1.0.14
---------------
+---------------
 
 :Release Date: 2022-04-12
 
@@ -23,7 +23,7 @@ Released components:
  - etsicatalog 1.0.14
 
 Version: 1.0.13
---------------
+---------------
 
 :Release Date: 2022-03-30
 
@@ -38,7 +38,7 @@ Released components:
 
 
 Version: 1.0.11
---------------
+---------------
 
 :Release Date: 2021-08-31
 
