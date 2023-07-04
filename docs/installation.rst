@@ -16,11 +16,12 @@ OOM Charts
 The Modeling/etsicatalog K8S charts are located in the OOM repository:
 https://gerrit.onap.org/r/admin/repos/oom
 
-For OOM deployment you can refer to the below links:
+For OOM deployment you can refer to the OOM documentation.
 
-* https://docs.onap.org/projects/onap-oom/en/latest/oom_user_guide.html#oom-user-guide
 
-* https://docs.onap.org/projects/onap-oom/en/latest/oom_quickstart_guide.html#oom-quickstart-guide
+.. * https://docs.onap.org/projects/onap-oom/en/latest/oom_user_guide.html#oom-user-guide
+.. * https://docs.onap.org/projects/onap-oom/en/latest/oom_quickstart_guide.html#oom-quickstart-guide
+
 
 Installing or Upgrading
 ------------------------

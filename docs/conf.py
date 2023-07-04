@@ -1,6 +1,6 @@
 project = "onap"
-release = "master"
-version = "master"
+release = "london"
+version = "london"
 
 author = "Open Network Automation Platform"
 # yamllint disable-line rule:line-length
@@ -30,7 +30,7 @@ extensions = [
 # Change to {releasename} after you have created the new 'doc' branch.
 #
 
-branch = 'latest'
+branch = 'london'
 
 intersphinx_mapping = {}
 doc_url = 'https://docs.onap.org/projects'
@@ -52,5 +52,7 @@ def setup(app):
     app.add_css_file("css/ribbon.css")
 
 linkcheck_ignore = [
-  r'http://localhost:\d+/'
+  r'http://localhost:\d+/',
+  r'http://127.0.0.1:*',
+  r'https://msb_ip:*'
 ]
