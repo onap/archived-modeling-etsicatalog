@@ -15,7 +15,7 @@
 from django.conf.urls import url
 
 from catalog.packages.views import vnf_package_views
-from catalog.packages.views.vnf_package_subscription_views import CreateQuerySubscriptionView,\
+from catalog.packages.views.vnf_package_subscription_views import CreateQuerySubscriptionView, \
     QueryTerminateSubscriptionView, PkgChangeNotificationView, PkgOnboardingNotificationView
 from catalog.packages.views.vnf_package_artifact_views import FetchVnfPkgmArtifactsView
 from catalog.packages.views import catalog_views, ns_descriptor_views, pnf_descriptor_views, nsdm_subscription_views
