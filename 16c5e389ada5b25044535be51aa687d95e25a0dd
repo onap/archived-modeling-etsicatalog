@@ -16,6 +16,23 @@
       "message": "Can you please review and merge?",
       "revId": "16c5e389ada5b25044535be51aa687d95e25a0dd",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a3ac82_ab15ecc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3759
+      },
+      "writtenOn": "2024-03-26T08:55:31Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "16c5e389ada5b25044535be51aa687d95e25a0dd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ]
 }
