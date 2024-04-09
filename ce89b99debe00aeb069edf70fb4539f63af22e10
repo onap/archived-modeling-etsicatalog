@@ -1,0 +1,9 @@
+Code-Review+2: Hui Deng <denghui12@huawei.com>
+Code-Review+2: Thomas Kulik <thomas.kulik@telekom.de>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Verified+1: Thomas Kulik <thomas.kulik@telekom.de>
+Submitted-by: Hui Deng <denghui12@huawei.com>
+Submitted-at: Tue, 09 Apr 2024 09:52:58 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/modeling/etsicatalog/+/137404
+Project: modeling/etsicatalog
+Branch: refs/heads/master
